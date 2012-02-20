@@ -1,0 +1,262 @@
+2011-12-29 12:53:05.611+0100: Creating new db @ /Users/erik/devel/law/data/graph.db/neostore
+2011-12-29 12:53:05.711+0100: Opened [/Users/erik/devel/law/data/graph.db/nioneo_logical.log.1] clean empty log, version=0, lastTxId=1
+2011-12-29 12:53:05.749+0100: Opened [/Users/erik/devel/law/data/graph.db/index/lucene.log.1] clean empty log, version=0, lastTxId=1
+2011-12-29 12:53:05.753+0100: TM new log: tm_tx_log.1
+2011-12-29 12:53:05.773+0100: --- CONFIGURATION START ---
+2011-12-29 12:53:05.773+0100: Graph Database: org.neo4j.kernel.EmbeddedGraphDatabase StoreId[time:1325159585620, id:-7518687819879110178, store version: 13561656364791302]
+2011-12-29 12:53:05.773+0100: Physical mem: 8192MB, Heap size: 505MB
+2011-12-29 12:53:05.775+0100: Kernel version: Neo4j - Graph Database Kernel 1.6.M01
+2011-12-29 12:53:05.775+0100: Neo4j component versions:
+2011-12-29 12:53:05.775+0100:   Neo4j - Graph Database Kernel 1.6.M01
+2011-12-29 12:53:05.775+0100: Store versions:
+2011-12-29 12:53:05.775+0100:   NeoStore v0.A.0
+2011-12-29 12:53:05.776+0100:   NodeStore v0.A.0
+2011-12-29 12:53:05.776+0100:   RelationshipStore v0.A.0
+2011-12-29 12:53:05.776+0100:   RelationshipTypeStore v0.A.0
+2011-12-29 12:53:05.776+0100:   PropertyStore v0.A.0
+2011-12-29 12:53:05.776+0100:   PropertyIndexStore v0.A.0
+2011-12-29 12:53:05.776+0100:   StringPropertyStore v0.A.0
+2011-12-29 12:53:05.776+0100:   ArrayPropertyStore v0.A.0
+2011-12-29 12:53:05.778+0100: Process id: 10330@Erik-Fremreds-MacBook-Pro.local
+2011-12-29 12:53:05.780+0100: Operating System: Mac OS X; version: 10.6.8; arch: x86_64; cpus: 4
+2011-12-29 12:53:05.781+0100: Max number of file descriptors: 10240
+2011-12-29 12:53:05.782+0100: Number of open file descriptors: 168
+2011-12-29 12:53:05.785+0100: Total Physical memory: 8.00 GB
+2011-12-29 12:53:05.786+0100: Free Physical memory: 1.26 GB
+2011-12-29 12:53:05.787+0100: Committed virtual memory: 3.47 GB
+2011-12-29 12:53:05.787+0100: Total swap space: 2.00 GB
+2011-12-29 12:53:05.788+0100: Free swap space: 631.12 MB
+2011-12-29 12:53:05.789+0100: Byte order: LITTLE_ENDIAN
+2011-12-29 12:53:05.789+0100: VM Name: Java HotSpot(TM) 64-Bit Server VM
+2011-12-29 12:53:05.789+0100: VM Vendor: Apple Inc.
+2011-12-29 12:53:05.789+0100: VM Version: 20.4-b02-402
+2011-12-29 12:53:05.790+0100: JIT compiler: HotSpot 64-Bit Tiered Compilers
+2011-12-29 12:53:05.799+0100: Class Path:
+2011-12-29 12:53:05.799+0100:    [bootstrap] /System/Library/Frameworks/JavaVM.framework/Versions/A/Frameworks/JavaRuntimeSupport.framework/Versions/A/Resources/Java/JavaRuntimeSupport.jar
+2011-12-29 12:53:05.799+0100:    [classpath] /Users/erik/.m2/repository/org/slf4j/slf4j-api/1.6.1/slf4j-api-1.6.1.jar
+2011-12-29 12:53:05.799+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/hibernate-jpa-2.0-api-1.0.0.Final.jar
+2011-12-29 12:53:05.799+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/spring-context-support-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.799+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/spring-core-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.799+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/spring-beans-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.799+0100:    [classpath + classpath] /Users/erik/.m2/repository/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA-sources.jar
+2011-12-29 12:53:05.799+0100:    [classpath] /Users/erik/.m2/repository/org/neo4j/neo4j-jmx/1.6.M01/neo4j-jmx-1.6.M01.jar
+2011-12-29 12:53:05.799+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/json-20090211.jar
+2011-12-29 12:53:05.799+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/neo4j-kernel-1.6.M01.jar
+2011-12-29 12:53:05.799+0100:    [classpath] /Users/erik/.m2/repository/org/neo4j/neo4j-graph-matching/1.6.M01/neo4j-graph-matching-1.6.M01.jar
+2011-12-29 12:53:05.799+0100:    [classpath] /Users/erik/.m2/repository/org/springframework/spring-beans/3.0.5.RELEASE/spring-beans-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.800+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/aspectjrt-1.6.12.jar
+2011-12-29 12:53:05.800+0100:    [classpath + classpath] /Users/erik/.m2/repository/com/google/gwt/gwt-user/2.4.0/gwt-user-2.4.0.jar
+2011-12-29 12:53:05.800+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/spring-asm-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.800+0100:    [classpath] /Users/erik/.m2/repository/org/springframework/spring-core/3.0.5.RELEASE/spring-core-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.800+0100:    [bootstrap] /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/laf.jar
+2011-12-29 12:53:05.800+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/spring-data-commons-core-1.2.0.M2.jar
+2011-12-29 12:53:05.800+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/spring-aspects-3.0.6.RELEASE.jar
+2011-12-29 12:53:05.800+0100:    [classpath] /Users/erik/.m2/repository/cglib/cglib/2.2/cglib-2.2.jar
+2011-12-29 12:53:05.800+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/log4j-1.2.14.jar
+2011-12-29 12:53:05.800+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/slf4j-log4j12-1.6.1.jar
+2011-12-29 12:53:05.800+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/spring-jdbc-3.0.6.RELEASE.jar
+2011-12-29 12:53:05.800+0100:    [classpath] /Users/erik/.m2/repository/org/neo4j/neo4j-graph-algo/1.6.M01/neo4j-graph-algo-1.6.M01.jar
+2011-12-29 12:53:05.800+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/commons-logging-1.1.1.jar
+2011-12-29 12:53:05.800+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/neo4j-lucene-index-1.6.M01.jar
+2011-12-29 12:53:05.800+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/standard-1.1.2.jar
+2011-12-29 12:53:05.800+0100:    [classpath] /Users/erik/.m2/repository/org/hibernate/javax/persistence/hibernate-jpa-2.0-api/1.0.0.Final/hibernate-jpa-2.0-api-1.0.0.Final.jar
+2011-12-29 12:53:05.800+0100:    [classpath + loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/classes/
+2011-12-29 12:53:05.801+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/hibernate-validator-4.2.0.Final.jar
+2011-12-29 12:53:05.801+0100:    [classpath] /Users/erik/.m2/repository/org/neo4j/neo4j-kernel/1.6.M01/neo4j-kernel-1.6.M01.jar
+2011-12-29 12:53:05.801+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/eventservice-1.2.0-SNAPSHOT.jar
+2011-12-29 12:53:05.801+0100:    [classpath] /Users/erik/.m2/repository/org/slf4j/jcl-over-slf4j/1.6.1/jcl-over-slf4j-1.6.1.jar
+2011-12-29 12:53:05.801+0100:    [bootstrap] /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/sunrsasign.jar
+2011-12-29 12:53:05.801+0100:    [classpath] /Users/erik/.m2/repository/org/neo4j/neo4j-lucene-index/1.6.M01/neo4j-lucene-index-1.6.M01.jar
+2011-12-29 12:53:05.801+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/spring-webmvc-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.801+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/jstl-1.1.2.jar
+2011-12-29 12:53:05.801+0100:    [classpath] /Users/erik/.m2/repository/org/aspectj/aspectjrt/1.6.12/aspectjrt-1.6.12.jar
+2011-12-29 12:53:05.801+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/spring-test-3.0.6.RELEASE.jar
+2011-12-29 12:53:05.801+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/neo4j-cypher-1.6.M01.jar
+2011-12-29 12:53:05.801+0100:    [classpath + classpath] /Users/erik/.m2/repository/com/google/gwt/gwt-dev/2.4.0/gwt-dev-2.4.0.jar
+2011-12-29 12:53:05.801+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/asm-3.1.jar
+2011-12-29 12:53:05.801+0100:    [classpath] /Users/erik/.m2/repository/org/springframework/data/spring-data-commons-core/1.2.0.M2/spring-data-commons-core-1.2.0.M2.jar
+2011-12-29 12:53:05.801+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/jcl-over-slf4j-1.6.1.jar
+2011-12-29 12:53:05.801+0100:    [classpath] /Users/erik/.m2/repository/taglibs/standard/1.1.2/standard-1.1.2.jar
+2011-12-29 12:53:05.801+0100:    [classpath] /Users/erik/devel/law/src/main/aspect
+2011-12-29 12:53:05.801+0100:    [classpath] /Users/erik/.m2/repository/org/springframework/spring-webmvc/3.0.5.RELEASE/spring-webmvc-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.802+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/neo4j-udc-1.6.M01.jar
+2011-12-29 12:53:05.802+0100:    [classpath] /Users/erik/.m2/repository/org/json/json/20090211/json-20090211.jar
+2011-12-29 12:53:05.802+0100:    [classpath] /Users/erik/.m2/repository/org/springframework/spring-web/3.0.5.RELEASE/spring-web-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.802+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/neo4j-1.6.M01.jar
+2011-12-29 12:53:05.802+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/spring-tx-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.802+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/spring-data-neo4j-2.0.0.RC1.jar
+2011-12-29 12:53:05.802+0100:    [classpath] /Users/erik/.m2/repository/org/springframework/data/spring-data-neo4j/2.0.0.RC1/spring-data-neo4j-2.0.0.RC1.jar
+2011-12-29 12:53:05.802+0100:    [bootstrap] /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/lib/jce.jar
+2011-12-29 12:53:05.802+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/aopalliance-1.0.jar
+2011-12-29 12:53:05.802+0100:    [classpath] /Users/erik/.m2/repository/org/springframework/spring-expression/3.0.5.RELEASE/spring-expression-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.802+0100:    [classpath] /Users/erik/.m2/repository/javax/servlet/jstl/1.1.2/jstl-1.1.2.jar
+2011-12-29 12:53:05.802+0100:    [classpath] /Users/erik/.m2/repository/org/springframework/spring-asm/3.0.5.RELEASE/spring-asm-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.802+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/geronimo-jta_1.1_spec-1.1.1.jar
+2011-12-29 12:53:05.802+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/gwt-servlet-2.4.0.jar
+2011-12-29 12:53:05.802+0100:    [classpath] /Users/erik/.m2/repository/org/springframework/spring-tx/3.0.5.RELEASE/spring-tx-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.803+0100:    [classpath] /Users/erik/.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar
+2011-12-29 12:53:05.803+0100:    [classpath + loader.0] file:/Users/erik/.m2/repository/javax/validation/validation-api/1.0.0.GA/validation-api-1.0.0.GA.jar
+2011-12-29 12:53:05.803+0100:    [classpath] /Users/erik/devel/law/src/main/resources
+2011-12-29 12:53:05.803+0100:    [classpath] /Users/erik/.m2/repository/org/neo4j/neo4j-cypher-dsl/1.5.M1/neo4j-cypher-dsl-1.5.M1.jar
+2011-12-29 12:53:05.803+0100:    [bootstrap] /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/charsets.jar
+2011-12-29 12:53:05.803+0100:    [classpath] /Users/erik/.m2/repository/org/scala-lang/scala-library/2.9.0-1/scala-library-2.9.0-1.jar
+2011-12-29 12:53:05.803+0100:    [classpath] /Users/erik/.m2/repository/org/springframework/spring-jdbc/3.0.6.RELEASE/spring-jdbc-3.0.6.RELEASE.jar
+2011-12-29 12:53:05.803+0100:    [classpath] /Users/erik/.m2/repository/org/neo4j/neo4j/1.6.M01/neo4j-1.6.M01.jar
+2011-12-29 12:53:05.803+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/lucene-core-3.1.0.jar
+2011-12-29 12:53:05.803+0100:    [classpath] /Users/erik/.m2/repository/aopalliance/aopalliance/1.0/aopalliance-1.0.jar
+2011-12-29 12:53:05.803+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/spring-expression-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.803+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/spring-web-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.803+0100:    [bootstrap] /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar
+2011-12-29 12:53:05.803+0100:    [classpath] /Users/erik/devel/law/target/generated-sources/gwt
+2011-12-29 12:53:05.803+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/slf4j-api-1.6.1.jar
+2011-12-29 12:53:05.803+0100:    [classpath] /Users/erik/.m2/repository/org/apache/lucene/lucene-core/3.1.0/lucene-core-3.1.0.jar
+2011-12-29 12:53:05.804+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/spring-aop-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.804+0100:    [classpath] /Users/erik/.m2/repository/org/springframework/spring-aspects/3.0.6.RELEASE/spring-aspects-3.0.6.RELEASE.jar
+2011-12-29 12:53:05.804+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/gwteventservice-1.2.0-SNAPSHOT.jar
+2011-12-29 12:53:05.804+0100:    [bootstrap] /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/ui.jar
+2011-12-29 12:53:05.804+0100:    [classpath] /Users/erik/.m2/repository/org/apache/geronimo/specs/geronimo-jta_1.1_spec/1.1.1/geronimo-jta_1.1_spec-1.1.1.jar
+2011-12-29 12:53:05.804+0100:    [classpath] /Users/erik/.m2/repository/com/google/code/gwteventservice/gwteventservice/1.2.0-SNAPSHOT/gwteventservice-1.2.0-SNAPSHOT.jar
+2011-12-29 12:53:05.804+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/validation-api-1.0.0.GA-sources.jar
+2011-12-29 12:53:05.804+0100:    [classpath] /Users/erik/devel/law/src/main/java
+2011-12-29 12:53:05.804+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/neo4j-cypher-dsl-1.5.M1.jar
+2011-12-29 12:53:05.804+0100:    [classpath] /Users/erik/.m2/repository/com/google/code/gwteventservice/eventservice-rpc/1.2.0-SNAPSHOT/eventservice-rpc-1.2.0-SNAPSHOT.jar
+2011-12-29 12:53:05.804+0100:    [classpath] /Users/erik/.m2/repository/asm/asm/3.1/asm-3.1.jar
+2011-12-29 12:53:05.804+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/spring-context-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.804+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/neo4j-graph-algo-1.6.M01.jar
+2011-12-29 12:53:05.804+0100:    [classpath] /Users/erik/.m2/repository/com/google/code/gwteventservice/eventservice/1.2.0-SNAPSHOT/eventservice-1.2.0-SNAPSHOT.jar
+2011-12-29 12:53:05.804+0100:    [classpath] /Users/erik/.m2/repository/org/springframework/spring-context-support/3.0.5.RELEASE/spring-context-support-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.804+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/scala-library-2.9.0-1.jar
+2011-12-29 12:53:05.804+0100:    [classpath] /Users/erik/.m2/repository/log4j/log4j/1.2.14/log4j-1.2.14.jar
+2011-12-29 12:53:05.804+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/neo4j-jmx-1.6.M01.jar
+2011-12-29 12:53:05.805+0100:    [classpath] /Users/erik/.m2/repository/org/springframework/spring-aop/3.0.5.RELEASE/spring-aop-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.805+0100:    [classpath] /Users/erik/.m2/repository/org/springframework/spring-orm/3.0.6.RELEASE/spring-orm-3.0.6.RELEASE.jar
+2011-12-29 12:53:05.805+0100:    [classpath] /Users/erik/.m2/repository/org/slf4j/slf4j-log4j12/1.6.1/slf4j-log4j12-1.6.1.jar
+2011-12-29 12:53:05.805+0100:    [classpath] /Users/erik/.m2/repository/com/google/gwt/gwt-servlet/2.4.0/gwt-servlet-2.4.0.jar
+2011-12-29 12:53:05.805+0100:    [classpath] /Users/erik/.m2/repository/org/neo4j/neo4j-udc/1.6.M01/neo4j-udc-1.6.M01.jar
+2011-12-29 12:53:05.805+0100:    [classpath] /Users/erik/.m2/repository/org/springframework/spring-test/3.0.6.RELEASE/spring-test-3.0.6.RELEASE.jar
+2011-12-29 12:53:05.805+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/gwt-dev-2.4.0.jar
+2011-12-29 12:53:05.805+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/eventservice-rpc-1.2.0-SNAPSHOT.jar
+2011-12-29 12:53:05.805+0100:    [classpath] /Users/erik/.m2/repository/org/hibernate/hibernate-validator/4.2.0.Final/hibernate-validator-4.2.0.Final.jar
+2011-12-29 12:53:05.805+0100:    [bootstrap] /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jsse.jar
+2011-12-29 12:53:05.805+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/spring-orm-3.0.6.RELEASE.jar
+2011-12-29 12:53:05.805+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/neo4j-graph-matching-1.6.M01.jar
+2011-12-29 12:53:05.805+0100:    [classpath] /Users/erik/.m2/repository/org/neo4j/neo4j-cypher/1.6.M01/neo4j-cypher-1.6.M01.jar
+2011-12-29 12:53:05.805+0100:    [loader.0] file:/Users/erik/devel/law/target/law-1.0-SNAPSHOT/WEB-INF/lib/cglib-2.2.jar
+2011-12-29 12:53:05.805+0100:    [bootstrap] /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/jsfd.jar
+2011-12-29 12:53:05.805+0100:    [classpath] /Users/erik/.m2/repository/org/springframework/spring-context/3.0.5.RELEASE/spring-context-3.0.5.RELEASE.jar
+2011-12-29 12:53:05.805+0100: Library Path:
+2011-12-29 12:53:05.806+0100:   /Applications/IntelliJ IDEA 11.app/Contents/Resources/Java
+2011-12-29 12:53:05.806+0100:   /System/Library/PrivateFrameworks/JavaApplicationLauncher.framework/Versions/A/Resources
+2011-12-29 12:53:05.806+0100:   /Users/erik/devel/law
+2011-12-29 12:53:05.806+0100:   /Library/Java/Extensions
+2011-12-29 12:53:05.806+0100:   /System/Library/Java/Extensions
+2011-12-29 12:53:05.806+0100:   /usr/lib/java
+2011-12-29 12:53:05.810+0100: Garbage Collector: ParNew: [Par Eden Space, Par Survivor Space]
+2011-12-29 12:53:05.810+0100: Garbage Collector: ConcurrentMarkSweep: [Par Eden Space, Par Survivor Space, CMS Old Gen, CMS Perm Gen]
+2011-12-29 12:53:05.812+0100: Memory Pool: Code Cache (Non-heap memory): committed=2.44 MB, used=1.26 MB, max=48.00 MB, threshold=0.00 B
+2011-12-29 12:53:05.812+0100: Memory Pool: Par Eden Space (Heap memory): committed=16.63 MB, used=12.78 MB, max=51.25 MB, threshold=?
+2011-12-29 12:53:05.812+0100: Memory Pool: Par Survivor Space (Heap memory): committed=2.06 MB, used=1.43 MB, max=6.38 MB, threshold=?
+2011-12-29 12:53:05.813+0100: Memory Pool: CMS Old Gen (Heap memory): committed=62.38 MB, used=24.01 MB, max=448.00 MB, threshold=0.00 B
+2011-12-29 12:53:05.813+0100: Memory Pool: CMS Perm Gen (Non-heap memory): committed=37.05 MB, used=33.11 MB, max=82.00 MB, threshold=0.00 B
+2011-12-29 12:53:05.814+0100: VM Arguments: [-Xmx512m]
+2011-12-29 12:53:05.814+0100: System properties:
+2011-12-29 12:53:05.814+0100:   sun.boot.library.path = /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Libraries
+2011-12-29 12:53:05.814+0100:   awt.nativeDoubleBuffering = true
+2011-12-29 12:53:05.814+0100:   com.apple.mrj.application.apple.menu.about.name = Development Mode
+2011-12-29 12:53:05.814+0100:   gopherProxySet = false
+2011-12-29 12:53:05.814+0100:   mrj.build = 10M3527
+2011-12-29 12:53:05.814+0100:   path.separator = :
+2011-12-29 12:53:05.815+0100:   file.encoding.pkg = sun.io
+2011-12-29 12:53:05.815+0100:   sun.java.launcher = SUN_STANDARD
+2011-12-29 12:53:05.815+0100:   user.country = US
+2011-12-29 12:53:05.815+0100:   sun.os.patch.level = unknown
+2011-12-29 12:53:05.815+0100:   user.dir = /Users/erik/devel/law
+2011-12-29 12:53:05.815+0100:   org.mortbay.log.class = com.google.gwt.dev.shell.jetty.JettyNullLogger
+2011-12-29 12:53:05.815+0100:   apple.awt.graphics.UseOpenGL = false
+2011-12-29 12:53:05.815+0100:   com.apple.eawt.CocoaComponent.CompatibilityMode = false
+2011-12-29 12:53:05.815+0100:   sun.jnu.encoding = MacRoman
+2011-12-29 12:53:05.815+0100:   sun.management.compiler = HotSpot 64-Bit Tiered Compilers
+2011-12-29 12:53:05.815+0100:   http.nonProxyHosts = local|*.local|169.254/16|*.169.254/16
+2011-12-29 12:53:05.815+0100:   user.home = /Users/erik
+2011-12-29 12:53:05.815+0100:   user.timezone = Europe/Stockholm
+2011-12-29 12:53:05.815+0100:   file.encoding = MacRoman
+2011-12-29 12:53:05.815+0100:   org.mortbay.xml.XmlParser.Validating = false
+2011-12-29 12:53:05.815+0100:   build.compiler = org.eclipse.jdt.core.JDTCompilerAdapter
+2011-12-29 12:53:05.815+0100:   user.name = erik
+2011-12-29 12:53:05.816+0100:   apple.awt.graphics.UseQuartz = false
+2011-12-29 12:53:05.816+0100:   sun.java.command = com.google.gwt.dev.DevMode -war /Users/erik/devel/law/target/law-1.0-SNAPSHOT -gen /Users/erik/devel/law/target/.generated -logLevel INFO -port 8888 -startupUrl law.html lawscraper.law
+2011-12-29 12:53:05.816+0100:   sun.arch.data.model = 64
+2011-12-29 12:53:05.816+0100:   user.language = en
+2011-12-29 12:53:05.816+0100:   awt.toolkit = apple.awt.CToolkit
+2011-12-29 12:53:05.816+0100:   file.separator = /
+2011-12-29 12:53:05.816+0100:   sun.io.unicode.encoding = UnicodeLittle
+2011-12-29 12:53:05.816+0100:   sun.cpu.endian = little
+2011-12-29 12:53:05.816+0100:   mrj.version = 1060.1.6.0_29-402
+2011-12-29 12:53:05.816+0100:   socksNonProxyHosts = local|*.local|169.254/16|*.169.254/16
+2011-12-29 12:53:05.816+0100:   ftp.nonProxyHosts = local|*.local|169.254/16|*.169.254/16
+2011-12-29 12:53:05.816+0100:   sun.awt.exception.handler = apple.awt.CToolkit$EventQueueExceptionHandler
+2011-12-29 12:53:05.816+0100:   sun.cpu.isalist = 
+2011-12-29 12:53:05.816+0100: Neo4j Kernel properties:
+2011-12-29 12:53:05.816+0100:   store_dir=/Users/erik/devel/law/data/graph.db
+2011-12-29 12:53:05.816+0100:   logical_log=/Users/erik/devel/law/data/graph.db/nioneo_logical.log
+2011-12-29 12:53:05.817+0100:   node_auto_indexing=false
+2011-12-29 12:53:05.817+0100:   neostore.relationshipstore.db.mapped_memory=100M
+2011-12-29 12:53:05.817+0100:   neostore.nodestore.db.mapped_memory=20M
+2011-12-29 12:53:05.817+0100:   use_memory_mapped_buffers=true
+2011-12-29 12:53:05.817+0100:   rebuild_idgenerators_fast=true
+2011-12-29 12:53:05.817+0100:   neostore.propertystore.db.index.keys.mapped_memory=1M
+2011-12-29 12:53:05.817+0100:   neostore.propertystore.db.arrays.mapped_memory=130M
+2011-12-29 12:53:05.817+0100:   neostore.propertystore.db.strings.mapped_memory=130M
+2011-12-29 12:53:05.817+0100:   neo_store=/Users/erik/devel/law/data/graph.db/neostore
+2011-12-29 12:53:05.817+0100:   neostore.propertystore.db.index.mapped_memory=1M
+2011-12-29 12:53:05.817+0100:   create=true
+2011-12-29 12:53:05.817+0100:   neostore.propertystore.db.mapped_memory=90M
+2011-12-29 12:53:05.817+0100:   relationship_auto_indexing=false
+2011-12-29 12:53:05.817+0100: Storage files:
+2011-12-29 12:53:05.818+0100:   active_tx_log: 11.00 B
+2011-12-29 12:53:05.818+0100:   index:
+2011-12-29 12:53:05.818+0100:     lucene-store.db: 32.00 B
+2011-12-29 12:53:05.818+0100:     lucene.log.1: 16.00 B
+2011-12-29 12:53:05.818+0100:     lucene.log.active: 4.00 B
+2011-12-29 12:53:05.819+0100:   - Total: 52.00 B
+2011-12-29 12:53:05.819+0100:   lock: 0.00 B
+2011-12-29 12:53:05.819+0100:   messages.log: 17.38 kB
+2011-12-29 12:53:05.819+0100:   neostore: 54.00 B
+2011-12-29 12:53:05.819+0100:   neostore.id: 9.00 B
+2011-12-29 12:53:05.819+0100:   neostore.nodestore.db: 9.00 B
+2011-12-29 12:53:05.820+0100:   neostore.nodestore.db.id: 9.00 B
+2011-12-29 12:53:05.820+0100:   neostore.propertystore.db: 0.00 B
+2011-12-29 12:53:05.820+0100:   neostore.propertystore.db.arrays: 128.00 B
+2011-12-29 12:53:05.820+0100:   neostore.propertystore.db.arrays.id: 9.00 B
+2011-12-29 12:53:05.820+0100:   neostore.propertystore.db.id: 9.00 B
+2011-12-29 12:53:05.820+0100:   neostore.propertystore.db.index: 0.00 B
+2011-12-29 12:53:05.821+0100:   neostore.propertystore.db.index.id: 9.00 B
+2011-12-29 12:53:05.821+0100:   neostore.propertystore.db.index.keys: 38.00 B
+2011-12-29 12:53:05.821+0100:   neostore.propertystore.db.index.keys.id: 9.00 B
+2011-12-29 12:53:05.821+0100:   neostore.propertystore.db.strings: 128.00 B
+2011-12-29 12:53:05.821+0100:   neostore.propertystore.db.strings.id: 9.00 B
+2011-12-29 12:53:05.821+0100:   neostore.relationshipstore.db: 0.00 B
+2011-12-29 12:53:05.822+0100:   neostore.relationshipstore.db.id: 9.00 B
+2011-12-29 12:53:05.822+0100:   neostore.relationshiptypestore.db: 0.00 B
+2011-12-29 12:53:05.822+0100:   neostore.relationshiptypestore.db.id: 9.00 B
+2011-12-29 12:53:05.822+0100:   neostore.relationshiptypestore.db.names: 38.00 B
+2011-12-29 12:53:05.822+0100:   neostore.relationshiptypestore.db.names.id: 9.00 B
+2011-12-29 12:53:05.822+0100:   nioneo_logical.log.1: 16.00 B
+2011-12-29 12:53:05.822+0100:   nioneo_logical.log.active: 4.00 B
+2011-12-29 12:53:05.822+0100:   tm_tx_log.1: 0.00 B
+2011-12-29 12:53:05.823+0100: Id usage:
+2011-12-29 12:53:05.823+0100:   NodeStore: used=1 high=0
+2011-12-29 12:53:05.823+0100:   RelationshipStore: used=0 high=-1
+2011-12-29 12:53:05.823+0100:   RelationshipTypeStore: used=0 high=-1
+2011-12-29 12:53:05.823+0100:   PropertyStore: used=0 high=-1
+2011-12-29 12:53:05.823+0100:   PropertyIndexStore: used=0 high=-1
+2011-12-29 12:53:05.823+0100:   StringPropertyStore: used=1 high=0
+2011-12-29 12:53:05.823+0100:   ArrayPropertyStore: used=1 high=0
+2011-12-29 12:53:05.823+0100: --- CONFIGURATION END ---
+2011-12-29 12:53:05.877+0100: Extension org.neo4j.kernel.KernelExtension[kernel jmx] loaded ok
+2011-12-29 12:53:05.879+0100: Extension org.neo4j.kernel.KernelExtension[kernel udc] loaded ok
+2011-12-29 13:09:29.416+0100: Closed log /Users/erik/devel/law/data/graph.db/nioneo_logical.log
+2011-12-29 13:09:29.436+0100: NeoStore closed
+2011-12-29 13:09:29.437+0100: Closed log /Users/erik/devel/law/data/graph.db/index/lucene.log
+2011-12-29 13:09:29.437+0100: NeoStore closed
+2011-12-29 13:09:29.438+0100: TM shutting down

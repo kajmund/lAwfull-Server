@@ -1,0 +1,19 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <ui:style>
+        .important {
+            font-weight: bold;
+        }
+    </ui:style>
+    <g:FlowPanel ui:field="paragraphContainer">
+
+        <g:FlowPanel ui:field="sectionContainer">
+            <g:FlowPanel ui:field="sectionListItemContainer">
+            </g:FlowPanel>
+        </g:FlowPanel>
+
+    </g:FlowPanel>
+
+
+</ui:UiBinder>

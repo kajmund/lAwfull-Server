@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+    <!-- Inherit our applications main module.                      -->
+    <inherits name='lawscraper.law'/>
+
+    <!-- Specify the path to any remote services.
+    <servlet path="/law/greet" class="lawscraper.server.GreetingServiceImpl" />
+    -->
+
+</module>

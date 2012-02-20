@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app
+        PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app id="WebApp_ID" version="2.5"
+         xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+
+    <!-- Front Controller for all GWT Spring based servlets -->
+    <servlet>
+        <servlet-name>gwt</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>requestFactoryServlet</servlet-name>
+        <servlet-class>lawscraper.shared.util.SpringRequestServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>requestFactoryServlet</servlet-name>
+        <url-pattern>/gwtRequest</url-pattern>
+    </servlet-mapping>
+
+    <!-- Front Controller for all Spring based servlets -->
+    <servlet>
+        <servlet-name>spring</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <!-- Don't forget to declare a gwt-servlet.xml -->
+    <servlet-mapping>
+        <servlet-name>gwt</servlet-name>
+        <url-pattern>law/rpc/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Don't forget to declare a spring-servlet.xml -->
+    <servlet-mapping>
+        <servlet-name>spring</servlet-name>
+        <url-pattern>lawscraper/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>jUnitHostImpl</servlet-name>
+        <servlet-class>com.google.gwt.junit.server.JUnitHostImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>jUnitHostImpl</servlet-name>
+        <url-pattern>/law/junithost/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>EventService</servlet-name>
+        <servlet-class>
+            de.novanic.eventservice.service.EventServiceImpl
+        </servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>EventService</servlet-name>
+        <url-pattern>/law/gwteventservice</url-pattern>
+    </servlet-mapping>
+
+</web-app>
+

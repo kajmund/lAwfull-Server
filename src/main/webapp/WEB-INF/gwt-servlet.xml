@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!--
+   The GWTHandler allows you to quickly map multiple RPC service beans to different URLs
+   very similar to the way Spring's SimpleUrlHandlerMapping maps URLs to controllers. The
+   mapped beans are internally wrapped into GWTRPCServiceExporter
+   instances, with the notable difference that you cannot specify a service interface in the configuration
+   and the service beans must implement the RemoteService interface (as a matter of fact there is
+   a workaround even for that by providing your own implementation of a RPCServiceExporter -
+   interested readers please consult the javadocs for GWTHandler).
+
+   See 3.2 Publishing multiple beans - GWTHandler
+   http://gwt-widget.sourceforge.net/?q=node/54 -->
+
+    <!--  If you wanna research further about annotation support with GWT Handler.
+  See http://groups.google.com/group/gwt-sl/browse_thread/thread/f563b200aa0af307# -->
+
+    <!-- Or create our own implementation:
+   Seehttp://groups.google.com/group/gwt-sl/msg/3677e59c4a7c2dee -->
+
+    <!-- A Spring bean-->
+    
+    <!-- The GWT handler. Watch out the mappings! -->
+
+</beans>

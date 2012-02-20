@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='law'>
+    <inherits name="javax.validation.Validation"/>
+    <!-- Inherit the core Web Toolkit stuff.                        -->
+    <inherits name='com.google.gwt.user.User'/>
+
+    <!-- We need the JUnit module in the main module,               -->
+    <!-- otherwise eclipse complains (Google plugin bug?)           -->
+    <inherits name='com.google.gwt.junit.JUnit'/>
+
+    <!-- Inherit the default GWT style sheet.  You can change       -->
+    <!-- the theme of your GWT application by uncommenting          -->
+    <!-- any one of the following lines.                            -->
+    <inherits name='com.google.gwt.user.theme.standard.Standard'/>
+    <inherits name="com.google.gwt.place.Place"/>
+    <inherits name="com.google.gwt.activity.Activity"/>
+      <!-- <inherits name='com.google.gwt.user.cellview.CellView'/> -->
+    <inherits name='com.google.gwt.logging.Logging'/>
+    <inherits name="com.google.gwt.resources.Resources"/>
+
+    <inherits name="de.novanic.eventservice.GWTEventService"/>
+    <inherits name="com.google.web.bindery.requestfactory.RequestFactory"/>
+
+    <servlet path="/ServerMessageGeneratorService" class="de.novanic.gwteventservice.demo.hello.server.ServerMessageGeneratorServiceImpl"/>
+    <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
+    <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
+
+    <!-- Other module inherits                                      -->
+
+    <!-- Specify the app entry point class.                         -->
+    <entry-point class='lawscraper.client.law'/>
+
+    <!-- Use ClientFactoryImpl by default -->
+    <replace-with class="lawscraper.client.ClientFactoryImpl">
+        <when-type-is class="lawscraper.client.ClientFactory"/>
+    </replace-with>
+
+    <!-- Specify the paths for translatable code                    -->
+    <source path='client'/>
+    <source path='shared'/>
+
+    <set-property name="gwt.logging.enabled" value="TRUE" />
+    <set-property name="gwt.logging.logLevel" value="SEVERE" />
+    <set-property name="gwt.logging.consoleHandler" value="ENABLED" />
+    <set-property name="gwt.logging.developmentModeHandler" value="ENABLED" />
+    <set-property name="gwt.logging.firebugHandler" value="ENABLED" />
+    <set-property name="gwt.logging.hasWidgetsHandler" value="DISABLED" />
+    <set-property name="gwt.logging.popupHandler" value="DISABLED" />
+    <set-property name="gwt.logging.systemHandler" value="ENABLED" />
+    <set-property name="gwt.logging.simpleRemoteHandler" value="DISABLED" />
+
+</module>
