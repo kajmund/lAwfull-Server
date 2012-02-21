@@ -25,6 +25,7 @@ public class Law extends LawDocumentPart {
     List<String> propositions = new ArrayList<String>();
 
     public Law() {
+        this.setType("law");
     }
 
     public String getCreator() {

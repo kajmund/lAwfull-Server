@@ -62,7 +62,7 @@ public class Scraper {
         } catch (ParserConfigurationException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();  //To change body of c atch statement use File | Settings | File Templates.
         }
 
         return law;
@@ -122,6 +122,18 @@ public class Scraper {
         } else if (cdt.equals("section") || cdt.equals("a")) {
             if (currentSection != null) {
                 currentSection.addText(currentSection.getTextElement().getText() + data);
+
+                //the lagen.nu parser sometimes misses deprecated paragraphs. let's check that our selfs.
+                if (currentSection.getTextElement().getText().contains("upphävd genom")) {
+                    currentSection.setType("deprecated");
+                    currentSection.setDeprecated(true);
+
+                    LawDocumentPart parent = currentSection.getParent();
+                    if (parent != null && parent.getType().equals("paragraph")) {
+                        parent.setDeprecated(true);
+                        parent.setType("deprecated");
+                    }
+                }
             }
         } else if (cdt.equals("dct:publisher")) {
             if (law.getPublisher() == null) {
@@ -175,9 +187,9 @@ public class Scraper {
             section.setKey(attributes.getValue(0));
             section.setType("section");
             if (currentParaGraph != null) {
-                currentParaGraph.getChildren().add(section);
+                currentParaGraph.addDocumentPartChild(section);
             } else {
-                law.getChildren().add(section);
+                law.addDocumentPartChild(section);
             }
 
             currentSection = section;
@@ -216,7 +228,7 @@ public class Scraper {
             sectionListItem.addText(attributes.getValue(0));
             sectionListItem.setType("sectionListItem");
             setCurrentDataType("sectionListItem");
-            currentSection.getChildren().add(sectionListItem);
+            currentSection.addDocumentPartChild(sectionListItem);
             currentSectionListItem = sectionListItem;
         }
     }
@@ -238,25 +250,26 @@ public class Scraper {
             //chapter.setOrder(Integer.parseInt(attributes.getValue(4)));
             chapter.setKey(attributes.getValue(2));
             if (currentDivider != null) {
-                currentDivider.getChildren().add(chapter);
+                currentDivider.addDocumentPartChild(chapter);
             } else {
-                law.getChildren().add(chapter);
+                law.addDocumentPartChild(chapter);
             }
+
             currentChapter = chapter;
             chapter.setType("chapter");
             setCurrentDataType("chapter");
         } else if (attributes.getValue(1) != null && attributes.getValue(1).equals("rinfo:Paragraf")) {
             LawDocumentPart paragraph = new LawDocumentPart();
             if (attributes.getValue(4) != null) {
-                //paragraph.setOrder(Integer.parseInt(attributes.getValue(4)));
+                paragraph.addText(attributes.getValue(4));
             }
             if (attributes.getValue(2) != null) {
                 paragraph.setKey(attributes.getValue(2));
             }
             if (currentChapter != null) {
-                currentChapter.getChildren().add(paragraph);
+                currentChapter.addDocumentPartChild(paragraph);
             } else {
-                law.getChildren().add(paragraph);
+                law.addDocumentPartChild(paragraph);
             }
 
             currentParaGraph = paragraph;
@@ -266,43 +279,26 @@ public class Scraper {
             currentDivider = new LawDocumentPart();
 
             currentDivider.setKey(attributes.getValue(1));
-            law.getChildren().add(currentDivider);
+            law.addDocumentPartChild(currentDivider);
             currentDivider.setType("divider");
             setCurrentDataType("divider");
         } else if (attributes.getValue(0) != null && attributes.getValue(0).equals("upphavd")) {
-            LawDocumentPart paragraph = new LawDocumentPart();
-
-            try {
-                int paragraphNo = currentParaGraph.getOrder();
-                paragraphNo++;
-                paragraph.setOrder(paragraphNo);
-            } catch (Exception e) {
-                System.out.println("Could not set paragraph no");
-            }
-            paragraph.setType("paragraph");
-            paragraph.setDeprecated(true);
-            /* todo: fix this
-            if (attributes.getValue(2) != null) {
-                paragraph.setKey(attributes.getValue(2));
-            }
-            */
+            LawDocumentPart deprecatedElement = new LawDocumentPart();
+            deprecatedElement.setType("deprecated");
+            deprecatedElement.setDeprecated(true);
 
             if (currentChapter != null) {
-                currentChapter.getChildren().add(paragraph);
+                currentChapter.addDocumentPartChild(deprecatedElement);
             } else {
-                law.getChildren().add(paragraph);
+                law.addDocumentPartChild(deprecatedElement);
             }
-            currentParaGraph = paragraph;
+
+            currentParaGraph = deprecatedElement;
 
             LawDocumentPart section = new LawDocumentPart();
-
-            /* todo: fix this
-            int sectionNo = Integer.parseInt(currentSection.getSectionNo())+1;
-            section.setSectionNo(String.valueOf(sectionNo));
-            section.setSectionKey("#"+sectionNo);
-            */
-            section.setType("section");
-            currentParaGraph.getChildren().add(section);
+            section.setType("deprecated");
+            section.setDeprecated(true);
+            currentParaGraph.addDocumentPartChild(section);
             currentSection = section;
 
             setCurrentDataType("sectionDeprecated");

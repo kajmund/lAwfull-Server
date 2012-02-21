@@ -121,4 +121,9 @@ public class LawDocumentPart extends DocumentPart {
     public boolean isDeprecated() {
         return deprecated;
     }
+
+    public void addDocumentPartChild(LawDocumentPart lawDocumentPart) {
+        getChildren().add(lawDocumentPart);
+        lawDocumentPart.setParent(this);
+    }
 }
