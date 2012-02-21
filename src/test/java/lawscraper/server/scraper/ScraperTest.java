@@ -11,9 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
@@ -30,9 +28,8 @@ public class ScraperTest {
 
     @Test
     public void testParseLawSkadestandsLagen() throws Exception {
-        final String lawUrl = "https://lagen.nu/1972:207.xht2";
         Scraper scraper = new Scraper();
-        Law law = scraper.parseLaw(lawUrl);
+        Law law = scraper.parseLaw(TestDataUtil.getLaw("1972:207"));
         assertNotNull(law);
         //assertEquals(" Skadeståndslag (1972:207) ", law.getTitle());
         assertEquals("1972:207", law.getFsNumber());

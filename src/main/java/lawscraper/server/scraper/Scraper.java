@@ -53,8 +53,28 @@ public class Scraper {
 
     }
 
-    public void parseXHTML(String url) throws SAXException, ParserConfigurationException, IOException {
+    public Law parseLaw(InputStream lawData) {
 
+        try {
+            parse(lawData);
+        } catch (SAXException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        return law;
+
+    }
+
+    public void parseXHTML(String url) throws SAXException, ParserConfigurationException, IOException {
+        InputStream in = new URL(url).openStream();
+        parse(in);
+    }
+
+    public void parse(InputStream in) throws ParserConfigurationException, SAXException, IOException {
         DefaultHandler handler = new
                 DefaultHandler() {
                     String data = "";
@@ -92,7 +112,6 @@ public class Scraper {
 
         factory.setNamespaceAware(true);
         SAXParser saxParser = factory.newSAXParser();
-        InputStream in = new URL(url).openStream();
         saxParser.parse(in, handler);
     }
 
