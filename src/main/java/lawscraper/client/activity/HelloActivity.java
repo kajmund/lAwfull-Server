@@ -6,17 +6,10 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
-import de.novanic.eventservice.client.event.RemoteEventService;
-import de.novanic.eventservice.client.event.RemoteEventServiceFactory;
-import de.novanic.eventservice.client.event.domain.Domain;
-import de.novanic.eventservice.client.event.domain.DomainFactory;
 import lawscraper.client.ClientFactory;
-import lawscraper.client.place.HelloPlace;
 import lawscraper.client.ui.StartView;
 import lawscraper.shared.LawRequestFactory;
 import lawscraper.shared.proxies.LawProxy;
-import lawscraper.shared.pushevent.PushEvent;
-import lawscraper.shared.pushevent.PushListener;
 
 
 public class HelloActivity extends AbstractActivity implements StartView.Presenter {
@@ -30,22 +23,8 @@ public class HelloActivity extends AbstractActivity implements StartView.Present
     // Alternatively, could be injected via GIN
     private ClientFactory clientFactory;
 
-    private static final Domain DOMAIN = DomainFactory.getDomain("my_domain");
-
-
-    public HelloActivity(HelloPlace place, final ClientFactory clientFactory) {
+    public HelloActivity(final ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
-
-        //Inits push service
-        RemoteEventServiceFactory theEventServiceFactory = RemoteEventServiceFactory.getInstance();
-        RemoteEventService theEventService = theEventServiceFactory.getRemoteEventService();
-
-        theEventService.addListener(DOMAIN, new PushListener() {
-            public void onMyEvent(PushEvent event) {
-                StartView startView = clientFactory.getHelloView();
-                startView.setScrapeUpdate(event.getMessage());
-            }
-        });
     }
 
 

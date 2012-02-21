@@ -1,7 +1,6 @@
 package lawscraper.server.scraper;
 
 import lawscraper.server.entities.law.*;
-import lawscraper.server.push.PushServiceImpl;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -31,12 +30,10 @@ public class Scraper {
     private Section currentSection = null;
     private SectionListItem currentSectionListItem = null;
     private Divider currentDivider;
-    private PushServiceImpl pushService;
     private String lawUrl;
 
 
     public Scraper() {
-        pushService = new PushServiceImpl();
     }
 
     public Law parseLaw(String lawUrl) {
@@ -100,9 +97,6 @@ public class Scraper {
     }
 
     private void addData(String data) {
-        if (currentChapter != null) {
-            pushService.sendMessage("Adding data to: " + currentChapter.getHeadLine() + " \n");
-        }
         String cdt = getCurrentDataType();
         if (cdt.equals("title")) {
             law.setTitle(data);

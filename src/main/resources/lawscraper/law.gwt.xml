@@ -18,7 +18,6 @@
     <inherits name='com.google.gwt.logging.Logging'/>
     <inherits name="com.google.gwt.resources.Resources"/>
 
-    <inherits name="de.novanic.eventservice.GWTEventService"/>
     <inherits name="com.google.web.bindery.requestfactory.RequestFactory"/>
 
     <servlet path="/ServerMessageGeneratorService" class="de.novanic.gwteventservice.demo.hello.server.ServerMessageGeneratorServiceImpl"/>

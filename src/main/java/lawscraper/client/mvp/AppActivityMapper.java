@@ -33,7 +33,7 @@ public class AppActivityMapper implements ActivityMapper {
 	public Activity getActivity(Place place) {
 		// This is begging for GIN
 		if (place instanceof HelloPlace) {
-            HelloActivity ha = new HelloActivity((HelloPlace) place, clientFactory);
+            HelloActivity ha = new HelloActivity(clientFactory);
             return ha;
         }
 		else if (place instanceof GoodbyePlace)
