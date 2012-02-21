@@ -1,4 +1,4 @@
-package lawscraper.server.entities.entitybase;
+package lawscraper.server.entities.superclasses;
 
 import org.springframework.data.neo4j.annotation.GraphId;
 
@@ -20,14 +20,11 @@ public class EntityBase implements Serializable {
     @Basic(optional = false)
     protected Long id;
 
-    @Version
-    private Long version;
-
     public Long getId() {
         return id;
     }
 
-    public Long getVersion() {
-        return version;
+    public void setId(Long id) {
+        this.id = id;
     }
 }

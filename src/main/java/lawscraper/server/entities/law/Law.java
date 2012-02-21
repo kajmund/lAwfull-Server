@@ -1,10 +1,6 @@
 package lawscraper.server.entities.law;
 
-import lawscraper.server.entities.entitybase.EntityBase;
-import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +13,7 @@ import java.util.List;
  */
 
 @NodeEntity
-public class Law extends EntityBase{
+public class Law extends LawDocumentPart {
     String title;
     String fsNumber;
     String latestFetchFromGov;
@@ -27,18 +23,6 @@ public class Law extends EntityBase{
 
     List<String> consolidations = new ArrayList<String>();
     List<String> propositions = new ArrayList<String>();
-
-    @Fetch
-    @RelatedTo(type = "chapter", elementClass = Chapter.class, direction = Direction.OUTGOING)
-    List<Chapter> chapters;
-
-    //used if no chapters exists
-    @RelatedTo(type = "paragraph", elementClass = Paragraph.class, direction = Direction.OUTGOING)
-    List<Paragraph> paragraphs;
-
-    //used with inkomstskattelagen for example
-    @RelatedTo(type = "divider", elementClass = Divider.class, direction = Direction.OUTGOING)
-    List<Divider> dividers;
 
     public Law() {
     }
@@ -105,29 +89,5 @@ public class Law extends EntityBase{
 
     public void setPropositions(List<String> propositions) {
         this.propositions = propositions;
-    }
-
-    public List<Chapter> getChapters() {
-        return chapters;
-    }
-
-    public void setChapters(List<Chapter> chapters) {
-        this.chapters = chapters;
-    }
-
-    public List<Divider> getDividers() {
-        return dividers;
-    }
-
-    public List<Paragraph> getParagraphs() {
-        return paragraphs;
-    }
-
-    public void setParagraphs(List<Paragraph> paragraphs) {
-        this.paragraphs = paragraphs;
-    }
-
-    public void setDividers(List<Divider> dividers) {
-        this.dividers = dividers;
     }
 }

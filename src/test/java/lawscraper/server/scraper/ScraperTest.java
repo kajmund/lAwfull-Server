@@ -1,9 +1,7 @@
 package lawscraper.server.scraper;
 
-import lawscraper.server.entities.law.Chapter;
 import lawscraper.server.entities.law.Law;
-import lawscraper.server.entities.law.Paragraph;
-import lawscraper.server.entities.law.Section;
+import lawscraper.server.entities.law.LawDocumentPart;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -38,19 +36,14 @@ public class ScraperTest {
         assertEquals("Regeringskansliet", law.getPublisher());
         assertEquals("Justitiedepartementet L2", law.getCreator());
         assertEquals(42, law.getPropositions().size());
-        assertEquals(6, law.getChapters().size());
+        assertEquals(6, law.getChildren().size());
 
-        Chapter chapter = law.getChapters().iterator().next();
+        LawDocumentPart chapter = law.getChildren().iterator().next();
         assertEquals("#K1", chapter.getKey());
         //assertEquals(chapter.getHeadLine(), "  1 kap. Inledande bestämmelser ");
-        assertEquals("1", chapter.getNumber());
-        assertEquals(3,chapter.getParagraphs().size());
+        assertEquals("1", chapter.getOrder());
+        assertEquals(3,chapter.getChildren().size());
 
-        Paragraph paragraph = chapter.getParagraphs().iterator().next();
-        assertEquals("#K1P1", paragraph.getParagraphKey());
-        assertEquals("1", paragraph.getParagraphNo());
-        assertEquals(1, paragraph.getSections().size());
-
-        Section section =  paragraph.getSections().iterator().next();
+        LawDocumentPart paragraph = chapter.getChildren().iterator().next();
     }
 }

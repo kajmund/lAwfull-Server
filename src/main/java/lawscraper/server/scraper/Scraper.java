@@ -25,11 +25,11 @@ public class Scraper {
     private Law law = new Law();
 
     ArrayList<String> currentDataType = new ArrayList<String>();
-    private Chapter currentChapter = null;
-    private Paragraph currentParaGraph = null;
-    private Section currentSection = null;
-    private SectionListItem currentSectionListItem = null;
-    private Divider currentDivider;
+    private LawDocumentPart currentChapter = null;
+    private LawDocumentPart currentParaGraph = null;
+    private LawDocumentPart currentSection = null;
+    private LawDocumentPart currentSectionListItem = null;
+    private LawDocumentPart currentDivider = null;
     private String lawUrl;
 
 
@@ -121,7 +121,7 @@ public class Scraper {
             law.setTitle(data);
         } else if (cdt.equals("section") || cdt.equals("a")) {
             if (currentSection != null) {
-                currentSection.setSectionText(currentSection.getSectionText() + data);
+                currentSection.addText(currentSection.getTextElement().getText() + data);
             }
         } else if (cdt.equals("dct:publisher")) {
             if (law.getPublisher() == null) {
@@ -132,13 +132,13 @@ public class Scraper {
                 law.setCreator(data);
             }
         } else if (cdt.equals("sectionListItem")) {
-            currentSectionListItem.setListItemString(currentSectionListItem.getListItemString() + data);
+            currentSectionListItem.addText(currentSectionListItem.getTextElement().getText() + data);
         } else if (cdt.equals("chapterHeadLine")) {
-            currentChapter.setHeadLine(data);
+            currentChapter.addText(currentChapter.getTextElement().getText() + data);
         } else if (cdt.equals("dividerHeadLine")) {
-            currentDivider.setHeadline(data);
+            currentDivider.addText(currentDivider.getTextElement().getText() + data);
         } else if (cdt.equals("sectionDeprecated")) {
-            currentSection.setSectionText(data);
+            currentSection.addText(currentSection.getTextElement().getText() + data);
         }
 
     }
@@ -168,15 +168,18 @@ public class Scraper {
     }
 
     private void parsePElement(Law law, Attributes attributes) {
-        if (attributes.getValue(2).equals("rinfo:Stycke") && !attributes.getValue(0).startsWith("L")) {
-            Section section = new Section();
-            section.setSectionKey(attributes.getValue(1));
-            section.setSectionNo(attributes.getValue(0));
-
-            if (currentParaGraph.getSections() == null) {
-                currentParaGraph.setSections(new ArrayList<Section>());
+        if (attributes.getValue(2) != null &&
+                attributes.getValue(2).equals("rinfo:Stycke") &&
+                !attributes.getValue(0).startsWith("L")) {
+            LawDocumentPart section = new LawDocumentPart();
+            section.setKey(attributes.getValue(0));
+            section.setType("section");
+            if (currentParaGraph != null) {
+                currentParaGraph.getChildren().add(section);
+            } else {
+                law.getChildren().add(section);
             }
-            currentParaGraph.getSections().add(section);
+
             currentSection = section;
             setCurrentDataType("section");
         } else {
@@ -208,22 +211,21 @@ public class Scraper {
 
         //checks if value starts with P because we want the LI's that is connected to a paragraph
         if (attributes.getValue(0).startsWith("P") || attributes.getValue(0).startsWith("K")) {
-            SectionListItem sectionListItem = new SectionListItem();
-            sectionListItem.setListItemKey(attributes.getValue(1));
-            sectionListItem.setListItemString(attributes.getValue(0));
+            LawDocumentPart sectionListItem = new LawDocumentPart();
+            sectionListItem.setKey(attributes.getValue(1));
+            sectionListItem.addText(attributes.getValue(0));
+            sectionListItem.setType("sectionListItem");
             setCurrentDataType("sectionListItem");
-            if (currentSection.getSectionListItems() == null) {
-                currentSection.setSectionListItems(new ArrayList<SectionListItem>());
-            }
-            currentSection.getSectionListItems().add(sectionListItem);
+            currentSection.getChildren().add(sectionListItem);
             currentSectionListItem = sectionListItem;
         }
     }
 
     private void parseHElement(Law law, Attributes attributes) {
-        if (attributes.getValue(0).equals("kapitelrubrik")) {
+
+        if (attributes.getValue(0) != null && attributes.getValue(0).equals("kapitelrubrik")) {
             setCurrentDataType("chapterHeadLine");
-        } else if (attributes.getValue(0).equals("avdelningsrubrik")) {
+        } else if (attributes.getValue(0) != null && attributes.getValue(0).equals("avdelningsrubrik")) {
             setCurrentDataType("dividerHeadLine");
         } else {
             setCurrentDataType("h");
@@ -232,54 +234,52 @@ public class Scraper {
 
     private void parseSectionElement(Law law, Attributes attributes) {
         if (attributes.getValue(1) != null && attributes.getValue(1).equals("rinfo:Kapitel")) {
-            Chapter chapter = new Chapter();
-            chapter.setNumber(attributes.getValue(4));
+            LawDocumentPart chapter = new LawDocumentPart();
+            //chapter.setOrder(Integer.parseInt(attributes.getValue(4)));
             chapter.setKey(attributes.getValue(2));
             if (currentDivider != null) {
-                if (currentDivider.getChapters() == null) {
-                    currentDivider.setChapters(new ArrayList<Chapter>());
-                }
-                currentDivider.getChapters().add(chapter);
+                currentDivider.getChildren().add(chapter);
             } else {
-                if (law.getChapters() == null) {
-                    law.setChapters(new ArrayList<Chapter>());
-                }
-                law.getChapters().add(chapter);
+                law.getChildren().add(chapter);
             }
             currentChapter = chapter;
+            chapter.setType("chapter");
             setCurrentDataType("chapter");
         } else if (attributes.getValue(1) != null && attributes.getValue(1).equals("rinfo:Paragraf")) {
-            Paragraph paragraph = new Paragraph();
+            LawDocumentPart paragraph = new LawDocumentPart();
             if (attributes.getValue(4) != null) {
-                paragraph.setParagraphNo(attributes.getValue(4));
+                //paragraph.setOrder(Integer.parseInt(attributes.getValue(4)));
             }
             if (attributes.getValue(2) != null) {
                 paragraph.setKey(attributes.getValue(2));
             }
-            if (currentChapter.getParagraphs() == null) {
-                currentChapter.setParagraphs(new ArrayList<Paragraph>());
+            if (currentChapter != null) {
+                currentChapter.getChildren().add(paragraph);
+            } else {
+                law.getChildren().add(paragraph);
             }
-            currentChapter.getParagraphs().add(paragraph);
+
             currentParaGraph = paragraph;
+            paragraph.setType("paragraph");
             setCurrentDataType("paragraph");
         } else if (attributes.getValue(0) != null && attributes.getValue(0).equals("rinfo:Avdelning")) {
-            currentDivider = new Divider();
+            currentDivider = new LawDocumentPart();
+
             currentDivider.setKey(attributes.getValue(1));
-            if (law.getDividers() == null) {
-                law.setDividers(new ArrayList<Divider>());
-            }
-            law.getDividers().add(currentDivider);
+            law.getChildren().add(currentDivider);
+            currentDivider.setType("divider");
             setCurrentDataType("divider");
         } else if (attributes.getValue(0) != null && attributes.getValue(0).equals("upphavd")) {
-            Paragraph paragraph = new Paragraph();
+            LawDocumentPart paragraph = new LawDocumentPart();
 
             try {
-                int paragraphNo = Integer.parseInt(currentParaGraph.getParagraphNo());
+                int paragraphNo = currentParaGraph.getOrder();
                 paragraphNo++;
-                paragraph.setParagraphNo(String.valueOf(paragraphNo));
+                paragraph.setOrder(paragraphNo);
             } catch (Exception e) {
                 System.out.println("Could not set paragraph no");
             }
+            paragraph.setType("paragraph");
             paragraph.setDeprecated(true);
             /* todo: fix this
             if (attributes.getValue(2) != null) {
@@ -287,23 +287,22 @@ public class Scraper {
             }
             */
 
-            if (currentChapter.getParagraphs() == null) {
-                currentChapter.setParagraphs(new ArrayList<Paragraph>());
+            if (currentChapter != null) {
+                currentChapter.getChildren().add(paragraph);
+            } else {
+                law.getChildren().add(paragraph);
             }
-            currentChapter.getParagraphs().add(paragraph);
             currentParaGraph = paragraph;
 
-            Section section = new Section();
+            LawDocumentPart section = new LawDocumentPart();
 
             /* todo: fix this
             int sectionNo = Integer.parseInt(currentSection.getSectionNo())+1;
             section.setSectionNo(String.valueOf(sectionNo));
             section.setSectionKey("#"+sectionNo);
             */
-            if (currentParaGraph.getSections() == null) {
-                currentParaGraph.setSections(new ArrayList<Section>());
-            }
-            currentParaGraph.getSections().add(section);
+            section.setType("section");
+            currentParaGraph.getChildren().add(section);
             currentSection = section;
 
             setCurrentDataType("sectionDeprecated");
