@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
@@ -20,18 +19,17 @@ import java.io.IOException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:/applicationContext.xml")
-@TransactionConfiguration(defaultRollback=true)
+@TransactionConfiguration(defaultRollback = true)
 @Transactional
 public class LawUrlScraperTest {
     @Test
-    public void testLawUrlScraper(){
+    public void testLawUrlScraper() {
+        LawUrlScraper lawUrlScraper = new LawUrlScraper();
         try {
-            LawUrlScraper lawUrlScraper = new LawUrlScraper();
+            lawUrlScraper.fetchUrls();
         } catch (SAXException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
