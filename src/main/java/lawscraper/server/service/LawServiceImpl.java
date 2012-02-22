@@ -28,7 +28,7 @@ public class LawServiceImpl implements LawService {
     @Transactional
     @Override
     public void scrapeAll() {
-        Scraper scraper = new Scraper();
+        Scraper scraper = new Scraper(new TextServiceImpl());
         Law law = scraper.parseLaw("https://lagen.nu/1978:413.xht2");
 
         lawRepository.save(law);

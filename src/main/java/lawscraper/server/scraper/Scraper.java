@@ -3,6 +3,7 @@ package lawscraper.server.scraper;
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
 import lawscraper.server.entities.law.LawDocumentPartType;
+import lawscraper.server.service.TextService;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -33,9 +34,11 @@ public class Scraper {
     private LawDocumentPart currentSectionListItem = null;
     private LawDocumentPart currentDivider = null;
     private String lawUrl;
+    private final TextService textService;
 
 
-    public Scraper() {
+    public Scraper(TextService textService) {
+        this.textService = textService;
     }
 
     public Law parseLaw(String lawUrl) {
@@ -194,7 +197,7 @@ public class Scraper {
                 law.addDocumentPartChild(section);
             }
 
-            currentSection = section;
+            setCurrentSection(section);
             setCurrentDataType("section");
         } else {
             setCurrentDataType("p");
@@ -231,7 +234,7 @@ public class Scraper {
             sectionListItem.setLawPartType(LawDocumentPartType.SECTION_LIST_ITEM);
             setCurrentDataType("sectionListItem");
             currentSection.addDocumentPartChild(sectionListItem);
-            currentSectionListItem = sectionListItem;
+            setCurrentSectionListItem(sectionListItem);
         }
     }
 
@@ -256,7 +259,7 @@ public class Scraper {
                 law.addDocumentPartChild(chapter);
             }
 
-            currentChapter = chapter;
+            setCurrentChapter(chapter);
             chapter.setLawPartType(LawDocumentPartType.CHAPTER);
             setCurrentDataType("chapter");
         } else if (attributes.getValue(1) != null && attributes.getValue(1).equals("rinfo:Paragraf")) {
@@ -273,15 +276,15 @@ public class Scraper {
                 law.addDocumentPartChild(paragraph);
             }
 
-            currentParaGraph = paragraph;
+            setCurrentParagraph(paragraph);
             paragraph.setLawPartType(LawDocumentPartType.PARAGRAPH);
             setCurrentDataType("paragraph");
         } else if (attributes.getValue(0) != null && attributes.getValue(0).equals("rinfo:Avdelning")) {
-            currentDivider = new LawDocumentPart();
-
-            currentDivider.setKey(attributes.getValue(1));
-            law.addDocumentPartChild(currentDivider);
-            currentDivider.setLawPartType(LawDocumentPartType.DIVIDER);
+            LawDocumentPart divider = new LawDocumentPart();
+            divider.setKey(attributes.getValue(1));
+            law.addDocumentPartChild(divider);
+            divider.setLawPartType(LawDocumentPartType.DIVIDER);
+            setCurrentDivider(divider);
             setCurrentDataType("divider");
         } else if (attributes.getValue(0) != null && attributes.getValue(0).equals("upphavd")) {
             LawDocumentPart deprecatedElement = new LawDocumentPart();
@@ -306,6 +309,42 @@ public class Scraper {
         } else {
             setCurrentDataType("section");
         }
+    }
+
+    private void setCurrentParagraph(LawDocumentPart paragraph) {
+        if (this.currentParaGraph != null) {
+            this.currentParaGraph.setTextElement(textService.getTextElement(currentParaGraph.getTextElement()));
+        }
+        this.currentParaGraph = paragraph;
+    }
+
+    private void setCurrentChapter(LawDocumentPart chapter) {
+        if (this.currentChapter != null) {
+            this.currentChapter.setTextElement(textService.getTextElement(this.currentChapter.getTextElement()));
+        }
+        this.currentChapter = chapter;
+    }
+
+    private void setCurrentSection(LawDocumentPart section) {
+        if (this.currentSection != null) {
+            this.currentSection.setTextElement(textService.getTextElement(this.currentSection.getTextElement()));
+        }
+        this.currentSection = section;
+    }
+
+    private void setCurrentSectionListItem(LawDocumentPart sectionListItem) {
+        if (this.currentSectionListItem != null) {
+            this.currentSectionListItem
+                    .setTextElement(textService.getTextElement(this.currentSection.getTextElement()));
+        }
+        this.currentSectionListItem = sectionListItem;
+    }
+
+    private void setCurrentDivider(LawDocumentPart divider) {
+        if (this.currentDivider != null) {
+            this.currentDivider.setTextElement(textService.getTextElement(this.currentDivider.getTextElement()));
+        }
+        this.currentDivider = divider;
     }
 
     private void parseLinkElement(Law law, Attributes attributes) {

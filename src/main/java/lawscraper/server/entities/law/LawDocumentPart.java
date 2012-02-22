@@ -110,7 +110,6 @@ public class LawDocumentPart extends DocumentPart {
     }
 
     public void addText(String string){
-        this.textElement = new TextElement();
         textElement.setText(string);
     }
 
