@@ -2,6 +2,7 @@ package lawscraper.server.entities.superclasses.Document;
 
 import lawscraper.server.entities.superclasses.EntityBase;
 import lawscraper.server.scraper.Utilities;
+import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 
 /**
@@ -31,6 +32,7 @@ public class TextElement extends EntityBase {
         this.setHash(tmpHash);
     }
 
+    @Indexed
     public String getHash() {
         return hash;
     }

@@ -18,17 +18,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("lawServiceImpl")
 public class LawServiceImpl implements LawService {
     LawRepository lawRepository = null;
+    TextService textService = null;
 
     @Autowired
-    public LawServiceImpl(LawRepository lawRepository) {
+    public LawServiceImpl(LawRepository lawRepository, TextService textService) {
         this.lawRepository = lawRepository;
-        System.out.println("LawServiceImpl instantiated!");
+        this.textService = textService;
     }
 
     @Transactional
     @Override
     public void scrapeAll() {
-        Scraper scraper = new Scraper(new TextServiceImpl());
+        Scraper scraper = new Scraper(textService);
         Law law = scraper.parseLaw("https://lagen.nu/1978:413.xht2");
 
         lawRepository.save(law);
