@@ -122,6 +122,14 @@ public class LawDocumentPart extends DocumentPart {
         return deprecated;
     }
 
+    public void setLawPartType(LawDocumentPartType type) {
+        setType(type.name());
+    }
+
+    public LawDocumentPartType getLawPartType() {
+        return LawDocumentPartType.valueOf(getType());
+    }
+
     public void addDocumentPartChild(LawDocumentPart lawDocumentPart) {
         getChildren().add(lawDocumentPart);
         lawDocumentPart.setParent(this);

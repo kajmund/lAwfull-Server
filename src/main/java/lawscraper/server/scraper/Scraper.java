@@ -1,6 +1,8 @@
 package lawscraper.server.scraper;
 
-import lawscraper.server.entities.law.*;
+import lawscraper.server.entities.law.Law;
+import lawscraper.server.entities.law.LawDocumentPart;
+import lawscraper.server.entities.law.LawDocumentPartType;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -125,13 +127,13 @@ public class Scraper {
 
                 //the lagen.nu parser sometimes misses deprecated paragraphs. let's check that our selfs.
                 if (currentSection.getTextElement().getText().contains("upphävd genom")) {
-                    currentSection.setType("deprecated");
+                    currentSection.setLawPartType(LawDocumentPartType.DEPRECATED);
                     currentSection.setDeprecated(true);
 
                     LawDocumentPart parent = currentSection.getParent();
-                    if (parent != null && parent.getType().equals("paragraph")) {
+                    if (parent != null && parent.getLawPartType().equals(LawDocumentPartType.PARAGRAPH)) {
                         parent.setDeprecated(true);
-                        parent.setType("deprecated");
+                        parent.setLawPartType(LawDocumentPartType.DEPRECATED);
                     }
                 }
             }
@@ -185,7 +187,7 @@ public class Scraper {
                 !attributes.getValue(0).startsWith("L")) {
             LawDocumentPart section = new LawDocumentPart();
             section.setKey(attributes.getValue(0));
-            section.setType("section");
+            section.setLawPartType(LawDocumentPartType.SECTION);
             if (currentParaGraph != null) {
                 currentParaGraph.addDocumentPartChild(section);
             } else {
@@ -226,7 +228,7 @@ public class Scraper {
             LawDocumentPart sectionListItem = new LawDocumentPart();
             sectionListItem.setKey(attributes.getValue(1));
             sectionListItem.addText(attributes.getValue(0));
-            sectionListItem.setType("sectionListItem");
+            sectionListItem.setLawPartType(LawDocumentPartType.SECTION_LIST_ITEM);
             setCurrentDataType("sectionListItem");
             currentSection.addDocumentPartChild(sectionListItem);
             currentSectionListItem = sectionListItem;
@@ -255,7 +257,7 @@ public class Scraper {
             }
 
             currentChapter = chapter;
-            chapter.setType("chapter");
+            chapter.setLawPartType(LawDocumentPartType.CHAPTER);
             setCurrentDataType("chapter");
         } else if (attributes.getValue(1) != null && attributes.getValue(1).equals("rinfo:Paragraf")) {
             LawDocumentPart paragraph = new LawDocumentPart();
@@ -272,18 +274,18 @@ public class Scraper {
             }
 
             currentParaGraph = paragraph;
-            paragraph.setType("paragraph");
+            paragraph.setLawPartType(LawDocumentPartType.PARAGRAPH);
             setCurrentDataType("paragraph");
         } else if (attributes.getValue(0) != null && attributes.getValue(0).equals("rinfo:Avdelning")) {
             currentDivider = new LawDocumentPart();
 
             currentDivider.setKey(attributes.getValue(1));
             law.addDocumentPartChild(currentDivider);
-            currentDivider.setType("divider");
+            currentDivider.setLawPartType(LawDocumentPartType.DIVIDER);
             setCurrentDataType("divider");
         } else if (attributes.getValue(0) != null && attributes.getValue(0).equals("upphavd")) {
             LawDocumentPart deprecatedElement = new LawDocumentPart();
-            deprecatedElement.setType("deprecated");
+            deprecatedElement.setLawPartType(LawDocumentPartType.DEPRECATED);
             deprecatedElement.setDeprecated(true);
 
             if (currentChapter != null) {
@@ -295,7 +297,7 @@ public class Scraper {
             currentParaGraph = deprecatedElement;
 
             LawDocumentPart section = new LawDocumentPart();
-            section.setType("deprecated");
+            section.setLawPartType(LawDocumentPartType.DEPRECATED);
             section.setDeprecated(true);
             currentParaGraph.addDocumentPartChild(section);
             currentSection = section;

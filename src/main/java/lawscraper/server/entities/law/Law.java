@@ -14,18 +14,18 @@ import java.util.List;
 
 @NodeEntity
 public class Law extends LawDocumentPart {
-    String title;
-    String fsNumber;
-    String latestFetchFromGov;
-    String releaseDate;
-    String publisher;
-    String creator;
+    String title = "";
+    String fsNumber = "";
+    String latestFetchFromGov = "";
+    String releaseDate = "";
+    String publisher = "";
+    String creator = "";
 
     List<String> consolidations = new ArrayList<String>();
     List<String> propositions = new ArrayList<String>();
 
     public Law() {
-        this.setType("law");
+        this.setLawPartType(LawDocumentPartType.LAW);
     }
 
     public String getCreator() {
