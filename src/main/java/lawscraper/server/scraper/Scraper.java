@@ -247,7 +247,6 @@ public class Scraper {
     private void parseSectionElement(Law law, Attributes attributes) {
         if (attributes.getValue(1) != null && attributes.getValue(1).equals("rinfo:Kapitel")) {
             LawDocumentPart chapter = new LawDocumentPart();
-            //chapter.setOrder(Integer.parseInt(attributes.getValue(4)));
             chapter.setKey(attributes.getValue(2));
             if (currentDivider != null) {
                 currentDivider.addDocumentPartChild(chapter);
