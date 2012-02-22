@@ -20,13 +20,18 @@ public class TestDataUtil {
 
     private static ZipFile getZipFile() throws IOException {
         if (zipFile == null) {
-            File zipFile = File.createTempFile("test_laws", ".zip");
-            zipFile.deleteOnExit();
-            InputStream zipResource = TestDataUtil.class.getResourceAsStream("/lawscraper/all_laws.zip");
-            IOUtils.copyLarge(zipResource, new FileOutputStream(zipFile));
+            File zipFile = getFile("/lawscraper/all_laws.zip");
             TestDataUtil.zipFile = new ZipFile(zipFile);
         }
         return TestDataUtil.zipFile;
+    }
+
+    public static File getFile(String classPath) throws IOException {
+        File tempFile = File.createTempFile("test", ".dat");
+        tempFile.deleteOnExit();
+        InputStream inputStream = TestDataUtil.class.getResourceAsStream(classPath);
+        IOUtils.copyLarge(inputStream, new FileOutputStream(tempFile));
+        return tempFile;
     }
 
     public static Iterable<Law> getAllLaws() throws IOException {
