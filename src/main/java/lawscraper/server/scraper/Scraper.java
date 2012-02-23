@@ -30,7 +30,7 @@ public class Scraper {
     private Stack<LawDocumentPart> lawDocumentPartStack = new Stack<LawDocumentPart>();
 
     public Scraper() {
-        setCurrentLaw(law);
+        this.lawDocumentPartStack.add(law);
     }
 
     public void parse(InputStream in) throws ParserConfigurationException, SAXException, IOException {
