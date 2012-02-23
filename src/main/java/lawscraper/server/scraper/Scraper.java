@@ -3,7 +3,6 @@ package lawscraper.server.scraper;
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
 import lawscraper.server.entities.law.LawDocumentPartType;
-import lawscraper.server.service.TextService;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -13,7 +12,6 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -28,55 +26,16 @@ public class Scraper {
     private Law law = new Law();
 
     ArrayList<String> currentDataType = new ArrayList<String>();
+
     private LawDocumentPart currentChapter = null;
     private LawDocumentPart currentParaGraph = null;
     private LawDocumentPart currentSection = null;
     private LawDocumentPart currentSectionListItem = null;
     private LawDocumentPart currentDivider = null;
-    private String lawUrl;
-    private final TextService textService;
+    private LawDocumentPart currentSubHeadline = null;
+    private LawDocumentPart currentHeadLine = null;
 
-
-    public Scraper(TextService textService) {
-        this.textService = textService;
-    }
-
-    public Law parseLaw(String lawUrl) {
-        this.lawUrl = lawUrl;
-
-        try {
-            parseXHTML(lawUrl);
-        } catch (SAXException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
-        return law;
-
-    }
-
-    public Law parseLaw(InputStream lawData) {
-
-        try {
-            parse(lawData);
-        } catch (SAXException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of c atch statement use File | Settings | File Templates.
-        }
-
-        return law;
-
-    }
-
-    public void parseXHTML(String url) throws SAXException, ParserConfigurationException, IOException {
-        InputStream in = new URL(url).openStream();
-        parse(in);
+    public Scraper() {
     }
 
     public void parse(InputStream in) throws ParserConfigurationException, SAXException, IOException {
@@ -86,7 +45,7 @@ public class Scraper {
 
                     public void startElement(String namespaceURI,
                                              String lname, String qname, Attributes attrs) {
-                        parseElement(law, qname, attrs);
+                        parseElement(qname, attrs);
                     }
 
                     public void characters(char[] ch, int start, int length) throws SAXException {
@@ -156,35 +115,38 @@ public class Scraper {
             currentDivider.addText(currentDivider.getTextElement().getText() + data);
         } else if (cdt.equals("sectionDeprecated")) {
             currentSection.addText(currentSection.getTextElement().getText() + data);
+        } else if (cdt.equals("headLine")) {
+            currentHeadLine.addText(currentHeadLine.getTextElement().getText() + data);
+        } else if (cdt.equals("subHeadLine")) {
+            currentSubHeadline.addText(currentSubHeadline.getTextElement().getText() + data);
         }
-
     }
 
     private void setCurrentDataType(String currentDataType) {
         this.currentDataType.add(0, currentDataType);
     }
 
-    private void parseElement(Law law, String qname, Attributes attributes) {
+    private void parseElement(String qname, Attributes attributes) {
         if (qname.equals("meta")) {
-            parseMetaElement(law, attributes);
+            parseMetaElement(attributes);
         } else if (qname.equals("link")) {
-            parseLinkElement(law, attributes);
+            parseLinkElement(attributes);
         } else if (qname.equals("dd")) {
-            parseDDElement(law, attributes);
+            parseDDElement(attributes);
         } else if (qname.equals("section")) {
-            parseSectionElement(law, attributes);
+            parseSectionElement(attributes);
         } else if (qname.equals("p")) {
-            parsePElement(law, attributes);
+            parsePElement(attributes);
         } else if (qname.equals("li")) {
-            parseLiElement(law, attributes);
+            parseLiElement(attributes);
         } else if (qname.equals("h")) {
-            parseHElement(law, attributes);
+            parseHElement(attributes);
         } else {
             setCurrentDataType(qname);
         }
     }
 
-    private void parsePElement(Law law, Attributes attributes) {
+    private void parsePElement(Attributes attributes) {
         if (attributes.getValue(2) != null &&
                 attributes.getValue(2).equals("rinfo:Stycke") &&
                 !attributes.getValue(0).startsWith("L")) {
@@ -204,7 +166,7 @@ public class Scraper {
         }
     }
 
-    private void parseDDElement(Law law, Attributes attributes) {
+    private void parseDDElement(Attributes attributes) {
         if (attributes.getValue(0) == null) {
             setCurrentDataType("dd");
             return;
@@ -220,7 +182,7 @@ public class Scraper {
         }
     }
 
-    private void parseLiElement(Law law, Attributes attributes) {
+    private void parseLiElement(Attributes attributes) {
         setCurrentDataType("li");
         if (attributes.getValue(0) == null) {
             return;
@@ -238,18 +200,41 @@ public class Scraper {
         }
     }
 
-    private void parseHElement(Law law, Attributes attributes) {
+    private void parseHElement(Attributes attributes) {
 
         if (attributes.getValue(0) != null && attributes.getValue(0).equals("kapitelrubrik")) {
             setCurrentDataType("chapterHeadLine");
         } else if (attributes.getValue(0) != null && attributes.getValue(0).equals("avdelningsrubrik")) {
             setCurrentDataType("dividerHeadLine");
+        } else if (attributes.getValue(1) != null && attributes.getValue(1).equals("underrubrik")) {
+            LawDocumentPart subHeadLine = new LawDocumentPart();
+            subHeadLine.setLawPartType(LawDocumentPartType.SUB_HEADING);
+            if (Utilities.getParentLawDocumentPartTypeByKey(attributes.getValue(0)) == LawDocumentPartType.CHAPTER) {
+                currentChapter.addDocumentPartChild(subHeadLine);
+            } else if (Utilities.getParentLawDocumentPartTypeByKey(attributes.getValue(0)) == LawDocumentPartType.LAW) {
+                law.addDocumentPartChild(subHeadLine);
+            }
+            setCurrentSubHeadLine(subHeadLine);
+            setCurrentDataType("subHeadLine");
+
+        } else if (attributes.getValue(0) != null && attributes.getValue(0).contains("R")) {
+            LawDocumentPart headLine = new LawDocumentPart();
+            headLine.setLawPartType(LawDocumentPartType.HEADING);
+            if (Utilities.getParentLawDocumentPartTypeByKey(attributes.getValue(0)) == LawDocumentPartType.CHAPTER) {
+                currentChapter.addDocumentPartChild(headLine);
+            } else if (Utilities.getParentLawDocumentPartTypeByKey(attributes.getValue(0)) == LawDocumentPartType.LAW) {
+                law.addDocumentPartChild(headLine);
+            }
+            setCurrentHeadLine(headLine);
+            setCurrentDataType("headLine");
+
         } else {
             setCurrentDataType("h");
         }
     }
 
-    private void parseSectionElement(Law law, Attributes attributes) {
+
+    private void parseSectionElement(Attributes attributes) {
         if (attributes.getValue(1) != null && attributes.getValue(1).equals("rinfo:Kapitel")) {
             LawDocumentPart chapter = new LawDocumentPart();
             chapter.setKey(attributes.getValue(2));
@@ -303,7 +288,7 @@ public class Scraper {
             section.setLawPartType(LawDocumentPartType.DEPRECATED);
             section.setDeprecated(true);
             currentParaGraph.addDocumentPartChild(section);
-            currentSection = section;
+            setCurrentSection(section);
 
             setCurrentDataType("sectionDeprecated");
         } else {
@@ -311,43 +296,7 @@ public class Scraper {
         }
     }
 
-    private void setCurrentParagraph(LawDocumentPart paragraph) {
-        if (this.currentParaGraph != null) {
-            this.currentParaGraph.setTextElement(textService.getTextElement(currentParaGraph.getTextElement()));
-        }
-        this.currentParaGraph = paragraph;
-    }
-
-    private void setCurrentChapter(LawDocumentPart chapter) {
-        if (this.currentChapter != null) {
-            this.currentChapter.setTextElement(textService.getTextElement(this.currentChapter.getTextElement()));
-        }
-        this.currentChapter = chapter;
-    }
-
-    private void setCurrentSection(LawDocumentPart section) {
-        if (this.currentSection != null) {
-            this.currentSection.setTextElement(textService.getTextElement(this.currentSection.getTextElement()));
-        }
-        this.currentSection = section;
-    }
-
-    private void setCurrentSectionListItem(LawDocumentPart sectionListItem) {
-        if (this.currentSectionListItem != null) {
-            this.currentSectionListItem
-                    .setTextElement(textService.getTextElement(this.currentSection.getTextElement()));
-        }
-        this.currentSectionListItem = sectionListItem;
-    }
-
-    private void setCurrentDivider(LawDocumentPart divider) {
-        if (this.currentDivider != null) {
-            this.currentDivider.setTextElement(textService.getTextElement(this.currentDivider.getTextElement()));
-        }
-        this.currentDivider = divider;
-    }
-
-    private void parseLinkElement(Law law, Attributes attributes) {
+    private void parseLinkElement(Attributes attributes) {
         setCurrentDataType("link");
         if (attributes.getValue(0) == null || attributes.getValue(0) == null) {
             return;
@@ -358,7 +307,7 @@ public class Scraper {
         }
     }
 
-    private void parseMetaElement(Law law, Attributes attributes) {
+    private void parseMetaElement(Attributes attributes) {
         setCurrentDataType("meta");
         if (attributes.getValue(0) == null || attributes.getValue(1) == null) {
             return;
@@ -378,5 +327,38 @@ public class Scraper {
         }
         return "";
     }
+
+    public Law getLaw() {
+        return law;
+    }
+
+    private void setCurrentSubHeadLine(LawDocumentPart subHeadLine) {
+        this.currentSubHeadline = subHeadLine;
+    }
+
+    private void setCurrentHeadLine(LawDocumentPart headLine) {
+        this.currentHeadLine = headLine;
+    }
+
+    private void setCurrentParagraph(LawDocumentPart paragraph) {
+        this.currentParaGraph = paragraph;
+    }
+
+    private void setCurrentChapter(LawDocumentPart chapter) {
+        this.currentChapter = chapter;
+    }
+
+    private void setCurrentSection(LawDocumentPart section) {
+        this.currentSection = section;
+    }
+
+    private void setCurrentSectionListItem(LawDocumentPart sectionListItem) {
+        this.currentSectionListItem = sectionListItem;
+    }
+
+    private void setCurrentDivider(LawDocumentPart divider) {
+        this.currentDivider = divider;
+    }
+
 }
 

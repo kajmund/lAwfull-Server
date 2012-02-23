@@ -3,7 +3,7 @@ package lawscraper.server.service;
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * TODO Document this.
@@ -16,7 +16,7 @@ public class LawRendererImpl implements LawRenderer {
                 "class", "law");
     }
 
-    private String renderParts(List<LawDocumentPart> children) {
+    private String renderParts(Set<LawDocumentPart> children) {
         StringBuilder sb = new StringBuilder();
         for (LawDocumentPart child : children) {
             sb.append(renderPart(child));

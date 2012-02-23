@@ -6,8 +6,8 @@ import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
@@ -22,7 +22,7 @@ public class LawDocumentPart extends DocumentPart {
     Law replacesLaw;
     String key;
     TextElement textElement = new TextElement();
-    List<LawDocumentPart> children = new ArrayList<LawDocumentPart>();
+    Set<LawDocumentPart> children = new HashSet<LawDocumentPart>();
     LawDocumentPart parent;
     LawDocumentPart nextVersion;
     LawDocumentPart previousVersion;
@@ -65,11 +65,11 @@ public class LawDocumentPart extends DocumentPart {
     }
 
     @RelatedTo(elementClass = LawDocumentPart.class, direction = Direction.OUTGOING)
-    public List<LawDocumentPart> getChildren() {
+    public Set<LawDocumentPart> getChildren() {
         return children;
     }
 
-    public void setChildren(List<LawDocumentPart> children) {
+    public void setChildren(Set<LawDocumentPart> children) {
         this.children = children;
     }
 
@@ -109,7 +109,7 @@ public class LawDocumentPart extends DocumentPart {
         this.transitionalProvision = transitionalProvision;
     }
 
-    public void addText(String string){
+    public void addText(String string) {
         textElement.setText(string);
     }
 

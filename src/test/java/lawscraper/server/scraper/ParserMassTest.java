@@ -13,10 +13,9 @@ public class ParserMassTest {
     public void parseAllLaws() throws Exception {
         int lawCount = 0;
         int successCount = 0;
-        TextServiceDummyImpl textService = new TextServiceDummyImpl();
         for (TestDataUtil.Law law : TestDataUtil.getAllLaws()) {
             lawCount++;
-            Scraper scraper = new Scraper(textService);
+            Scraper scraper = new Scraper();
             try {
                 scraper.parse(law.getInputStream());
                 successCount++;

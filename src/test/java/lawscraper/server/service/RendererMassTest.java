@@ -2,7 +2,6 @@ package lawscraper.server.service;
 
 import lawscraper.server.scraper.Scraper;
 import lawscraper.server.scraper.TestDataUtil;
-import lawscraper.server.scraper.TextServiceDummyImpl;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -19,9 +18,10 @@ public class RendererMassTest {
         int successCount = 0;
         for (TestDataUtil.Law lawData : TestDataUtil.getAllLaws()) {
             lawCount++;
-            Scraper scraper = new Scraper(new TextServiceDummyImpl());
+            Scraper scraper = new Scraper();
             try {
-                renderer.renderToHtml(scraper.parseLaw(lawData.getInputStream()));
+                scraper.parse(lawData.getInputStream());
+                renderer.renderToHtml(scraper.getLaw());
                 successCount++;
             } catch (Exception e) {
                 System.out.println("Failed to render " + lawData.getName());

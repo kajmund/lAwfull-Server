@@ -17,8 +17,9 @@ public class ScraperTest {
 
     @Test
     public void testParseLawSkadestandsLagen() throws Exception {
-        Scraper scraper = new Scraper(new TextServiceDummyImpl());
-        Law law = scraper.parseLaw(TestDataUtil.getLaw("1972:207"));
+        Scraper scraper = new Scraper();
+        scraper.parse(TestDataUtil.getLaw("1972:207"));
+        Law law = scraper.getLaw();
         assertNotNull(law);
         //assertEquals(" Skadeståndslag (1972:207) ", law.getTitle());
         assertEquals("1972:207", law.getFsNumber());
@@ -33,7 +34,7 @@ public class ScraperTest {
         assertEquals("#K1", chapter.getKey());
         //assertEquals(chapter.getHeadLine(), "  1 kap. Inledande bestämmelser ");
         assertEquals(1, chapter.getOrder());
-        assertEquals(3,chapter.getChildren().size());
+        assertEquals(3, chapter.getChildren().size());
 
         LawDocumentPart paragraph = chapter.getChildren().iterator().next();
     }

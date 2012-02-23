@@ -1,7 +1,6 @@
 package lawscraper.server.service;
 
 
-import lawscraper.server.scraper.Scraper;
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.repositories.LawRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,37 +15,23 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 @Service("lawServiceImpl")
+@Transactional(readOnly = true)
 public class LawServiceImpl implements LawService {
     LawRepository lawRepository = null;
-    TextService textService = null;
 
     @Autowired
-    public LawServiceImpl(LawRepository lawRepository, TextService textService) {
+    public LawServiceImpl(LawRepository lawRepository) {
         this.lawRepository = lawRepository;
-        this.textService = textService;
-    }
-
-    @Transactional
-    @Override
-    public void scrapeAll() {
-        Scraper scraper = new Scraper(textService);
-        Law law = scraper.parseLaw("https://lagen.nu/1978:413.xht2");
-
-        lawRepository.save(law);
     }
 
     @Override
-    public Law findLaw(Long id) {
-        return lawRepository.findAll().iterator().next();
+    @Transactional(readOnly = false)
+    public Law createOrUpdate(Law law) {
+        return lawRepository.save(law);
     }
 
     @Override
     public Law find(Long id) {
-        return lawRepository.findOne(id);
-    }
-
-    @Override
-    public Law find(Class<? extends Law> clazz, Long id) {
         return lawRepository.findOne(id);
     }
 }

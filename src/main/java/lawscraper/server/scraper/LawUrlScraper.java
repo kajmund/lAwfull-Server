@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
  */
 public class LawUrlScraper {
 
+
     private boolean insideLi;
     private List<String> urls = new ArrayList<String>();
     private static List<String> URLS_TO_SCRAPE = Arrays.asList(

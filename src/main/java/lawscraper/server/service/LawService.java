@@ -1,7 +1,6 @@
 package lawscraper.server.service;
 
 import lawscraper.server.entities.law.Law;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
@@ -11,10 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public interface LawService {
 
-    @Transactional
-    void scrapeAll();
-    Law findLaw(Long id);
     Law find(Long id);
+    Law createOrUpdate(Law law);
 
-    Law find(Class<? extends Law> clazz, Long id);
 }
