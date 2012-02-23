@@ -13,6 +13,7 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
@@ -26,16 +27,10 @@ public class Scraper {
     private Law law = new Law();
 
     ArrayList<String> currentDataType = new ArrayList<String>();
-
-    private LawDocumentPart currentChapter = null;
-    private LawDocumentPart currentParaGraph = null;
-    private LawDocumentPart currentSection = null;
-    private LawDocumentPart currentSectionListItem = null;
-    private LawDocumentPart currentDivider = null;
-    private LawDocumentPart currentSubHeadline = null;
-    private LawDocumentPart currentHeadLine = null;
+    private Stack<LawDocumentPart> lawDocumentPartStack = new Stack<LawDocumentPart>();
 
     public Scraper() {
+        setCurrentLaw(law);
     }
 
     public void parse(InputStream in) throws ParserConfigurationException, SAXException, IOException {
@@ -80,25 +75,38 @@ public class Scraper {
     }
 
     private void addData(String data) {
+        LawDocumentPart currentDocumentPart = lawDocumentPartStack.peek();
         String cdt = getCurrentDataType();
         if (cdt.equals("title")) {
             law.setTitle(data);
         } else if (cdt.equals("section") || cdt.equals("a")) {
-            if (currentSection != null) {
-                currentSection.addText(currentSection.getTextElement().getText() + data);
+            if (currentDocumentPart != null) {
+                currentDocumentPart.addText(currentDocumentPart.getTextElement().getText() + data);
 
                 //the lagen.nu parser sometimes misses deprecated paragraphs. let's check that our selfs.
-                if (currentSection.getTextElement().getText().contains("upphävd genom")) {
-                    currentSection.setLawPartType(LawDocumentPartType.DEPRECATED);
-                    currentSection.setDeprecated(true);
+                if (currentDocumentPart.getTextElement().getText().contains("upphävd genom")) {
+                    currentDocumentPart.setLawPartType(LawDocumentPartType.DEPRECATED);
+                    currentDocumentPart.setDeprecated(true);
 
-                    LawDocumentPart parent = currentSection.getParent();
+                    LawDocumentPart parent = currentDocumentPart.getParent();
                     if (parent != null && parent.getLawPartType().equals(LawDocumentPartType.PARAGRAPH)) {
                         parent.setDeprecated(true);
                         parent.setLawPartType(LawDocumentPartType.DEPRECATED);
                     }
                 }
             }
+        } else if (cdt.equals("sectionListItem")) {
+            currentDocumentPart.addText(currentDocumentPart.getTextElement().getText() + data);
+        } else if (cdt.equals("chapterHeadLine")) {
+            currentDocumentPart.addText(currentDocumentPart.getTextElement().getText() + data);
+        } else if (cdt.equals("dividerHeadLine")) {
+            currentDocumentPart.addText(currentDocumentPart.getTextElement().getText() + data);
+        } else if (cdt.equals("sectionDeprecated")) {
+            currentDocumentPart.addText(currentDocumentPart.getTextElement().getText() + data);
+        } else if (cdt.equals("headLine")) {
+            currentDocumentPart.addText(currentDocumentPart.getTextElement().getText() + data);
+        } else if (cdt.equals("subHeadLine")) {
+            currentDocumentPart.addText(currentDocumentPart.getTextElement().getText() + data);
         } else if (cdt.equals("dct:publisher")) {
             if (law.getPublisher() == null) {
                 law.setPublisher(data);
@@ -107,18 +115,6 @@ public class Scraper {
             if (law.getCreator() == null) {
                 law.setCreator(data);
             }
-        } else if (cdt.equals("sectionListItem")) {
-            currentSectionListItem.addText(currentSectionListItem.getTextElement().getText() + data);
-        } else if (cdt.equals("chapterHeadLine")) {
-            currentChapter.addText(currentChapter.getTextElement().getText() + data);
-        } else if (cdt.equals("dividerHeadLine")) {
-            currentDivider.addText(currentDivider.getTextElement().getText() + data);
-        } else if (cdt.equals("sectionDeprecated")) {
-            currentSection.addText(currentSection.getTextElement().getText() + data);
-        } else if (cdt.equals("headLine")) {
-            currentHeadLine.addText(currentHeadLine.getTextElement().getText() + data);
-        } else if (cdt.equals("subHeadLine")) {
-            currentSubHeadline.addText(currentSubHeadline.getTextElement().getText() + data);
         }
     }
 
@@ -153,13 +149,7 @@ public class Scraper {
             LawDocumentPart section = new LawDocumentPart();
             section.setKey(attributes.getValue(0));
             section.setLawPartType(LawDocumentPartType.SECTION);
-            if (currentParaGraph != null) {
-                currentParaGraph.addDocumentPartChild(section);
-            } else {
-                law.addDocumentPartChild(section);
-            }
-
-            setCurrentSection(section);
+            setCurrentLawDocumentPart(section);
             setCurrentDataType("section");
         } else {
             setCurrentDataType("p");
@@ -195,8 +185,7 @@ public class Scraper {
             sectionListItem.addText(attributes.getValue(0));
             sectionListItem.setLawPartType(LawDocumentPartType.SECTION_LIST_ITEM);
             setCurrentDataType("sectionListItem");
-            currentSection.addDocumentPartChild(sectionListItem);
-            setCurrentSectionListItem(sectionListItem);
+            setCurrentLawDocumentPart(sectionListItem);
         }
     }
 
@@ -209,23 +198,14 @@ public class Scraper {
         } else if (attributes.getValue(1) != null && attributes.getValue(1).equals("underrubrik")) {
             LawDocumentPart subHeadLine = new LawDocumentPart();
             subHeadLine.setLawPartType(LawDocumentPartType.SUB_HEADING);
-            if (Utilities.getParentLawDocumentPartTypeByKey(attributes.getValue(0)) == LawDocumentPartType.CHAPTER) {
-                currentChapter.addDocumentPartChild(subHeadLine);
-            } else if (Utilities.getParentLawDocumentPartTypeByKey(attributes.getValue(0)) == LawDocumentPartType.LAW) {
-                law.addDocumentPartChild(subHeadLine);
-            }
-            setCurrentSubHeadLine(subHeadLine);
+
+            setCurrentLawDocumentPart(subHeadLine);
             setCurrentDataType("subHeadLine");
 
         } else if (attributes.getValue(0) != null && attributes.getValue(0).contains("R")) {
             LawDocumentPart headLine = new LawDocumentPart();
             headLine.setLawPartType(LawDocumentPartType.HEADING);
-            if (Utilities.getParentLawDocumentPartTypeByKey(attributes.getValue(0)) == LawDocumentPartType.CHAPTER) {
-                currentChapter.addDocumentPartChild(headLine);
-            } else if (Utilities.getParentLawDocumentPartTypeByKey(attributes.getValue(0)) == LawDocumentPartType.LAW) {
-                law.addDocumentPartChild(headLine);
-            }
-            setCurrentHeadLine(headLine);
+            setCurrentLawDocumentPart(headLine);
             setCurrentDataType("headLine");
 
         } else {
@@ -238,14 +218,8 @@ public class Scraper {
         if (attributes.getValue(1) != null && attributes.getValue(1).equals("rinfo:Kapitel")) {
             LawDocumentPart chapter = new LawDocumentPart();
             chapter.setKey(attributes.getValue(2));
-            if (currentDivider != null) {
-                currentDivider.addDocumentPartChild(chapter);
-            } else {
-                law.addDocumentPartChild(chapter);
-            }
-
-            setCurrentChapter(chapter);
             chapter.setLawPartType(LawDocumentPartType.CHAPTER);
+            setCurrentLawDocumentPart(chapter);
             setCurrentDataType("chapter");
         } else if (attributes.getValue(1) != null && attributes.getValue(1).equals("rinfo:Paragraf")) {
             LawDocumentPart paragraph = new LawDocumentPart();
@@ -255,41 +229,24 @@ public class Scraper {
             if (attributes.getValue(2) != null) {
                 paragraph.setKey(attributes.getValue(2));
             }
-            if (currentChapter != null) {
-                currentChapter.addDocumentPartChild(paragraph);
-            } else {
-                law.addDocumentPartChild(paragraph);
-            }
-
-            setCurrentParagraph(paragraph);
             paragraph.setLawPartType(LawDocumentPartType.PARAGRAPH);
+            setCurrentLawDocumentPart(paragraph);
             setCurrentDataType("paragraph");
         } else if (attributes.getValue(0) != null && attributes.getValue(0).equals("rinfo:Avdelning")) {
             LawDocumentPart divider = new LawDocumentPart();
             divider.setKey(attributes.getValue(1));
-            law.addDocumentPartChild(divider);
             divider.setLawPartType(LawDocumentPartType.DIVIDER);
-            setCurrentDivider(divider);
+            setCurrentLawDocumentPart(divider);
             setCurrentDataType("divider");
         } else if (attributes.getValue(0) != null && attributes.getValue(0).equals("upphavd")) {
             LawDocumentPart deprecatedElement = new LawDocumentPart();
             deprecatedElement.setLawPartType(LawDocumentPartType.DEPRECATED);
             deprecatedElement.setDeprecated(true);
-
-            if (currentChapter != null) {
-                currentChapter.addDocumentPartChild(deprecatedElement);
-            } else {
-                law.addDocumentPartChild(deprecatedElement);
-            }
-
-            currentParaGraph = deprecatedElement;
-
+            setCurrentLawDocumentPart(deprecatedElement);
             LawDocumentPart section = new LawDocumentPart();
             section.setLawPartType(LawDocumentPartType.DEPRECATED);
             section.setDeprecated(true);
-            currentParaGraph.addDocumentPartChild(section);
-            setCurrentSection(section);
-
+            setCurrentLawDocumentPart(section);
             setCurrentDataType("sectionDeprecated");
         } else {
             setCurrentDataType("section");
@@ -332,32 +289,84 @@ public class Scraper {
         return law;
     }
 
-    private void setCurrentSubHeadLine(LawDocumentPart subHeadLine) {
-        this.currentSubHeadline = subHeadLine;
+    private void setCurrentLawDocumentPart(LawDocumentPart lawDocumentPart) {
+        addDocumentPart(lawDocumentPart);
+        this.lawDocumentPartStack.add(lawDocumentPart);
     }
 
-    private void setCurrentHeadLine(LawDocumentPart headLine) {
-        this.currentHeadLine = headLine;
+    private void addDocumentPart(LawDocumentPart documentPart) {
+        LawDocumentPart allowedParent = getAllowedParent(documentPart);
+        if (allowedParent == null) {
+            System.out.println("Couldn't find an allowed parent");
+        } else {
+            allowedParent.addDocumentPartChild(documentPart);
+        }
     }
 
-    private void setCurrentParagraph(LawDocumentPart paragraph) {
-        this.currentParaGraph = paragraph;
+    private LawDocumentPart getAllowedParent(LawDocumentPart documentPart) {
+        LawDocumentPart stackTop = lawDocumentPartStack.peek();
+        if (stackTop == null) {
+            return null;
+        }
+
+        if (isAllowedParent(stackTop.getLawPartType(), documentPart.getLawPartType())) {
+            return stackTop;
+        }
+        lawDocumentPartStack.pop();
+        return getAllowedParent(documentPart);
     }
 
-    private void setCurrentChapter(LawDocumentPart chapter) {
-        this.currentChapter = chapter;
-    }
+    private boolean isAllowedParent(LawDocumentPartType parentLawPartType, LawDocumentPartType lawDocumentPartType) {
+        if (lawDocumentPartType == LawDocumentPartType.LAW || parentLawPartType == lawDocumentPartType) {
+            return false;
+        }
 
-    private void setCurrentSection(LawDocumentPart section) {
-        this.currentSection = section;
-    }
-
-    private void setCurrentSectionListItem(LawDocumentPart sectionListItem) {
-        this.currentSectionListItem = sectionListItem;
-    }
-
-    private void setCurrentDivider(LawDocumentPart divider) {
-        this.currentDivider = divider;
+        switch (parentLawPartType) {
+            case LAW:
+            case DIVIDER:
+                if (lawDocumentPartType != LawDocumentPartType.SECTION_LIST_ITEM &&
+                        lawDocumentPartType != LawDocumentPartType.SUB_HEADING) {
+                    return true;
+                }
+                break;
+            case HEADING:
+                if (lawDocumentPartType != LawDocumentPartType.SECTION_LIST_ITEM) {
+                    return true;
+                }
+                break;
+            case CHAPTER:
+                if (lawDocumentPartType != LawDocumentPartType.SECTION_LIST_ITEM &&
+                        lawDocumentPartType != LawDocumentPartType.DIVIDER &&
+                        lawDocumentPartType != LawDocumentPartType.SUB_HEADING) {
+                    return true;
+                }
+                break;
+            case PARAGRAPH:
+                if (lawDocumentPartType != LawDocumentPartType.SECTION_LIST_ITEM &&
+                        lawDocumentPartType != LawDocumentPartType.DIVIDER &&
+                        lawDocumentPartType != LawDocumentPartType.CHAPTER) {
+                    return true;
+                }
+                break;
+            case SECTION:
+                if (lawDocumentPartType == LawDocumentPartType.SECTION_LIST_ITEM) {
+                    return true;
+                }
+                break;
+            case SECTION_LIST_ITEM:
+                return false;
+            case SUB_HEADING:
+                if (lawDocumentPartType != LawDocumentPartType.SECTION_LIST_ITEM) {
+                    return true;
+                }
+                break;
+            case DEPRECATED:
+                if (lawDocumentPartType == LawDocumentPartType.DEPRECATED) {
+                    return true;
+                }
+                break;
+        }
+        return false;
     }
 
 }
