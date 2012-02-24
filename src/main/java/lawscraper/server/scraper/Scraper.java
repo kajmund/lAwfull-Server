@@ -87,12 +87,6 @@ public class Scraper {
                 if (currentDocumentPart.getTextElement().getText().contains("upphävd genom")) {
                     currentDocumentPart.setLawPartType(LawDocumentPartType.DEPRECATED);
                     currentDocumentPart.setDeprecated(true);
-
-                    LawDocumentPart parent = currentDocumentPart.getParent();
-                    if (parent != null && parent.getLawPartType().equals(LawDocumentPartType.PARAGRAPH)) {
-                        parent.setDeprecated(true);
-                        parent.setLawPartType(LawDocumentPartType.DEPRECATED);
-                    }
                 }
             }
         } else if (cdt.equals("sectionListItem")) {
@@ -103,6 +97,16 @@ public class Scraper {
             currentDocumentPart.addText(currentDocumentPart.getTextElement().getText() + data);
         } else if (cdt.equals("sectionDeprecated")) {
             currentDocumentPart.addText(currentDocumentPart.getTextElement().getText() + data);
+            if (currentDocumentPart.getType() == null) {
+                if (currentDocumentPart.getTextElement().getText().contains("kap")) {
+                    currentDocumentPart.setLawPartType(LawDocumentPartType.CHAPTER);
+                    addDocumentPart(currentDocumentPart);
+                } else {
+                    currentDocumentPart.setLawPartType(LawDocumentPartType.PARAGRAPH);
+                    addDocumentPart(currentDocumentPart);
+                }
+            }
+
         } else if (cdt.equals("headLine")) {
             currentDocumentPart.addText(currentDocumentPart.getTextElement().getText() + data);
         } else if (cdt.equals("subHeadLine")) {
@@ -240,13 +244,8 @@ public class Scraper {
             setCurrentDataType("divider");
         } else if (attributes.getValue(0) != null && attributes.getValue(0).equals("upphavd")) {
             LawDocumentPart deprecatedElement = new LawDocumentPart();
-            deprecatedElement.setLawPartType(LawDocumentPartType.DEPRECATED);
             deprecatedElement.setDeprecated(true);
-            setCurrentLawDocumentPart(deprecatedElement);
-            LawDocumentPart section = new LawDocumentPart();
-            section.setLawPartType(LawDocumentPartType.DEPRECATED);
-            section.setDeprecated(true);
-            setCurrentLawDocumentPart(section);
+            this.lawDocumentPartStack.add(deprecatedElement);
             setCurrentDataType("sectionDeprecated");
         } else {
             setCurrentDataType("section");
