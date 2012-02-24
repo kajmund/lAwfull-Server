@@ -1,5 +1,6 @@
 package lawscraper.server.service;
 
+import lawscraper.server.scraper.DummyPartFactory;
 import lawscraper.server.scraper.Scraper;
 import lawscraper.server.scraper.TestDataUtil;
 import org.junit.Test;
@@ -16,9 +17,10 @@ public class RendererMassTest {
         LawRendererImpl renderer = new LawRendererImpl();
         int lawCount = 0;
         int successCount = 0;
+        DummyPartFactory partFactory = new DummyPartFactory();
         for (TestDataUtil.Law lawData : TestDataUtil.getAllLaws()) {
             lawCount++;
-            Scraper scraper = new Scraper();
+            Scraper scraper = new Scraper(partFactory);
             try {
                 scraper.parse(lawData.getInputStream());
                 renderer.renderToHtml(scraper.getLaw());

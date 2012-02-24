@@ -45,7 +45,7 @@ public class HelloActivity extends AbstractActivity implements StartView.Present
         LawRequestFactory.LawRequest context = requests.lawRequest();
 
         long id = 0;
-        context.findLaw(id).fire(new Receiver<LawProxy>() {
+        context.find(id).fire(new Receiver<LawProxy>() {
             @Override
             public void onSuccess(LawProxy response) {
                 System.out.println("Success!");
@@ -62,12 +62,14 @@ public class HelloActivity extends AbstractActivity implements StartView.Present
 
         LawRequestFactory.LawRequest context = requests.lawRequest();
 
+        /*
         context.scrapeAll().fire(new Receiver<Void>() {
             @Override
             public void onSuccess(Void response) {
                 System.out.println("Färdigt");
             }
         });
+         */
     }
 
     /**

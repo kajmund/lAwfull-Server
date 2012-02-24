@@ -1,9 +1,7 @@
 package lawscraper.server.entities.law;
 
-import org.springframework.data.neo4j.annotation.NodeEntity;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
@@ -12,7 +10,6 @@ import java.util.List;
  * Time: 7:47 PM
  */
 
-@NodeEntity
 public class Law extends LawDocumentPart {
     String title = "";
     String fsNumber = "";
@@ -21,8 +18,8 @@ public class Law extends LawDocumentPart {
     String publisher = "";
     String creator = "";
 
-    List<String> consolidations = new ArrayList<String>();
-    List<String> propositions = new ArrayList<String>();
+    Set<String> consolidations = new HashSet<String>();
+    Set<String> propositions = new HashSet<String>();
 
     public Law() {
         this.setLawPartType(LawDocumentPartType.LAW);
@@ -76,19 +73,19 @@ public class Law extends LawDocumentPart {
         this.publisher = publisher;
     }
 
-    public List<String> getConsolidations() {
+    public Set<String> getConsolidations() {
         return consolidations;
     }
 
-    public void setConsolidations(List<String> consolidations) {
+    public void setConsolidations(Set<String> consolidations) {
         this.consolidations = consolidations;
     }
 
-    public List<String> getPropositions() {
+    public Set<String> getPropositions() {
         return propositions;
     }
 
-    public void setPropositions(List<String> propositions) {
+    public void setPropositions(Set<String> propositions) {
         this.propositions = propositions;
     }
 }

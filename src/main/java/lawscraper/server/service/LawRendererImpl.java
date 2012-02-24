@@ -3,7 +3,7 @@ package lawscraper.server.service;
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * TODO Document this.
@@ -12,11 +12,11 @@ public class LawRendererImpl implements LawRenderer {
     @Override
     public String renderToHtml(Law law) {
         return element("div", renderMeta(law)
-                + element("div", renderParts(law.getChildren()), "class", "lawBody"),
+                + element("div", renderParts(law.getSortedParts()), "class", "lawBody"),
                 "class", "law");
     }
 
-    private String renderParts(Set<LawDocumentPart> children) {
+    private String renderParts(List<LawDocumentPart> children) {
         StringBuilder sb = new StringBuilder();
         for (LawDocumentPart child : children) {
             sb.append(renderPart(child));
@@ -29,7 +29,7 @@ public class LawRendererImpl implements LawRenderer {
     }
 
     private String renderPart(LawDocumentPart part, String cssClass) {
-        return element("div", part.getTextElement().getText() + renderParts(part.getChildren()), "class", cssClass);
+        return element("div", part.getTextElement().getText() + renderParts(part.getSortedParts()), "class", cssClass);
     }
 
     private String renderMeta(Law law) {

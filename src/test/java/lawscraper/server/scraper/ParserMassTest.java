@@ -15,7 +15,7 @@ public class ParserMassTest {
         int successCount = 0;
         for (TestDataUtil.Law law : TestDataUtil.getAllLaws()) {
             lawCount++;
-            Scraper scraper = new Scraper();
+            Scraper scraper = new Scraper(new DummyPartFactory());
             try {
                 scraper.parse(law.getInputStream());
                 successCount++;

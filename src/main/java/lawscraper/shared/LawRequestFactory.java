@@ -18,8 +18,7 @@ import lawscraper.shared.proxies.LawProxy;
 public interface LawRequestFactory extends RequestFactory{
     @Service(value = LawService.class, locator = SpringServiceLocator.class)
     interface LawRequest extends RequestContext{
-        Request<Void> scrapeAll();
-        Request<LawProxy> findLaw(Long id);
+        Request<LawProxy> find(Long id);
     }
 
     LawRequest lawRequest();

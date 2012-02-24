@@ -1,7 +1,9 @@
 package lawscraper.server.scraper;
 
+import lawscraper.server.components.PartFactory;
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.service.LawService;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +25,18 @@ public class TransactionParserMassTest {
 
     @Autowired
     LawService lawService;
+    @Autowired
+    PartFactory partFactory;
 
     @Test
+    @Ignore
     public void parseAllLaws() throws Exception {
         int lawCount = 0;
         int successCount = 0;
+        long start = System.currentTimeMillis();
         for (TestDataUtil.Law law : TestDataUtil.getAllLaws()) {
             lawCount++;
-            Scraper scraper = new Scraper();
+            Scraper scraper = new Scraper(partFactory);
             try {
                 scraper.parse(law.getInputStream());
                 successCount++;
@@ -43,6 +49,7 @@ public class TransactionParserMassTest {
 
         }
 
+        System.out.println("Time: " + (System.currentTimeMillis() - start) + "ms");
         Law law = lawService.find((long) 1);
         assertNotNull(law);
         assertEquals("All laws not parseable", lawCount, successCount);

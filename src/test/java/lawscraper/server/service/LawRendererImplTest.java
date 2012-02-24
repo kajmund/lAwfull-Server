@@ -25,7 +25,9 @@ public class LawRendererImplTest {
                 "<div class=\"metaHeading\"><div class=\"metaTitle\">Utfärdad</div><div class=\"metaText\"></div></div>" +
                 "<div class=\"metaHeading\"><div class=\"metaTitle\">Källa</div><div class=\"metaText\"></div></div>" +
                 "<div class=\"metaHeading\"><div class=\"metaTitle\">Senast hämtad</div><div class=\"metaText\"></div></div>" +
-                "</div></div>"
+                "</div>" +
+                "<div class=\"lawBody\"></div>" +
+                "</div>"
                 , html);
     }
 

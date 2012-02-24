@@ -1,5 +1,6 @@
 package lawscraper.server.scraper;
 
+import lawscraper.server.components.PartFactory;
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
 import lawscraper.server.entities.law.LawDocumentPartType;
@@ -24,12 +25,15 @@ import java.util.Stack;
 
 public class Scraper {
 
+    private final PartFactory partFactory;
+
     private Law law = new Law();
 
     ArrayList<String> currentDataType = new ArrayList<String>();
     private Stack<LawDocumentPart> lawDocumentPartStack = new Stack<LawDocumentPart>();
 
-    public Scraper() {
+    public Scraper(PartFactory partFactory) {
+        this.partFactory = partFactory;
         this.lawDocumentPartStack.add(law);
     }
 
@@ -98,6 +102,7 @@ public class Scraper {
         } else if (cdt.equals("sectionDeprecated")) {
             currentDocumentPart.addText(currentDocumentPart.getTextElement().getText() + data);
             if (currentDocumentPart.getType() == null) {
+                // TODO Fler fall?
                 if (currentDocumentPart.getTextElement().getText().contains("kap")) {
                     currentDocumentPart.setLawPartType(LawDocumentPartType.CHAPTER);
                     addDocumentPart(currentDocumentPart);
@@ -150,9 +155,8 @@ public class Scraper {
         if (attributes.getValue(2) != null &&
                 attributes.getValue(2).equals("rinfo:Stycke") &&
                 !attributes.getValue(0).startsWith("L")) {
-            LawDocumentPart section = new LawDocumentPart();
+            LawDocumentPart section = createPart(LawDocumentPartType.SECTION);
             section.setKey(attributes.getValue(0));
-            section.setLawPartType(LawDocumentPartType.SECTION);
             setCurrentLawDocumentPart(section);
             setCurrentDataType("section");
         } else {
@@ -184,10 +188,9 @@ public class Scraper {
 
         //checks if value starts with P because we want the LI's that is connected to a paragraph
         if (attributes.getValue(0).startsWith("P") || attributes.getValue(0).startsWith("K")) {
-            LawDocumentPart sectionListItem = new LawDocumentPart();
+            LawDocumentPart sectionListItem = createPart(LawDocumentPartType.SECTION_LIST_ITEM);
             sectionListItem.setKey(attributes.getValue(1));
             sectionListItem.addText(attributes.getValue(0));
-            sectionListItem.setLawPartType(LawDocumentPartType.SECTION_LIST_ITEM);
             setCurrentDataType("sectionListItem");
             setCurrentLawDocumentPart(sectionListItem);
         }
@@ -200,15 +203,12 @@ public class Scraper {
         } else if (attributes.getValue(0) != null && attributes.getValue(0).equals("avdelningsrubrik")) {
             setCurrentDataType("dividerHeadLine");
         } else if (attributes.getValue(1) != null && attributes.getValue(1).equals("underrubrik")) {
-            LawDocumentPart subHeadLine = new LawDocumentPart();
-            subHeadLine.setLawPartType(LawDocumentPartType.SUB_HEADING);
-
+            LawDocumentPart subHeadLine = createPart(LawDocumentPartType.SUB_HEADING);
             setCurrentLawDocumentPart(subHeadLine);
             setCurrentDataType("subHeadLine");
 
         } else if (attributes.getValue(0) != null && attributes.getValue(0).contains("R")) {
-            LawDocumentPart headLine = new LawDocumentPart();
-            headLine.setLawPartType(LawDocumentPartType.HEADING);
+            LawDocumentPart headLine = createPart(LawDocumentPartType.HEADING);
             setCurrentLawDocumentPart(headLine);
             setCurrentDataType("headLine");
 
@@ -217,33 +217,37 @@ public class Scraper {
         }
     }
 
+    private LawDocumentPart createPart(LawDocumentPartType type) {
+        LawDocumentPart subHeadLine = new LawDocumentPart();
+        if (type != null)
+            subHeadLine.setLawPartType(type);
+        return subHeadLine;
+    }
+
 
     private void parseSectionElement(Attributes attributes) {
         if (attributes.getValue(1) != null && attributes.getValue(1).equals("rinfo:Kapitel")) {
-            LawDocumentPart chapter = new LawDocumentPart();
+            LawDocumentPart chapter = createPart(LawDocumentPartType.CHAPTER);
             chapter.setKey(attributes.getValue(2));
-            chapter.setLawPartType(LawDocumentPartType.CHAPTER);
             setCurrentLawDocumentPart(chapter);
             setCurrentDataType("chapter");
         } else if (attributes.getValue(1) != null && attributes.getValue(1).equals("rinfo:Paragraf")) {
-            LawDocumentPart paragraph = new LawDocumentPart();
+            LawDocumentPart paragraph = createPart(LawDocumentPartType.PARAGRAPH);
             if (attributes.getValue(4) != null) {
                 paragraph.addText(attributes.getValue(4));
             }
             if (attributes.getValue(2) != null) {
                 paragraph.setKey(attributes.getValue(2));
             }
-            paragraph.setLawPartType(LawDocumentPartType.PARAGRAPH);
             setCurrentLawDocumentPart(paragraph);
             setCurrentDataType("paragraph");
         } else if (attributes.getValue(0) != null && attributes.getValue(0).equals("rinfo:Avdelning")) {
-            LawDocumentPart divider = new LawDocumentPart();
+            LawDocumentPart divider = createPart(LawDocumentPartType.DIVIDER);
             divider.setKey(attributes.getValue(1));
-            divider.setLawPartType(LawDocumentPartType.DIVIDER);
             setCurrentLawDocumentPart(divider);
             setCurrentDataType("divider");
         } else if (attributes.getValue(0) != null && attributes.getValue(0).equals("upphavd")) {
-            LawDocumentPart deprecatedElement = new LawDocumentPart();
+            LawDocumentPart deprecatedElement = createPart(null);
             deprecatedElement.setDeprecated(true);
             this.lawDocumentPartStack.add(deprecatedElement);
             setCurrentDataType("sectionDeprecated");
@@ -258,7 +262,7 @@ public class Scraper {
             return;
         }
         if (attributes.getValue(0).equals("rinfo:forarbete") && !law.getPropositions()
-                                                                    .contains(attributes.getValue(1))) {
+                .contains(attributes.getValue(1))) {
             law.getPropositions().add(attributes.getValue(1));
         }
     }

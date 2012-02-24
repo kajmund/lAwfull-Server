@@ -27,7 +27,8 @@ public class TextServiceImpl implements TextService {
     public TextElement getTextElement(TextElement te) {
 
         //Discontinued - findbypropertyvalue always returns null and the method is very slow
-        TextElement textElement = repository.findByPropertyValue("hash", te.getHash());
+        //TextElement textElement = repository.findByPropertyValue("hash", te.getHash());
+        TextElement textElement = null;
         if (textElement == null) {
             textElement = repository.save(te);
         }

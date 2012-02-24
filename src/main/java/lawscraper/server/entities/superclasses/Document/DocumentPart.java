@@ -2,18 +2,15 @@ package lawscraper.server.entities.superclasses.Document;
 
 import lawscraper.server.entities.superclasses.EntityBase;
 
-import javax.persistence.MappedSuperclass;
-
 /**
  * Created by erik, IT Bolaget Per & Per AB
  * Copyright Inspectera AB
  * Date: 2/21/12
  * Time: 9:48 AM
  */
-@MappedSuperclass
 public class DocumentPart extends EntityBase {
-    int order;
-    String type;
+    private int order;
+    private String type;
 
     public int getOrder() {
         return order;

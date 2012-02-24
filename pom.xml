@@ -26,7 +26,7 @@
   <repositories>
 
     <repository>
-      <id>spring-maven-snapshot</id>
+      <id>repository.springframework.maven.mileston</id>
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
@@ -37,6 +37,11 @@
       <id>JBoss Repository</id>
       <url>https://repository.jboss.org/nexus/content/repositories/releases</url>
       <name>JBoss Repository</name>
+    </repository>
+    <repository>
+      <id>repository.springframework.maven.release</id>
+      <name>Spring Framework Maven Release Repository</name>
+      <url>http://maven.springframework.org/release</url>
     </repository>
 
   </repositories>
@@ -100,6 +105,7 @@
       <artifactId>spring-core</artifactId>
       <version>${spring.version}</version>
     </dependency>
+
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
@@ -136,6 +142,7 @@
       <artifactId>spring-data-neo4j</artifactId>
       <version>2.0.0.RELEASE</version>
     </dependency>
+
     <dependency>
       <groupId>javax.validation</groupId>
       <artifactId>validation-api</artifactId>
@@ -144,6 +151,11 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
       <version>${spring.version}</version>
     </dependency>
   </dependencies>
@@ -228,36 +240,6 @@
           <i18nMessagesBundle>lawscraper.client.Messages</i18nMessagesBundle>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>aspectj-maven-plugin</artifactId>
-        <version>1.2</version>
-        <dependencies>
-          <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>${aspectj.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjtools</artifactId>
-            <version>${aspectj.version}</version>
-          </dependency>
-        </dependencies>
-        <executions>
-          <execution>
-            <goals>
-              <goal>compile</goal>
-              <goal>test-compile</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <outxml>true</outxml>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
-      </plugin>
       <!-- Copy static web files before executing gwt:run -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -284,6 +266,23 @@
           <target>1.6</target>
         </configuration>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.10</version>
+        <configuration>
+          <useFile>true</useFile>
+          <includes>
+            <include>**/*Tests.java</include>
+            <include>**/*Test.java</include>
+          </includes>
+          <excludes>
+            <exclude>**/Abstract*.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+
     </plugins>
   </build>
 

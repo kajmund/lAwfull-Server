@@ -3,11 +3,10 @@ package lawscraper.server.entities.law;
 import lawscraper.server.entities.superclasses.Document.DocumentPart;
 import lawscraper.server.entities.superclasses.Document.TextElement;
 import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.NodeEntity;
+import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
@@ -15,21 +14,27 @@ import java.util.Set;
  * Date: 2/21/12
  * Time: 9:58 AM
  */
-
-@NodeEntity
 public class LawDocumentPart extends DocumentPart {
+    @RelatedTo
     Law deprecatedByLaw;
+    @RelatedTo
     Law replacesLaw;
     String key;
+    @RelatedTo
     TextElement textElement = new TextElement();
-    Set<LawDocumentPart> children = new HashSet<LawDocumentPart>();
+    @RelatedTo(type = "HAS_SUB_PART")
+    @Fetch
+    Collection<LawDocumentPart> parts = new HashSet<LawDocumentPart>();
+    @RelatedTo(direction = Direction.INCOMING, type = "HAS_SUB_PART")
     LawDocumentPart parent;
+    @RelatedTo(direction = Direction.INCOMING, type = "PREVIOUS_VERSION")
     LawDocumentPart nextVersion;
+    @RelatedTo(type = "PREVIOUS_VERSION")
     LawDocumentPart previousVersion;
+    @RelatedTo
     LawDocumentPart transitionalProvision;
     private boolean deprecated;
 
-    @RelatedTo(elementClass = Law.class, direction = Direction.OUTGOING)
     public Law getReplacesLaw() {
         return replacesLaw;
     }
@@ -38,7 +43,6 @@ public class LawDocumentPart extends DocumentPart {
         this.replacesLaw = replacesLaw;
     }
 
-    @RelatedTo(elementClass = TextElement.class, direction = Direction.OUTGOING)
     public TextElement getTextElement() {
         return textElement;
     }
@@ -47,7 +51,6 @@ public class LawDocumentPart extends DocumentPart {
         this.textElement = textElement;
     }
 
-    @RelatedTo(elementClass = Law.class, direction = Direction.OUTGOING)
     public Law getDeprecatedByLaw() {
         return deprecatedByLaw;
     }
@@ -64,25 +67,26 @@ public class LawDocumentPart extends DocumentPart {
         this.key = key;
     }
 
-    @RelatedTo(elementClass = LawDocumentPart.class, direction = Direction.OUTGOING)
-    public Set<LawDocumentPart> getChildren() {
-        return children;
+    public Collection<LawDocumentPart> getParts() {
+        return parts;     
     }
 
-    public void setChildren(Set<LawDocumentPart> children) {
-        this.children = children;
+    public List<LawDocumentPart> getSortedParts() {
+        ArrayList<LawDocumentPart> lawDocumentParts = new ArrayList<LawDocumentPart>(getParts());
+        Collections.sort(lawDocumentParts, new Comparator<LawDocumentPart>() {
+            @Override
+            public int compare(LawDocumentPart o, LawDocumentPart o1) {
+                return o.getOrder() - o1.getOrder();
+            }
+        });
+        return lawDocumentParts;
     }
 
-    @RelatedTo(elementClass = LawDocumentPart.class, direction = Direction.INCOMING)
     public LawDocumentPart getParent() {
-        return parent;
+        //return parentRel.getParent();
+        return null;
     }
 
-    public void setParent(LawDocumentPart parent) {
-        this.parent = parent;
-    }
-
-    @RelatedTo(elementClass = LawDocumentPart.class, direction = Direction.INCOMING)
     public LawDocumentPart getNextVersion() {
         return nextVersion;
     }
@@ -91,7 +95,6 @@ public class LawDocumentPart extends DocumentPart {
         this.nextVersion = nextVersion;
     }
 
-    @RelatedTo(elementClass = LawDocumentPart.class, direction = Direction.OUTGOING)
     public LawDocumentPart getPreviousVersion() {
         return previousVersion;
     }
@@ -100,7 +103,6 @@ public class LawDocumentPart extends DocumentPart {
         this.previousVersion = previousVersion;
     }
 
-    @RelatedTo(elementClass = LawDocumentPart.class, direction = Direction.OUTGOING)
     public LawDocumentPart getTransitionalProvision() {
         return transitionalProvision;
     }
@@ -129,9 +131,9 @@ public class LawDocumentPart extends DocumentPart {
         return LawDocumentPartType.valueOf(getType());
     }
 
-    public void addDocumentPartChild(LawDocumentPart lawDocumentPart) {
-        getChildren().add(lawDocumentPart);
-        lawDocumentPart.setParent(this);
-        lawDocumentPart.setOrder(getChildren().size());
+    public void addDocumentPartChild(LawDocumentPart subPart) {
+        subPart.setOrder(parts.size());
+        parts.add(subPart);
     }
+
 }

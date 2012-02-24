@@ -16,7 +16,7 @@ public class ScraperTest {
 
     @Test
     public void testParseLawSkadestandsLagen() throws Exception {
-        Scraper scraper = new Scraper();
+        Scraper scraper = new Scraper(new DummyPartFactory());
         scraper.parse(TestDataUtil.getLaw("1972:207"));
         Law law = scraper.getLaw();
         assertNotNull(law);
@@ -38,6 +38,6 @@ public class ScraperTest {
         assertEquals(3, chapter.getChildren().size());
 
         LawDocumentPart paragraph = chapter.getChildren().iterator().next();
-         */
+        */
     }
 }
