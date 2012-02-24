@@ -1,6 +1,8 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:lawResultPanel="urn:import:lawscraper.client.ui.panels">
+
     <ui:style>
         .stackHeader {
             color: #15428B;
@@ -338,6 +340,7 @@
                 </g:StackLayoutPanel>
             </g:FlowPanel>
             <g:FlowPanel addStyleNames="{style.mainContainer}, {style.lightblueGradient}">
+                <lawResultPanel:LawResultPanel ui:field="lawResultPanel"/>
                 <g:FlowPanel>
                     <g:HTML>MainPanel</g:HTML>
                     <g:HTMLPanel>
@@ -346,14 +349,13 @@
                                 <td>
                                     <g:Button text="Skrapa lagar" ui:field="scrapeButton"/>
                                 </td>
-                            </tr>
-                            <tr>
                                 <td>
                                     <g:Button text="Hämta lag" ui:field="sendButton"/>
                                 </td>
                             </tr>
                         </table>
-                        <g:FlowPanel ui:field="container"/>
+                        <g:FlowPanel ui:field="container">
+                        </g:FlowPanel>
                     </g:HTMLPanel>
                 </g:FlowPanel>
             </g:FlowPanel>

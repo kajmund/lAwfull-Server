@@ -6,6 +6,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.*;
+import lawscraper.client.ui.panels.LawResultPanel;
 import lawscraper.shared.proxies.LawWrapperProxy;
 
 import java.util.List;
@@ -20,7 +21,8 @@ public class StartViewImpl extends Composite implements StartView {
     @UiField Button sendButton;
     @UiField Button scrapeButton;
     @UiField FlowPanel container;
-    @UiField Label processingLabel;
+    @UiField LawResultPanel lawResultPanel;
+
     private Presenter listener;
     private String name;
 
@@ -49,16 +51,8 @@ public class StartViewImpl extends Composite implements StartView {
     }
 
     @Override
-    public void setLaw(List<LawWrapperProxy> law) {
+    public void setLaw(List<LawWrapperProxy> laws) {
         container.clear();
-        for (LawWrapperProxy lawWrapperProxy : law) {
-            container.add(new HTMLPanel(lawWrapperProxy.getTitle()));
-        }
-    }
-
-    @Override
-    public void setScrapeUpdate(String message) {
-        String update = processingLabel.getText() + "\n" + message + "\n";
-        processingLabel.setText(update + "<br>");
+        lawResultPanel.setLaws(laws.subList(0,200));
     }
 }

@@ -12,17 +12,15 @@ import java.util.List;
  *
  * @author drfibonacci
  */
-public interface StartView extends IsWidget
-{
-	void setName(String helloName);
-	void setPresenter(Presenter listener);
+public interface StartView extends IsWidget {
+    void setName(String helloName);
+
+    void setPresenter(Presenter listener);
+
     void setLaw(List<LawWrapperProxy> law);
 
-    void setScrapeUpdate(String message);
-
-    public interface Presenter
-	{
-		void goTo(Place place);
+    public interface Presenter {
+        void goTo(Place place);
 
         void getLaw();
 
