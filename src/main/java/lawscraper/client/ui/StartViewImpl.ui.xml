@@ -341,10 +341,18 @@
                 <g:FlowPanel>
                     <g:HTML>MainPanel</g:HTML>
                     <g:HTMLPanel>
-                        <g:Button text="Skrapa lagar" ui:field="scrapeButton"/>
-
-                        <g:Label text="..." ui:field="processingLabel"/>
-                        <g:Button text="Hämta lag" ui:field="sendButton"/>
+                        <table>
+                            <tr>
+                                <td>
+                                    <g:Button text="Skrapa lagar" ui:field="scrapeButton"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <g:Button text="Hämta lag" ui:field="sendButton"/>
+                                </td>
+                            </tr>
+                        </table>
                         <g:FlowPanel ui:field="container"/>
                     </g:HTMLPanel>
                 </g:FlowPanel>

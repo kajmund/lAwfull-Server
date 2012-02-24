@@ -4,7 +4,7 @@ import lawscraper.server.components.PartFactory;
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
 import lawscraper.server.entities.law.LawDocumentPartType;
-import lawscraper.server.service.LawService;
+import lawscraper.server.repositories.LawRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ import static org.junit.Assert.assertNotNull;
 public class LawPesistanceFunctionalTest {
 
     @Autowired
-    LawService lawService;
+    LawRepository lawRepository;
     @Autowired
     PartFactory partFactory;
     @Autowired
@@ -39,24 +39,24 @@ public class LawPesistanceFunctionalTest {
 
     @Test
     public void parseAndStoreMinimal() throws Exception {
-        Law update = lawService.createOrUpdate(new Law());
+        Law update = lawRepository.save(new Law());
 
-        Law storedLaw = lawService.find(update.getId());
+        Law storedLaw = lawRepository.findOne(update.getId());
         assertNotNull(storedLaw);
     }
 
     @Test
     public void parseAndStoreSingePart() throws Exception {
         Law law = new Law();
-        law = lawService.createOrUpdate(law);
+        law = lawRepository.save(law);
         //law = template.save(law);
         law.setTitle("Law X");
         LawDocumentPart subPart = partFactory.createpart(LawDocumentPartType.DIVIDER);
         subPart.setKey("Key");
         law.addDocumentPartChild(subPart);
-        lawService.createOrUpdate(law);
+        lawRepository.save(law);
 
-        Law storedLaw = lawService.find(law.getId());
+        Law storedLaw = lawRepository.findOne(law.getId());
         assertNotNull(storedLaw);
         assertEquals("Law X", storedLaw.getTitle());
         assertEquals("Key", storedLaw.getParts().iterator().next().getKey());
@@ -67,8 +67,8 @@ public class LawPesistanceFunctionalTest {
         InputStream law = TestDataUtil.getLaw("2011:926");
         Scraper scraper = new Scraper(new DummyPartFactory());
         scraper.parse(law);
-        lawService.createOrUpdate(scraper.getLaw());
-        Law storedLaw = lawService.find(scraper.getLaw().getId());
+        lawRepository.save(scraper.getLaw());
+        Law storedLaw = lawRepository.findOne(scraper.getLaw().getId());
         assertNotNull(storedLaw);
     }
 

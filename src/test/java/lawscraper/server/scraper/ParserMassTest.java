@@ -13,14 +13,14 @@ public class ParserMassTest {
     public void parseAllLaws() throws Exception {
         int lawCount = 0;
         int successCount = 0;
-        for (TestDataUtil.Law law : TestDataUtil.getAllLaws()) {
+        for (TestDataUtil.LawEntry lawEntry : TestDataUtil.getAllLaws()) {
             lawCount++;
             Scraper scraper = new Scraper(new DummyPartFactory());
             try {
-                scraper.parse(law.getInputStream());
+                scraper.parse(lawEntry.getInputStream());
                 successCount++;
             } catch (Exception e) {
-                System.out.println("Failed to parse " + law.getName());
+                System.out.println("Failed to parse " + lawEntry.getName());
                 e.printStackTrace();
             }
 

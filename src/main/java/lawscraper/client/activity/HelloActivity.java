@@ -9,11 +9,17 @@ import com.google.web.bindery.requestfactory.shared.Receiver;
 import lawscraper.client.ClientFactory;
 import lawscraper.client.ui.StartView;
 import lawscraper.shared.LawRequestFactory;
-import lawscraper.shared.proxies.LawProxy;
+import lawscraper.shared.LawScraperRequestFactory;
+import lawscraper.shared.proxies.LawWrapperProxy;
+import lawscraper.shared.proxies.ScraperStatusProxy;
+import lawscraper.shared.scraper.LawScraperSource;
+
+import java.util.List;
 
 
 public class HelloActivity extends AbstractActivity implements StartView.Presenter {
     final LawRequestFactory requests = GWT.create(LawRequestFactory.class);
+    final LawScraperRequestFactory scraperRequests = GWT.create(LawScraperRequestFactory.class);
 
     /**
      * Create a remote service proxy to talk to the server-side Greeting service.
@@ -37,6 +43,7 @@ public class HelloActivity extends AbstractActivity implements StartView.Present
         startView.setPresenter(this);
         containerWidget.setWidget(startView.asWidget());
         requests.initialize(eventBus);
+        scraperRequests.initialize(eventBus);
     }
 
     @Override
@@ -45,9 +52,9 @@ public class HelloActivity extends AbstractActivity implements StartView.Present
         LawRequestFactory.LawRequest context = requests.lawRequest();
 
         long id = 0;
-        context.find(id).fire(new Receiver<LawProxy>() {
+        context.findAll().fire(new Receiver<List<LawWrapperProxy>>() {
             @Override
-            public void onSuccess(LawProxy response) {
+            public void onSuccess(List<LawWrapperProxy> response) {
                 System.out.println("Success!");
                 StartView startView = clientFactory.getHelloView();
                 startView.setLaw(response);
@@ -60,16 +67,15 @@ public class HelloActivity extends AbstractActivity implements StartView.Present
 
         System.out.println("Scraping laws");
 
-        LawRequestFactory.LawRequest context = requests.lawRequest();
+        LawScraperRequestFactory.LawScraperRequest context = scraperRequests.lawScraperRequest();
 
-        /*
-        context.scrapeAll().fire(new Receiver<Void>() {
+        context.scrapeLaws(LawScraperSource.ZIPFILE).fire(new Receiver<ScraperStatusProxy>() {
             @Override
-            public void onSuccess(Void response) {
+            public void onSuccess(ScraperStatusProxy response) {
                 System.out.println("Färdigt");
+                System.out.println("Antal lästa lagar: " + response.getScrapedLaws());
             }
         });
-         */
     }
 
     /**

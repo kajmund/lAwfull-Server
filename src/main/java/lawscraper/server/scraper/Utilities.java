@@ -1,7 +1,5 @@
 package lawscraper.server.scraper;
 
-import lawscraper.server.entities.law.LawDocumentPartType;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -48,16 +46,5 @@ public class Utilities {
         }
 
         return hexString.toString();
-    }
-
-    public static LawDocumentPartType getParentLawDocumentPartTypeByKey(String key) {
-        if (key.startsWith("R")) {
-            return LawDocumentPartType.LAW;
-        } else if (key.startsWith("K")) {
-            return LawDocumentPartType.CHAPTER;
-        } else {
-            System.out.println("WHAT THE FRAC! " + key);
-        }
-        return null;
     }
 }

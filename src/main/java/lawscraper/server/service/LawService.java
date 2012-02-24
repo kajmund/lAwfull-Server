@@ -1,6 +1,6 @@
 package lawscraper.server.service;
 
-import lawscraper.server.entities.law.Law;
+import java.util.List;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
@@ -9,8 +9,7 @@ import lawscraper.server.entities.law.Law;
  * Time: 8:53 PM
  */
 public interface LawService {
-
-    Law find(Long id);
-    Law createOrUpdate(Law law);
-
+    LawWrapper find(Long id);
+    List<LawWrapper> findAll();
+    HTMLWrapper findLawHTMLWrapped(Long id);
 }

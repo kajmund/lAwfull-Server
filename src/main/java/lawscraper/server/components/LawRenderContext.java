@@ -1,4 +1,4 @@
-package lawscraper.server.service;
+package lawscraper.server.components;
 
 /**
  * TODO Document this.

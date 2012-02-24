@@ -34,11 +34,11 @@ public class TestDataUtil {
         return tempFile;
     }
 
-    public static Iterable<Law> getAllLaws() throws IOException {
+    public static Iterable<LawEntry> getAllLaws() throws IOException {
         final Enumeration<? extends ZipEntry> enumeration = getZipFile().entries();
-        return new Iterable<Law>() {
+        return new Iterable<LawEntry>() {
             @Override
-            public Iterator<Law> iterator() {
+            public Iterator<LawEntry> iterator() {
                 return new LawIterator(enumeration);
             }
         };
@@ -50,7 +50,7 @@ public class TestDataUtil {
     }
 
 
-    private static class LawIterator implements Iterator<Law> {
+    private static class LawIterator implements Iterator<LawEntry> {
         private final Enumeration<? extends ZipEntry> entries;
 
         public LawIterator(Enumeration<? extends ZipEntry> enumeration) {
@@ -63,9 +63,9 @@ public class TestDataUtil {
         }
 
         @Override
-        public Law next() {
+        public LawEntry next() {
             ZipEntry zipEntry = entries.nextElement();
-            return new Law(zipEntry);
+            return new LawEntry(zipEntry);
         }
 
         @Override
@@ -74,10 +74,10 @@ public class TestDataUtil {
     }
 
 
-    public static class Law {
+    public static class LawEntry {
         private final ZipEntry zipEntry;
 
-        public Law(ZipEntry zipEntry) {
+        public LawEntry(ZipEntry zipEntry) {
             this.zipEntry = zipEntry;
         }
 

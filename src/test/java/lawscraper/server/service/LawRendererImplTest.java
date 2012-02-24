@@ -1,5 +1,6 @@
 package lawscraper.server.service;
 
+import lawscraper.server.components.LawRendererImpl;
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
 import lawscraper.server.entities.law.LawDocumentPartType;

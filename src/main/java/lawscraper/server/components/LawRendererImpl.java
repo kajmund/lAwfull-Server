@@ -1,13 +1,16 @@
-package lawscraper.server.service;
+package lawscraper.server.components;
 
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 /**
  * TODO Document this.
  */
+
+@Component
 public class LawRendererImpl implements LawRenderer {
     @Override
     public String renderToHtml(Law law) {

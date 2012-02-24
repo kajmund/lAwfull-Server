@@ -2,7 +2,7 @@ package lawscraper.server.scraper;
 
 import lawscraper.server.components.PartFactory;
 import lawscraper.server.entities.law.Law;
-import lawscraper.server.service.LawService;
+import lawscraper.server.repositories.LawRepository;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +24,7 @@ import static org.junit.Assert.assertNotNull;
 public class TransactionParserMassTest {
 
     @Autowired
-    LawService lawService;
+    LawRepository lawService;
     @Autowired
     PartFactory partFactory;
 
@@ -34,23 +34,23 @@ public class TransactionParserMassTest {
         int lawCount = 0;
         int successCount = 0;
         long start = System.currentTimeMillis();
-        for (TestDataUtil.Law law : TestDataUtil.getAllLaws()) {
+        for (TestDataUtil.LawEntry lawEntry : TestDataUtil.getAllLaws()) {
             lawCount++;
             Scraper scraper = new Scraper(partFactory);
             try {
-                scraper.parse(law.getInputStream());
+                scraper.parse(lawEntry.getInputStream());
                 successCount++;
-                lawService.createOrUpdate(scraper.getLaw());
+                lawService.save(scraper.getLaw());
 
             } catch (Exception e) {
-                System.out.println("Failed to parse " + law.getName());
+                System.out.println("Failed to parse " + lawEntry.getName());
                 e.printStackTrace();
             }
 
         }
 
         System.out.println("Time: " + (System.currentTimeMillis() - start) + "ms");
-        Law law = lawService.find((long) 1);
+        Law law = lawService.findOne((long) 1);
         assertNotNull(law);
         assertEquals("All laws not parseable", lawCount, successCount);
     }

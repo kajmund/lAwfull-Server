@@ -1,5 +1,6 @@
 package lawscraper.server.service;
 
+import lawscraper.server.components.LawRendererImpl;
 import lawscraper.server.scraper.DummyPartFactory;
 import lawscraper.server.scraper.Scraper;
 import lawscraper.server.scraper.TestDataUtil;
@@ -18,15 +19,15 @@ public class RendererMassTest {
         int lawCount = 0;
         int successCount = 0;
         DummyPartFactory partFactory = new DummyPartFactory();
-        for (TestDataUtil.Law lawData : TestDataUtil.getAllLaws()) {
+        for (TestDataUtil.LawEntry lawEntryData : TestDataUtil.getAllLaws()) {
             lawCount++;
             Scraper scraper = new Scraper(partFactory);
             try {
-                scraper.parse(lawData.getInputStream());
+                scraper.parse(lawEntryData.getInputStream());
                 renderer.renderToHtml(scraper.getLaw());
                 successCount++;
             } catch (Exception e) {
-                System.out.println("Failed to render " + lawData.getName());
+                System.out.println("Failed to render " + lawEntryData.getName());
                 e.printStackTrace();
             }
 
