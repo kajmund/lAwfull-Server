@@ -19,7 +19,6 @@ public class PartFactoryImpl implements PartFactory {
     public LawDocumentPart createpart(LawDocumentPartType type) {
         LawDocumentPart part = new LawDocumentPart();
         part.setLawPartType(type);
-        repository.save(part);
-        return part;
+        return repository.save(part);
     }
 }
