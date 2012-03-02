@@ -24,17 +24,17 @@ import static org.junit.Assert.assertNotNull;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:/applicationContext.xml")
+@ContextConfiguration(locations = "/text-context.xml")
 @TransactionConfiguration(defaultRollback = true)
 @Transactional
 public class LawPesistanceFunctionalTest {
 
     @Autowired
-    LawRepository lawRepository;
+    private LawRepository lawRepository;
     @Autowired
-    PartFactory partFactory;
+    private PartFactory partFactory;
     @Autowired
-    Neo4jOperations template;
+    Neo4jOperations operations;
 
 
     @Test
@@ -49,22 +49,23 @@ public class LawPesistanceFunctionalTest {
     public void parseAndStoreSingePart() throws Exception {
         Law law = new Law();
         law = lawRepository.save(law);
-        //law = template.save(law);
         law.setTitle("Law X");
         LawDocumentPart subPart = partFactory.createpart(LawDocumentPartType.DIVIDER);
         subPart.setKey("Key");
+        operations.save(subPart);
         law.addDocumentPartChild(subPart);
-        lawRepository.save(law);
+        law = lawRepository.save(law);
 
         Law storedLaw = lawRepository.findOne(law.getId());
         assertNotNull(storedLaw);
         assertEquals("Law X", storedLaw.getTitle());
-        assertEquals("Key", storedLaw.getParts().iterator().next().getKey());
+        LawDocumentPart part = storedLaw.getParts().iterator().next();
+        assertEquals("Key", part.getKey());
     }
 
     @Test
     public void parseAndStoreFull() throws Exception {
-        InputStream law = TestDataUtil.getLaw("2011:926");
+        InputStream law = TestDataUtil.getLaw("1999:1229"); // Inkomstskattelagen
         Scraper scraper = new Scraper(new DummyPartFactory());
         scraper.parse(law);
         lawRepository.save(scraper.getLaw());

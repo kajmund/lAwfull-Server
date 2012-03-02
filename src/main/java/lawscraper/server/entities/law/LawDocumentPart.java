@@ -24,7 +24,7 @@ public class LawDocumentPart extends DocumentPart {
     TextElement textElement = new TextElement();
     @RelatedTo(type = "HAS_SUB_PART")
     @Fetch
-    Collection<LawDocumentPart> parts = new HashSet<LawDocumentPart>();
+    Set<LawDocumentPart> parts = new HashSet<LawDocumentPart>();
     @RelatedTo(direction = Direction.INCOMING, type = "HAS_SUB_PART")
     LawDocumentPart parent;
     @RelatedTo(direction = Direction.INCOMING, type = "PREVIOUS_VERSION")
@@ -67,7 +67,7 @@ public class LawDocumentPart extends DocumentPart {
         this.key = key;
     }
 
-    public Collection<LawDocumentPart> getParts() {
+    public Set<LawDocumentPart> getParts() {
         return parts;     
     }
 
