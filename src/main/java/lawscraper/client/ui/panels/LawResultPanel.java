@@ -1,7 +1,8 @@
 package lawscraper.client.ui.panels;
 
 import com.google.gwt.cell.client.AbstractCell;
-import com.google.gwt.cell.client.TextCell;
+import com.google.gwt.cell.client.ClickableTextCell;
+import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -10,7 +11,9 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import lawscraper.shared.proxies.LawWrapperProxy;
+import lawscraper.client.place.LawPlace;
+import lawscraper.client.ui.StartView;
+import lawscraper.shared.proxies.LawProxy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +27,10 @@ import java.util.List;
 public class LawResultPanel extends Composite {
     private static LawResultPanelUiBinder uiBinder = GWT.create(LawResultPanelUiBinder.class);
 
-    private CellTable<LawWrapperProxy> table;
-    private List<LawWrapperProxy> laws = new ArrayList<LawWrapperProxy>();
+    private CellTable<LawProxy> table;
+    private List<LawProxy> laws = new ArrayList<LawProxy>();
     @UiField FlowPanel lawTableContainer;
+    private StartView.Presenter listener;
 
     interface LawResultPanelUiBinder extends UiBinder<FlowPanel, LawResultPanel> {
     }
@@ -39,8 +43,8 @@ public class LawResultPanel extends Composite {
     }
 
     public void initPanel() {
-        table = new CellTable<LawWrapperProxy>();
-        Column<LawWrapperProxy, String> lawNameColumn = addLawNameColumn(table);
+        table = new CellTable<LawProxy>();
+        Column<LawProxy, String> lawNameColumn = addLawNameColumn(table);
         table.setColumnWidth(lawNameColumn, 600, Style.Unit.PX);
 
     }
@@ -50,25 +54,42 @@ public class LawResultPanel extends Composite {
         updateLawTableData();
     }
 
-    public void setLaws(List<LawWrapperProxy> laws) {
+    public void setLaws(List<LawProxy> laws) {
         clearView();
         this.laws = laws;
         updateLawTableData();
     }
 
-    private Column<LawWrapperProxy, String> addLawNameColumn(CellTable<LawWrapperProxy> table) {
-        Column<LawWrapperProxy, String> nameColumn = getNameColumn(new TextCell());
+    private Column<LawProxy, String> addLawNameColumn(CellTable<LawProxy> table) {
+        Column<LawProxy, String> nameColumn = getNameColumn(new ClickableTextCell());
         table.addColumn(nameColumn, "Lagnamn");
         return nameColumn;
     }
 
-    private Column<LawWrapperProxy, String> getNameColumn(final AbstractCell nameCell) {
-        return new Column<LawWrapperProxy, String>(nameCell) {
+    private Column<LawProxy, String> getNameColumn(final AbstractCell nameCell) {
+        Column<LawProxy, String> column = new Column<LawProxy, String>(nameCell) {
             @Override
-            public String getValue(LawWrapperProxy object) {
+            public String getValue(LawProxy object) {
                 return object.getTitle();
             }
         };
+
+        column.setFieldUpdater(new FieldUpdater<LawProxy, String>() {
+            @Override
+            public void update(int index, LawProxy object, String value) {
+                listener.goTo(new LawPlace(object.getId()));
+            }
+        });
+
+        return column;
+    }
+
+    public StartView.Presenter getListener() {
+        return listener;
+    }
+
+    public void setListener(StartView.Presenter listener) {
+        this.listener = listener;
     }
 
     public void updateLawTableData() {
@@ -76,7 +97,6 @@ public class LawResultPanel extends Composite {
         table.setRowCount(laws.size(), true);
         table.setRowData(laws);
         table.redraw();
-        System.out.println("Redraw table with numner of elmnts: " + table.getRowCount());
     }
 
 }

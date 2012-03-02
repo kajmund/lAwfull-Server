@@ -16,7 +16,7 @@ public class LawRendererImpl implements LawRenderer {
     public String renderToHtml(Law law) {
         return element("div", renderMeta(law)
                 + element("div", renderParts(law.getSortedParts()), "class", "lawBody"),
-                "class", "law");
+                       "class", "law");
     }
 
     private String renderParts(List<LawDocumentPart> children) {
@@ -41,15 +41,15 @@ public class LawRendererImpl implements LawRenderer {
                 + getMetaPart("Utfärdad", law.getReleaseDate())
                 + getMetaPart("Källa", law.getPublisher())
                 + getMetaPart("Senast hämtad", law.getLatestFetchFromGov()),
-                "class", "lawMeta"
-        );
+                       "class", "lawMeta"
+                      );
     }
 
     private String getMetaPart(String title, String content) {
         return element("div",
-                element("div", title, "class", "metaTitle") +
-                        element("div", content, "class", "metaText"),
-                "class", "metaHeading");
+                       element("div", title, "class", "metaTitle") +
+                               element("div", content, "class", "metaText"),
+                       "class", "metaHeading");
     }
 
     private String getLawTitle(Law law) {

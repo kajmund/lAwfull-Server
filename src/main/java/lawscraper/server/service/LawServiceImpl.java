@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -32,22 +31,17 @@ public class LawServiceImpl implements LawService {
     }
 
     @Override
-    public LawWrapper find(Long id) {
-        return new LawWrapper(lawStore.findOne(id), lawRenderer);
+    public Law find(Long id) {
+        return lawStore.findOne(id);
     }
 
     @Override
-    public List<LawWrapper> findAll() {
-        Collection<Law> allLaws = lawStore.findAllLaws();
-        ArrayList<LawWrapper> wrappers = new ArrayList<LawWrapper>(allLaws.size());
-        for (Law law : allLaws) {
-            wrappers.add(new LawWrapper(law, lawRenderer));
-        }
-        return wrappers;
+    public List<Law> findAll() {
+        return new ArrayList<Law>(lawStore.findAllLaws());
     }
 
     @Override
-    public HTMLWrapper findLawHTMLWrapped(Long id){
+    public HTMLWrapper findLawHTMLWrapped(Long id) {
         return new HTMLWrapper(lawRenderer.renderToHtml(lawStore.findOne(id)));
     }
 }

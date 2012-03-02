@@ -7,7 +7,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.*;
 import lawscraper.client.ui.panels.LawResultPanel;
-import lawscraper.shared.proxies.LawWrapperProxy;
+import lawscraper.shared.proxies.LawProxy;
 
 import java.util.List;
 
@@ -48,11 +48,17 @@ public class StartViewImpl extends Composite implements StartView {
     @Override
     public void setPresenter(Presenter listener) {
         this.listener = listener;
+        lawResultPanel.setListener(listener);
     }
 
     @Override
-    public void setLaw(List<LawWrapperProxy> laws) {
-        container.clear();
-        lawResultPanel.setLaws(laws.subList(0,200));
+    public void setLaws(List<LawProxy> laws) {
+        lawResultPanel.setLaws(laws.subList(0, 200));
+    }
+
+    @Override
+    public FlowPanel getMainContainer() {
+        return container;
+
     }
 }

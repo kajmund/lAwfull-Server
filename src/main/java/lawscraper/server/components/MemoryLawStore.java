@@ -22,6 +22,7 @@ public class MemoryLawStore implements LawStore {
     @Override
     public Law persistLaw(Law law) {
         lawMap.put(id++, law);
+        law.setId(id);
         return law;
     }
 

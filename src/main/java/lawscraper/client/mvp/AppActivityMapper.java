@@ -5,9 +5,11 @@ import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import lawscraper.client.ClientFactory;
 import lawscraper.client.activity.GoodbyeActivity;
-import lawscraper.client.activity.HelloActivity;
+import lawscraper.client.activity.LawViewActivity;
+import lawscraper.client.activity.StartViewActivity;
 import lawscraper.client.place.GoodbyePlace;
-import lawscraper.client.place.HelloPlace;
+import lawscraper.client.place.LawPlace;
+import lawscraper.client.place.StartViewPlace;
 
 public class AppActivityMapper implements ActivityMapper {
 
@@ -32,9 +34,12 @@ public class AppActivityMapper implements ActivityMapper {
 	@Override
 	public Activity getActivity(Place place) {
 		// This is begging for GIN
-		if (place instanceof HelloPlace) {
-            HelloActivity ha = new HelloActivity(clientFactory);
-            return ha;
+		if (place instanceof StartViewPlace) {
+            StartViewActivity startViewActivity = new StartViewActivity((StartViewPlace)place, clientFactory);
+            return startViewActivity;
+        }else if (place instanceof LawPlace) {
+            LawViewActivity lawViewActivity = new LawViewActivity((LawPlace)place, clientFactory);
+            return lawViewActivity;
         }
 		else if (place instanceof GoodbyePlace)
 			return new GoodbyeActivity((GoodbyePlace) place, clientFactory);

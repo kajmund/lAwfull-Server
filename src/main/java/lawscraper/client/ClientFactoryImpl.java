@@ -3,10 +3,7 @@ package lawscraper.client;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.place.shared.PlaceController;
-import lawscraper.client.ui.GoodbyeView;
-import lawscraper.client.ui.GoodbyeViewImpl;
-import lawscraper.client.ui.StartView;
-import lawscraper.client.ui.StartViewImpl;
+import lawscraper.client.ui.*;
 
 public class ClientFactoryImpl implements ClientFactory
 {
@@ -14,15 +11,16 @@ public class ClientFactoryImpl implements ClientFactory
 	private static final PlaceController placeController = new PlaceController(eventBus);
 	private static final StartView START_VIEW = new StartViewImpl();
 	private static final GoodbyeView goodbyeView = new GoodbyeViewImpl();
+    private static final LawView lawView = new LawViewImpl();
 
-	@Override
+    @Override
 	public EventBus getEventBus()
 	{
 		return eventBus;
 	}
 
 	@Override
-	public StartView getHelloView()
+	public StartView getStartView()
 	{
 		return START_VIEW;
 	}
@@ -38,5 +36,11 @@ public class ClientFactoryImpl implements ClientFactory
 	{
 		return goodbyeView;
 	}
+
+    @Override
+    public LawView getLawView() {
+        return lawView;
+
+    }
 
 }

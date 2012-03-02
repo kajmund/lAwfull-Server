@@ -2,7 +2,7 @@ package lawscraper.shared.proxies;
 
 import com.google.web.bindery.requestfactory.shared.ProxyFor;
 import com.google.web.bindery.requestfactory.shared.ValueProxy;
-import lawscraper.server.service.LawWrapper;
+import lawscraper.server.entities.law.Law;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
@@ -11,8 +11,8 @@ import lawscraper.server.service.LawWrapper;
  * Time: 10:22 AM
  */
 
-@ProxyFor(value = LawWrapper.class)
-public interface LawWrapperProxy extends ValueProxy {
+@ProxyFor(value = Law.class)
+public interface LawProxy extends ValueProxy {
     Long getId();
     String getTitle();
 }

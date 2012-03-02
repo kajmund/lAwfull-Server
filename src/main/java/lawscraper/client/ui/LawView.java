@@ -1,11 +1,8 @@
 package lawscraper.client.ui;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import lawscraper.shared.proxies.LawProxy;
-
-import java.util.List;
+import lawscraper.shared.proxies.HTMLProxy;
 
 /**
  * View interface. Extends IsWidget so a view impl can easily provide
@@ -13,20 +10,14 @@ import java.util.List;
  *
  * @author drfibonacci
  */
-public interface StartView extends IsWidget {
-    void setName(String helloName);
+public interface LawView extends IsWidget {
+     void setPresenter(Presenter listener);
 
-    void setPresenter(Presenter listener);
-
-    void setLaws(List<LawProxy> law);
-
-    FlowPanel getMainContainer();
+    void setLaw(HTMLProxy law);
 
     public interface Presenter {
         void goTo(Place place);
 
         void getLaw();
-
-        void scrapeLaw();
     }
 }

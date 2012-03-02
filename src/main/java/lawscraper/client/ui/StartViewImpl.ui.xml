@@ -340,9 +340,11 @@
                 </g:StackLayoutPanel>
             </g:FlowPanel>
             <g:FlowPanel addStyleNames="{style.mainContainer}, {style.lightblueGradient}">
-                <lawResultPanel:LawResultPanel ui:field="lawResultPanel"/>
-                <g:FlowPanel>
+                <g:FlowPanel ui:field="container">
                     <g:HTML>MainPanel</g:HTML>
+
+                    <lawResultPanel:LawResultPanel ui:field="lawResultPanel"/>
+
                     <g:HTMLPanel>
                         <table>
                             <tr>
@@ -354,8 +356,7 @@
                                 </td>
                             </tr>
                         </table>
-                        <g:FlowPanel ui:field="container">
-                        </g:FlowPanel>
+
                     </g:HTMLPanel>
                 </g:FlowPanel>
             </g:FlowPanel>

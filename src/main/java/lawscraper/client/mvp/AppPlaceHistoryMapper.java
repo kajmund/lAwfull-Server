@@ -3,7 +3,8 @@ package lawscraper.client.mvp;
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.place.shared.WithTokenizers;
 import lawscraper.client.place.GoodbyePlace;
-import lawscraper.client.place.HelloPlace;
+import lawscraper.client.place.LawPlace;
+import lawscraper.client.place.StartViewPlace;
 
 /**
  * PlaceHistoryMapper interface is used to attach all places which the
@@ -11,6 +12,6 @@ import lawscraper.client.place.HelloPlace;
  * annotation or by extending PlaceHistoryMapperWithFactory and creating a
  * separate TokenizerFactory.
  */
-@WithTokenizers( { HelloPlace.Tokenizer.class, GoodbyePlace.Tokenizer.class })
+@WithTokenizers( {LawPlace.Tokenizer.class, StartViewPlace.Tokenizer.class, GoodbyePlace.Tokenizer.class })
 public interface AppPlaceHistoryMapper extends PlaceHistoryMapper {
 }

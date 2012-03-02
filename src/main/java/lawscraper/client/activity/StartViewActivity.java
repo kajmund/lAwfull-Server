@@ -7,29 +7,26 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import lawscraper.client.ClientFactory;
+import lawscraper.client.place.StartViewPlace;
 import lawscraper.client.ui.StartView;
 import lawscraper.shared.LawRequestFactory;
 import lawscraper.shared.LawScraperRequestFactory;
-import lawscraper.shared.proxies.LawWrapperProxy;
+import lawscraper.shared.proxies.LawProxy;
 import lawscraper.shared.proxies.ScraperStatusProxy;
 import lawscraper.shared.scraper.LawScraperSource;
 
 import java.util.List;
 
 
-public class HelloActivity extends AbstractActivity implements StartView.Presenter {
+public class StartViewActivity extends AbstractActivity implements StartView.Presenter {
     final LawRequestFactory requests = GWT.create(LawRequestFactory.class);
     final LawScraperRequestFactory scraperRequests = GWT.create(LawScraperRequestFactory.class);
-
-    /**
-     * Create a remote service proxy to talk to the server-side Greeting service.
-     */
 
     // Used to obtain views, eventBus, placeController
     // Alternatively, could be injected via GIN
     private ClientFactory clientFactory;
 
-    public HelloActivity(final ClientFactory clientFactory) {
+    public StartViewActivity(StartViewPlace place, final ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
     }
 
@@ -39,7 +36,7 @@ public class HelloActivity extends AbstractActivity implements StartView.Present
      */
     @Override
     public void start(AcceptsOneWidget containerWidget, EventBus eventBus) {
-        StartView startView = clientFactory.getHelloView();
+        StartView startView = clientFactory.getStartView();
         startView.setPresenter(this);
         containerWidget.setWidget(startView.asWidget());
         requests.initialize(eventBus);
@@ -51,13 +48,12 @@ public class HelloActivity extends AbstractActivity implements StartView.Present
         System.out.println("Getting law");
         LawRequestFactory.LawRequest context = requests.lawRequest();
 
-        long id = 0;
-        context.findAll().fire(new Receiver<List<LawWrapperProxy>>() {
+        context.findAll().fire(new Receiver<List<LawProxy>>() {
             @Override
-            public void onSuccess(List<LawWrapperProxy> response) {
+            public void onSuccess(List<LawProxy> response) {
                 System.out.println("Success!");
-                StartView startView = clientFactory.getHelloView();
-                startView.setLaw(response);
+                StartView startView = clientFactory.getStartView();
+                startView.setLaws(response);
             }
         });
     }

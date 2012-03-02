@@ -12,13 +12,13 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import lawscraper.client.mvp.AppActivityMapper;
 import lawscraper.client.mvp.AppPlaceHistoryMapper;
-import lawscraper.client.place.HelloPlace;
+import lawscraper.client.place.StartViewPlace;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class law implements EntryPoint {
-    private Place defaultPlace = new HelloPlace("World!");
+    private Place defaultPlace = new StartViewPlace("World!");
     private SimplePanel appWidget = new SimplePanel();
 
     /**

@@ -1,0 +1,29 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <ui:style>
+        .lawTable {
+            height: 600px;
+            width: 600px;
+        }
+
+        .part_paragraph {
+            font-size: 20px;
+        }
+        @external .part_paragraph;
+
+        .part_section {
+            font-size: 15px;
+            margin-bottom: 16px;
+
+        }
+        @external .part_section;
+
+    </ui:style>
+
+
+    <g:FlowPanel>
+        <g:HTMLPanel ui:field="lawContainer" addStyleNames="{style.lawTable}"/>
+
+    </g:FlowPanel>
+</ui:UiBinder>

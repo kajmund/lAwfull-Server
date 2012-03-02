@@ -1,5 +1,7 @@
 package lawscraper.server.service;
 
+import lawscraper.server.entities.law.Law;
+
 import java.util.List;
 
 /**
@@ -9,7 +11,7 @@ import java.util.List;
  * Time: 8:53 PM
  */
 public interface LawService {
-    LawWrapper find(Long id);
-    List<LawWrapper> findAll();
+    Law find(Long id);
+    List<Law> findAll();
     HTMLWrapper findLawHTMLWrapped(Long id);
 }

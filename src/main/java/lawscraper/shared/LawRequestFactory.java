@@ -7,7 +7,7 @@ import com.google.web.bindery.requestfactory.shared.Service;
 import lawscraper.server.locators.SpringServiceLocator;
 import lawscraper.server.service.LawService;
 import lawscraper.shared.proxies.HTMLProxy;
-import lawscraper.shared.proxies.LawWrapperProxy;
+import lawscraper.shared.proxies.LawProxy;
 
 import java.util.List;
 
@@ -21,8 +21,8 @@ import java.util.List;
 public interface LawRequestFactory extends RequestFactory{
     @Service(value = LawService.class, locator = SpringServiceLocator.class)
     interface LawRequest extends RequestContext{
-        Request<LawWrapperProxy> find(Long id);
-        Request<List<LawWrapperProxy>> findAll();
+        Request<LawProxy> find(Long id);
+        Request<List<LawProxy>> findAll();
         Request<HTMLProxy>findLawHTMLWrapped(Long id);
     }
 
