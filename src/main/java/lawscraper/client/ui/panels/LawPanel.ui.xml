@@ -9,15 +9,39 @@
 
         .part_paragraph {
             font-size: 20px;
+            font-style: normal;
         }
         @external .part_paragraph;
 
         .part_section {
             font-size: 15px;
             margin-bottom: 16px;
+            font-style: normal;
 
         }
         @external .part_section;
+
+        .part_section_list_item {
+            margin-left: 20px;
+            font-size: 15px;
+            margin-bottom: 10px;
+            font-style: normal;
+        }
+        @external .part_section_list_item;
+
+        .part_sub_heading {
+            font-size: 18px;
+            font-style: italic;
+        }
+
+        @external .part_sub_heading;
+
+        .part_heading {
+            font-size: 20px;
+            font-style: normal;
+        }
+        @external .part_heading;
+
 
     </ui:style>
 

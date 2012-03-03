@@ -38,9 +38,9 @@ public class LawRendererImpl implements LawRenderer {
     private String renderMeta(Law law) {
         return element("div", element("div", getLawTitle(law), "class", "lawTitle") +
                 getMetaPart("Departement", law.getCreator())
-                + getMetaPart("Utfärdad", law.getReleaseDate())
-                + getMetaPart("Källa", law.getPublisher())
-                + getMetaPart("Senast hämtad", law.getLatestFetchFromGov()),
+                + getMetaPart("Utf&auml;rdad", law.getReleaseDate())
+                + getMetaPart("K&auml;lla", law.getPublisher())
+                + getMetaPart("Senast h&auml;mtad", law.getLatestFetchFromGov()),
                        "class", "lawMeta"
                       );
     }

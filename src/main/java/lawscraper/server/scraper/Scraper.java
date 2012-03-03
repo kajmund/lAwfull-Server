@@ -190,7 +190,7 @@ public class Scraper {
         if (attributes.getValue(0).startsWith("P") || attributes.getValue(0).startsWith("K")) {
             LawDocumentPart sectionListItem = createPart(LawDocumentPartType.SECTION_LIST_ITEM);
             sectionListItem.setKey(attributes.getValue(1));
-            sectionListItem.addText(attributes.getValue(0));
+            //sectionListItem.addText(attributes.getValue(0));
             setCurrentDataType("sectionListItem");
             setCurrentLawDocumentPart(sectionListItem);
         }
@@ -234,7 +234,7 @@ public class Scraper {
         } else if (attributes.getValue(1) != null && attributes.getValue(1).equals("rinfo:Paragraf")) {
             LawDocumentPart paragraph = createPart(LawDocumentPartType.PARAGRAPH);
             if (attributes.getValue(4) != null) {
-                paragraph.addText(attributes.getValue(4));
+                paragraph.addText(attributes.getValue(4) + " &sect; ");
             }
             if (attributes.getValue(2) != null) {
                 paragraph.setKey(attributes.getValue(2));
