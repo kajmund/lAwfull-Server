@@ -1,5 +1,6 @@
 package lawscraper.server.service;
 
+import lawscraper.server.components.DummyPartFactory;
 import lawscraper.server.components.LawStore;
 import lawscraper.server.components.PartFactory;
 import lawscraper.server.scraper.Scraper;
@@ -46,7 +47,7 @@ public class LawScraperServiceImpl implements LawScraperService {
         ScraperStatus scraperStatus = new ScraperStatus();
         try {
             for (TestDataUtil.LawEntry lawEntry : TestDataUtil.getAllLaws()) {
-                Scraper scraper = new Scraper(partFactory);
+                Scraper scraper = new Scraper(new DummyPartFactory());
                 try {
                     scraper.parse(lawEntry.getInputStream());
                     scraperStatus.increaseScrapedLaws();

@@ -1,7 +1,7 @@
 package lawscraper.server.service;
 
+import lawscraper.server.components.DummyPartFactory;
 import lawscraper.server.components.LawRendererImpl;
-import lawscraper.server.scraper.DummyPartFactory;
 import lawscraper.server.scraper.Scraper;
 import lawscraper.server.scraper.TestDataUtil;
 import org.junit.Test;

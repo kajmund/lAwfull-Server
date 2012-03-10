@@ -1,5 +1,6 @@
 package lawscraper.server.scraper;
 
+import lawscraper.server.components.DummyPartFactory;
 import lawscraper.server.components.PartFactory;
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;

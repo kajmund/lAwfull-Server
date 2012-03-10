@@ -28,7 +28,7 @@ public class Scraper {
     private final PartFactory partFactory;
 
     private Law law = new Law();
-
+    boolean endParsing;
     ArrayList<String> currentDataType = new ArrayList<String>();
     private Stack<LawDocumentPart> lawDocumentPartStack = new Stack<LawDocumentPart>();
 
@@ -51,6 +51,9 @@ public class Scraper {
                         data = new String(ch, start, length);
                         /* Dont't trim the a's, they need their space :-)
                         * */
+                        if (endParsing) {
+                            return;
+                        }
                         data = Utilities.trimText(data);
                         if (data.length() > 0) {
                             if (getCurrentDataType().equals("a")) {
@@ -76,6 +79,7 @@ public class Scraper {
         factory.setNamespaceAware(true);
         SAXParser saxParser = factory.newSAXParser();
         saxParser.parse(in, handler);
+
     }
 
     private void addData(String data) {
@@ -218,14 +222,16 @@ public class Scraper {
     }
 
     private LawDocumentPart createPart(LawDocumentPartType type) {
-        LawDocumentPart subHeadLine = new LawDocumentPart();
-        if (type != null)
-            subHeadLine.setLawPartType(type);
-        return subHeadLine;
+        LawDocumentPart lawDocumentPart = new LawDocumentPart();
+        if (type != null) {
+            lawDocumentPart.setLawPartType(type);
+        }
+        return partFactory.createpart(type);
     }
 
 
     private void parseSectionElement(Attributes attributes) {
+
         if (attributes.getValue(1) != null && attributes.getValue(1).equals("rinfo:Kapitel")) {
             LawDocumentPart chapter = createPart(LawDocumentPartType.CHAPTER);
             chapter.setKey(attributes.getValue(2));
@@ -247,10 +253,14 @@ public class Scraper {
             setCurrentLawDocumentPart(divider);
             setCurrentDataType("divider");
         } else if (attributes.getValue(0) != null && attributes.getValue(0).equals("upphavd")) {
-            LawDocumentPart deprecatedElement = createPart(null);
+            LawDocumentPart deprecatedElement = createPart(LawDocumentPartType.SECTION);
             deprecatedElement.setDeprecated(true);
             this.lawDocumentPartStack.add(deprecatedElement);
             setCurrentDataType("sectionDeprecated");
+        } else if (attributes.getValue(0) != null && attributes.getValue(0).equals("secondary")) {
+            //stop parsing when we hit the meta-data in the end
+            setCurrentDataType("secondary");
+            endParsing = true;
         } else {
             setCurrentDataType("section");
         }
@@ -262,7 +272,7 @@ public class Scraper {
             return;
         }
         if (attributes.getValue(0).equals("rinfo:forarbete") && !law.getPropositions()
-                .contains(attributes.getValue(1))) {
+                                                                    .contains(attributes.getValue(1))) {
             law.getPropositions().add(attributes.getValue(1));
         }
     }
@@ -347,7 +357,9 @@ public class Scraper {
             case PARAGRAPH:
                 if (lawDocumentPartType != LawDocumentPartType.SECTION_LIST_ITEM &&
                         lawDocumentPartType != LawDocumentPartType.DIVIDER &&
-                        lawDocumentPartType != LawDocumentPartType.CHAPTER) {
+                        lawDocumentPartType != LawDocumentPartType.CHAPTER &&
+                        lawDocumentPartType != LawDocumentPartType.HEADING &&
+                        lawDocumentPartType != LawDocumentPartType.SUB_HEADING) {
                     return true;
                 }
                 break;
@@ -359,7 +371,8 @@ public class Scraper {
             case SECTION_LIST_ITEM:
                 return false;
             case SUB_HEADING:
-                if (lawDocumentPartType != LawDocumentPartType.SECTION_LIST_ITEM) {
+                if (lawDocumentPartType != LawDocumentPartType.SECTION_LIST_ITEM &&
+                        lawDocumentPartType != LawDocumentPartType.HEADING) {
                     return true;
                 }
                 break;

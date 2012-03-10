@@ -1,5 +1,6 @@
 package lawscraper.server.scraper;
 
+import lawscraper.server.components.DummyPartFactory;
 import lawscraper.server.entities.law.Law;
 import org.junit.Test;
 

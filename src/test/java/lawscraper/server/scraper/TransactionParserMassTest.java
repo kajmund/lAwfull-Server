@@ -3,7 +3,6 @@ package lawscraper.server.scraper;
 import lawscraper.server.components.PartFactory;
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.repositories.LawRepository;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,6 @@ public class TransactionParserMassTest {
     PartFactory partFactory;
 
     @Test
-    @Ignore
     public void parseAllLaws() throws Exception {
         int lawCount = 0;
         int successCount = 0;

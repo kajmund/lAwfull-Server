@@ -1,5 +1,6 @@
 package lawscraper.server.scraper;
 
+import lawscraper.server.components.DummyPartFactory;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

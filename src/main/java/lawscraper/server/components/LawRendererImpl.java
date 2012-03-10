@@ -28,11 +28,21 @@ public class LawRendererImpl implements LawRenderer {
     }
 
     private String renderPart(LawDocumentPart part) {
-        return renderPart(part, "part_" + part.getLawPartType().name().toLowerCase());
+        String deprecatedString = "";
+        if (part.isDeprecated()) {
+            deprecatedString = "_deprecated";
+        }
+        return renderPart(part, "part_" + part.getLawPartType().name().toLowerCase() + deprecatedString);
     }
 
     private String renderPart(LawDocumentPart part, String cssClass) {
-        return element("div", part.getTextElement().getText() + renderParts(part.getSortedParts()), "class", cssClass);
+        String idStr = "";
+        if (part.getId() != null) {
+            idStr = Long.toString(part.getId());
+        }
+
+        return element("div", part.getTextElement().getText() + renderParts(part.getSortedParts()), "class", cssClass,
+                       "id", idStr);
     }
 
     private String renderMeta(Law law) {

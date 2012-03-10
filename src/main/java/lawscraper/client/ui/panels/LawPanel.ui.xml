@@ -8,10 +8,18 @@
         }
 
         .part_paragraph {
-            font-size: 20px;
+            font-size: 18px;
             font-style: normal;
         }
+
         @external .part_paragraph;
+
+        .part_paragraph_deprecated {
+            font-style: italic;
+            color: #808080;
+        }
+
+        @external .part_paragraph_deprecated;
 
         .part_section {
             font-size: 15px;
@@ -19,6 +27,7 @@
             font-style: normal;
 
         }
+
         @external .part_section;
 
         .part_section_list_item {
@@ -27,11 +36,13 @@
             margin-bottom: 10px;
             font-style: normal;
         }
+
         @external .part_section_list_item;
 
         .part_sub_heading {
-            font-size: 18px;
+            font-size: 16px;
             font-style: italic;
+            font-style: oblique;
         }
 
         @external .part_sub_heading;
@@ -40,8 +51,15 @@
             font-size: 20px;
             font-style: normal;
         }
+
         @external .part_heading;
 
+        .part_chapter {
+            font-size: 22px;
+            font-style: normal;
+        }
+
+        @external .part_chapter;
 
     </ui:style>
 
