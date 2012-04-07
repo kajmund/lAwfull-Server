@@ -1,0 +1,121 @@
+@CHARSET "UTF-8";
+
+@def selectionBorderWidth 0px;
+.cellTableWidget {
+
+    width: 100%;
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+.cellTableFooter {
+    gwt-image: 'cellTableFooterBackground';
+    background-color: #b4d0f8;
+    border-top: 1px solid #88b0f2;
+    border-left: 1px solid #88b0f2;
+    border-right: 0px solid #eef;
+    padding: 0px 10px;
+    text-align: left;
+    color: #7b7979;
+    text-shadow: #ddf 1px 1px 0;
+}
+
+.cellTableHeader {
+
+}
+
+.cellTableCell {
+    padding-left: 4px;
+    padding-right: 4px;
+    border-right: 1px solid gray;
+    border-left: 0px solid gray;
+    overflow: hidden;
+}
+
+.cellTableFirstColumnFooter {
+    border-left: 0px;
+
+}
+
+.cellTableFirstColumnHeader {
+}
+
+.cellTableLastColumnFooter {
+    border-right: 0px;
+}
+
+.cellTableLastColumnHeader {
+    border-right: 0px;
+}
+
+.cellTableEvenRow {
+    background: #ffffff;
+}
+
+.cellTableEvenRowCell {
+}
+
+.cellTableOddRow {
+    background: #edf3fe;
+}
+
+.cellTableOddRowCell {
+}
+
+.cellTableHoveredRow {
+    background-color: #3875d7;
+    color: white;
+}
+
+.cellTableHoveredRowCell {
+}
+
+.cellTableKeyboardSelectedRow {
+    gwt-image: 'cellTableSelectedBackground';
+    background-color: #3875d7;
+    color: white;
+    height: auto;
+    overflow: auto;
+}
+
+.cellTableKeyboardSelectedRowCell {
+
+}
+
+.cellTableSelectedRow {
+    gwt-image: 'cellTableSelectedBackground';
+    background-color: #3875d7;
+    color: white;
+    height: auto;
+    overflow: auto;
+}
+
+.cellTableSelectedRowCell {
+}
+
+.cellTableFirstColumn {
+}
+
+.cellTableLastColumn {
+    border-right: 0px;
+}
+
+/**
+ * The keyboard selected cell is visible over selection.
+ */
+.cellTableKeyboardSelectedCell {
+}
+
+@sprite .cellTableLoading {
+    gwt-image: 'cellTableLoading';
+    margin: 30px;
+}
+
+.cellTableSortableHeader {
+}
+
+.cellTableSortedHeaderAscending {
+}
+
+.cellTableSortedHeaderDescending {
+}

@@ -6,6 +6,7 @@ import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
 import lawscraper.server.entities.law.LawDocumentPartType;
 import lawscraper.server.repositories.LawRepository;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,7 @@ public class LawPesistanceFunctionalTest {
     }
 
     @Test
+    @Ignore
     public void parseAndStoreFull() throws Exception {
         InputStream law = TestDataUtil.getLaw("1999:1229"); // Inkomstskattelagen
         Scraper scraper = new Scraper(new DummyPartFactory());

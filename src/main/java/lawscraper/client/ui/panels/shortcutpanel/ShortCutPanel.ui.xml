@@ -1,0 +1,28 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <ui:style>
+
+        .shortCutContainer {
+            border: solid;
+            border-width: 1px;
+            background-color: #E4F3FF;
+            border-color: black;
+        }
+
+        .shortCutLabel {
+            text-align: center;
+            font-weight: bold;
+            font-size: large;
+            color: #15428B;
+        }
+
+
+    </ui:style>
+
+    <g:FlowPanel>
+        <g:HTMLPanel addStyleNames="{style.shortCutContainer}">
+            <g:Label ui:field="shortCutLabel" addStyleNames="{style.shortCutLabel}"/>
+        </g:HTMLPanel>
+    </g:FlowPanel>
+</ui:UiBinder>

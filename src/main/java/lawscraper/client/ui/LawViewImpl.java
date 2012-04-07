@@ -5,7 +5,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
-import lawscraper.client.ui.panels.LawPanel;
+import lawscraper.client.ui.panels.lawpanel.LawPanel;
 import lawscraper.shared.proxies.HTMLProxy;
 
 /**

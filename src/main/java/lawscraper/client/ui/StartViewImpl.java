@@ -2,11 +2,13 @@ package lawscraper.client.ui;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.*;
-import lawscraper.client.ui.panels.LawResultPanel;
+import lawscraper.client.ui.panels.shortsearchresultpanel.ShortSearchResultPanel;
 import lawscraper.shared.proxies.LawProxy;
 
 import java.util.List;
@@ -21,7 +23,8 @@ public class StartViewImpl extends Composite implements StartView {
     @UiField Button sendButton;
     @UiField Button scrapeButton;
     @UiField FlowPanel container;
-    @UiField LawResultPanel lawResultPanel;
+    @UiField TextBox searchTextBox;
+    @UiField ShortSearchResultPanel searchResultPanel;
 
     private Presenter listener;
     private String name;
@@ -48,17 +51,26 @@ public class StartViewImpl extends Composite implements StartView {
     @Override
     public void setPresenter(Presenter listener) {
         this.listener = listener;
-        lawResultPanel.setListener(listener);
+
     }
 
     @Override
     public void setLaws(List<LawProxy> laws) {
-        lawResultPanel.setLaws(laws.subList(0, 200));
+
     }
 
     @Override
     public FlowPanel getMainContainer() {
         return container;
 
+    }
+
+    @UiHandler("searchTextBox")
+    public void OnChangeTextBox(KeyUpEvent event) {
+        if (searchTextBox.getText().length() > 3) {
+            searchResultPanel.setVisible(true);
+        } else {
+            searchResultPanel.setVisible(false);
+        }
     }
 }

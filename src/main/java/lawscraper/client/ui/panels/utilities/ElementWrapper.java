@@ -1,4 +1,4 @@
-package lawscraper.client.ui.panels;
+package lawscraper.client.ui.panels.utilities;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -24,6 +24,8 @@ public class ElementWrapper extends Widget implements HasClickHandlers {
     }
 
     public void onAttach() {
-        super.onAttach();
+        if (!super.isAttached()) {
+            super.onAttach();
+        }
     }
 }

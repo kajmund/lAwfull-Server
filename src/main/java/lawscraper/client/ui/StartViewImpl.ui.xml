@@ -1,7 +1,8 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
-             xmlns:lawResultPanel="urn:import:lawscraper.client.ui.panels">
+             xmlns:lawResultPanel="urn:import:lawscraper.client.ui.panels.lawresultpanel"
+             xmlns:searchPanels="urn:import:lawscraper.client.ui.panels.shortsearchresultpanel">
 
     <ui:style>
         .stackHeader {
@@ -15,7 +16,7 @@
             background-image: literal("-moz-linear-gradient(bottom, rgb(255,255,255) 40%, rgb(222,237,255) 100%)");
             background-image: literal("-webkit-linear-gradient(bottom, rgb(255, 255, 255) 40%, rgb(101, 166, 245) 100%)");
             background-image: literal("-ms-linear-gradient(bottom, rgb(255, 255, 255) 40%, rgb(101, 166, 245) 100%)");
-            background-image: literal("-webkit-gradient(linear, left bottom, left top, color-stop(0.4, rgb(255, 255, 255)), color-stop(1, rgb(101, 166, 245)))");
+            background-image: literal("-webkit-gradient(linear, left bottom, left top, color-stop(0.4, rgb(255, 255, 255)), color-stop(4, rgb(101, 166, 245)))");
         }
 
         .headerFont {
@@ -33,11 +34,15 @@
             background-image: url("http://gwt-cx.com/serendipity/serendipity/gwtcx/skins/aqua/images/navigation_pane_header.png");
             background-repeat: repeat-x;
             height: 26px;
-            width: 100%;
+            left: 0;
+            right: 0;
+
         }
 
         .headerContainer {
-            width: 100%;
+            left: 0;
+            right: 0;
+
             height: 53px;
             background-image: url("http://gwt-cx.com/serendipity/serendipity/gwtcx/skins/aqua/images/masthead.png");
             background-repeat: repeat-x;
@@ -46,12 +51,16 @@
         .menuContainer {
             border-top: 1px solid #15428B;
             border-bottom: 1px solid #15428B;
-            width: 100%;
+            left: 0;
+            right: 0;
+
             height: 10%;
         }
 
         .titleContainer {
-            width: 100%;
+            left: 0;
+            right: 0;
+
             height: 100%;
             border-bottom: 1px solid #15428B;
         }
@@ -63,13 +72,16 @@
         }
 
         .mainContentTitle {
-            width: 100%;
+            /* width: 100%; */
+            left: 0;
+            right: 0;
             border-left: 1px solid #15428B;
         }
 
         .mainContentContainer {
             height: 100%;
-            width: 100%;
+            left: 0;
+            right: 0;
         }
 
         .mainContainer {
@@ -101,30 +113,43 @@
         }
 
         .caseList {
-            width: 200px;
-            margin-right: 8px;
+            width: 20%;
+            position: absolute;
+            right: 0;
+            margin-right: 2px;
             margin-top: 3px;
         }
 
         .searchTextBox {
-            -moz-border-bottom-colors: none;
-            -moz-border-image: none;
-            -moz-border-left-colors: none;
-            -moz-border-right-colors: none;
-            -moz-border-top-colors: none;
-            background: none repeat scroll 0 0 #FFFFFF;
-            border-color: #BDC7D8;
-            border-style: solid;
-            border-width: 1px 0;
-            cursor: default;
-            height: 11px;
-            left: 332px;
+            left: 30%;
             margin-right: 8px;
             position: absolute;
-            top: 57px;
-            width: 350px;
+            top: 15px;
+            width: 20%;
+            padding: 4px 7px;
+            outline: 0;
+            border-color: #87cefa;
+            top: 82px;
+            height: 11px;
         }
 
+        .searchTextBox:focus {
+
+            /* supported IE8+ and all other browsers tested.
+             * optional, but gives the input focues when selected.
+   	         * change to a color that suits your design.
+    	     */
+            border-color: #00008b;
+
+        }
+
+        .searchResultPanel {
+            height: 300px;
+        }
+
+        .borderRight {
+            border-right: solid 1px;
+        }
 
     </ui:style>
 
@@ -137,13 +162,13 @@
                 </g:FlowPanel>
             </g:FlowPanel>
             <g:FlowPanel addStyleNames="{style.menuContainer}">
-                <g:FlowPanel addStyleNames="{style.pageSection}">
+                <g:FlowPanel addStyleNames="{style.pageSection}, {style.borderRight}">
                     <g:HTMLPanel>
                         <div style="float:left;">
                             menu1, menu2, menu3, menu4
                         </div>
                         <div style="float:right;">
-                            <g:TextBox addStyleNames="{style.searchTextBox}"/>
+                            <g:TextBox ui:field="searchTextBox" addStyleNames="{style.searchTextBox}"/>
                             <g:ListBox addStyleNames="{style.caseList}"/>
                         </div>
                     </g:HTMLPanel>
@@ -158,8 +183,8 @@
                 </g:FlowPanel>
             </g:FlowPanel>
             <g:FlowPanel addStyleNames="{style.mainContentTitleContainer}">
-                <g:FlowPanel addStyleNames="{style.mainContentTitle}, {style.pageSection}">
-                    <g:HTML addStyleNames="{style.headerFont}">Sidtitel</g:HTML>
+                <g:FlowPanel addStyleNames="{style.mainContentTitle}, {style.pageSection}, {style.borderRight}">
+                    <g:HTML addStyleNames="{style.headerFont}">Sök</g:HTML>
                 </g:FlowPanel>
             </g:FlowPanel>
             <g:FlowPanel addStyleNames="{style.clearBoth}"/>
@@ -340,11 +365,10 @@
                 </g:StackLayoutPanel>
             </g:FlowPanel>
             <g:FlowPanel addStyleNames="{style.mainContainer}, {style.lightblueGradient}">
+                <searchPanels:ShortSearchResultPanel ui:field="searchResultPanel" addStyleNames="{style.searchResultPanel}" visible="false"/>
+
                 <g:FlowPanel ui:field="container">
                     <g:HTML>MainPanel</g:HTML>
-
-                    <lawResultPanel:LawResultPanel ui:field="lawResultPanel"/>
-
                     <g:HTMLPanel>
                         <table>
                             <tr>

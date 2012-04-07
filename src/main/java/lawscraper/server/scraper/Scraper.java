@@ -343,7 +343,9 @@ public class Scraper {
                 }
                 break;
             case HEADING:
-                if (lawDocumentPartType != LawDocumentPartType.SECTION_LIST_ITEM) {
+                if (lawDocumentPartType != LawDocumentPartType.DIVIDER &&
+                        lawDocumentPartType != LawDocumentPartType.SECTION_LIST_ITEM &&
+                        lawDocumentPartType != LawDocumentPartType.CHAPTER) {
                     return true;
                 }
                 break;
@@ -371,8 +373,10 @@ public class Scraper {
             case SECTION_LIST_ITEM:
                 return false;
             case SUB_HEADING:
-                if (lawDocumentPartType != LawDocumentPartType.SECTION_LIST_ITEM &&
-                        lawDocumentPartType != LawDocumentPartType.HEADING) {
+                if (lawDocumentPartType != LawDocumentPartType.DIVIDER &&
+                        lawDocumentPartType != LawDocumentPartType.SECTION_LIST_ITEM &&
+                        lawDocumentPartType != LawDocumentPartType.HEADING &&
+                        lawDocumentPartType != LawDocumentPartType.CHAPTER) {
                     return true;
                 }
                 break;

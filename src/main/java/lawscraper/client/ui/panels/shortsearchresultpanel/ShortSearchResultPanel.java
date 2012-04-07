@@ -1,14 +1,17 @@
-package lawscraper.client.ui.panels;
+package lawscraper.client.ui.panels.shortsearchresultpanel;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.ClickableTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import lawscraper.client.place.LawPlace;
@@ -24,18 +27,20 @@ import java.util.List;
  * Date: 2/24/12
  * Time: 2:31 PM
  */
-public class LawResultPanel extends Composite {
+public class ShortSearchResultPanel extends Composite {
     private static LawResultPanelUiBinder uiBinder = GWT.create(LawResultPanelUiBinder.class);
 
     private CellTable<LawProxy> table;
     private List<LawProxy> laws = new ArrayList<LawProxy>();
     @UiField FlowPanel lawTableContainer;
+    @UiField FlowPanel searchControlBar;
+    @UiField Button closeButton;
     private StartView.Presenter listener;
 
-    interface LawResultPanelUiBinder extends UiBinder<FlowPanel, LawResultPanel> {
+    interface LawResultPanelUiBinder extends UiBinder<FlowPanel, ShortSearchResultPanel> {
     }
 
-    public LawResultPanel() {
+    public ShortSearchResultPanel() {
         initWidget(uiBinder.createAndBindUi(this));
         initPanel();
         lawTableContainer.add(table);
@@ -97,6 +102,11 @@ public class LawResultPanel extends Composite {
         table.setRowCount(laws.size(), true);
         table.setRowData(laws);
         table.redraw();
+    }
+
+    @UiHandler("closeButton")
+    public void onClickCloseButton(ClickEvent event) {
+        this.setVisible(false);
     }
 
 }

@@ -1,0 +1,118 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:bookMark="urn:import:lawscraper.client.ui.panels.bookmarkpanel"
+             xmlns:shortCut="urn:import:lawscraper.client.ui.panels.shortcutpanel"
+             xmlns:boxPanel="urn:import:lawscraper.client.ui.panels.boxpanel">
+
+    <ui:style>
+        .rightWingPanel {
+            float: left;
+            position: absolute;
+            right: 0;
+            top: 108px;
+            border-top: solid 1px;
+            border-bottom: solid 1px;
+            width: 20%;
+        }
+
+        .lawTable {
+            float: left;
+            min-height: 600px;
+            width: 70%;
+            margin-left: 8px;
+        }
+
+        .part_paragraph {
+            font-size: 18px;
+            font-style: normal;
+        }
+
+        @external .part_paragraph;
+
+        .part_paragraph_deprecated {
+            font-style: italic;
+            color: #808080;
+        }
+
+        @external .part_paragraph_deprecated;
+
+        .part_section {
+            font-size: 15px;
+            margin-bottom: 16px;
+            font-style: normal;
+
+        }
+
+        @external .part_section;
+
+        .part_section_list_item {
+            margin-left: 20px;
+            font-size: 15px;
+            margin-bottom: 10px;
+            font-style: normal;
+        }
+
+        @external .part_section_list_item;
+
+        .part_sub_heading {
+            font-size: 16px;
+            font-style: italic;
+            font-style: oblique;
+        }
+
+        @external .part_sub_heading;
+
+        .part_heading {
+            font-size: 20px;
+            font-style: normal;
+        }
+
+        @external .part_heading;
+
+        .part_chapter {
+            font-size: 22px;
+            font-style: normal;
+        }
+
+        @external .part_chapter;
+
+        .shortCutPanel {
+            height: 30px;
+            width: 40%;
+            right: 30%;
+            position: fixed;
+            top: 0;
+        }
+
+        .TOCElement_SUB_HEADING {
+            display: none;
+        }
+
+        @external .TOCElement_SUB_HEADING;
+
+        .TOCElement_HEADING {
+            color: grey;
+            font-style: italic;
+            margin-left: 12px;
+        }
+
+        @external .TOCElement_HEADING;
+
+        .tocBoxPanel {
+
+        }
+
+    </ui:style>
+
+
+    <g:FlowPanel ui:field="lawPanelContainer">
+        <shortCut:ShortCutPanel ui:field="shortCutPanel" visible="false" addStyleNames="{style.shortCutPanel}"/>
+        <g:HTMLPanel ui:field="lawContainer" addStyleNames="{style.lawTable}"/>
+        <g:FlowPanel ui:field="rightWingPanel" addStyleNames="{style.rightWingPanel}">
+            <boxPanel:BoxPanel ui:field="MetaBoxPanel" headerTitle="Information"/>
+            <boxPanel:BoxPanel ui:field="TOCBoxPanel" headerTitle="Innehåll" addStyleNames="{style.tocBoxPanel}"/>
+            <boxPanel:BoxPanel ui:field="bookMarkBoxPanel" headerTitle="Bokmärken"/>
+        </g:FlowPanel>
+    </g:FlowPanel>
+</ui:UiBinder>

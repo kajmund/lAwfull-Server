@@ -2,6 +2,7 @@ package lawscraper.server.components;
 
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
+import lawscraper.server.entities.law.LawDocumentPartType;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,10 +15,33 @@ import java.util.List;
 public class LawRendererImpl implements LawRenderer {
     @Override
     public String renderToHtml(Law law) {
-        return element("div", renderMeta(law)
+        return element("div", renderMeta(law) + renderTableOfContents(law)
                 + element("div", renderParts(law.getSortedParts()), "class", "lawBody"),
                        "class", "law");
     }
+
+    private String renderTableOfContents(Law law) {
+        return element("div", renderTableOfContentsLawPart(law.getSortedParts()),
+                       "class", "lawTableOfContents"
+                      );
+    }
+
+    private String renderTableOfContentsLawPart(List<LawDocumentPart> parts) {
+        String html = "";
+
+        for (LawDocumentPart part : parts) {
+            if (part.getLawPartType() != LawDocumentPartType.PARAGRAPH &&
+                    part.getLawPartType() != LawDocumentPartType.SECTION &&
+                    part.getLawPartType() != LawDocumentPartType.SECTION_LIST_ITEM) {
+                html += element("div    ", element("a", part.getTextElement().getText(), "href", "#" + part.getId()),
+                                "class",
+                                "TOCElement_" + part.getType()) + renderTableOfContentsLawPart(
+                        part.getSortedParts());
+            }
+        }
+        return html;
+    }
+
 
     private String renderParts(List<LawDocumentPart> children) {
         StringBuilder sb = new StringBuilder();
@@ -37,12 +61,19 @@ public class LawRendererImpl implements LawRenderer {
 
     private String renderPart(LawDocumentPart part, String cssClass) {
         String idStr = "";
+        String title = "";
+
         if (part.getId() != null) {
             idStr = Long.toString(part.getId());
         }
 
+        if (LawDocumentPartType.valueOf(part.getType()) == LawDocumentPartType.HEADING ||
+                LawDocumentPartType.valueOf(part.getType()) == LawDocumentPartType.CHAPTER) {
+            title = part.getTextElement().getText();
+        }
+
         return element("div", part.getTextElement().getText() + renderParts(part.getSortedParts()), "class", cssClass,
-                       "id", idStr);
+                       "id", idStr, "title", title);
     }
 
     private String renderMeta(Law law) {

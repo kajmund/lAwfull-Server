@@ -23,9 +23,9 @@ public class LawRendererImplTest {
         assertEquals("<div class=\"law\"><div class=\"lawMeta\">" +
                 "<div class=\"lawTitle\"> ()</div>" +
                 "<div class=\"metaHeading\"><div class=\"metaTitle\">Departement</div><div class=\"metaText\"></div></div>" +
-                "<div class=\"metaHeading\"><div class=\"metaTitle\">Utfärdad</div><div class=\"metaText\"></div></div>" +
-                "<div class=\"metaHeading\"><div class=\"metaTitle\">Källa</div><div class=\"metaText\"></div></div>" +
-                "<div class=\"metaHeading\"><div class=\"metaTitle\">Senast hämtad</div><div class=\"metaText\"></div></div>" +
+                "<div class=\"metaHeading\"><div class=\"metaTitle\">Utf&auml;rdad</div><div class=\"metaText\"></div></div>" +
+                "<div class=\"metaHeading\"><div class=\"metaTitle\">K&auml;lla</div><div class=\"metaText\"></div></div>" +
+                "<div class=\"metaHeading\"><div class=\"metaTitle\">Senast h&auml;mtad</div><div class=\"metaText\"></div></div>" +
                 "</div>" +
                 "<div class=\"lawBody\"></div>" +
                 "</div>"
@@ -66,21 +66,21 @@ public class LawRendererImplTest {
         assertEquals("<div class=\"law\"><div class=\"lawMeta\">" +
                 "<div class=\"lawTitle\">Law (FS)</div>" +
                 "<div class=\"metaHeading\"><div class=\"metaTitle\">Departement</div><div class=\"metaText\">Creator</div></div>" +
-                "<div class=\"metaHeading\"><div class=\"metaTitle\">Utfärdad</div><div class=\"metaText\">RelDate</div></div>" +
-                "<div class=\"metaHeading\"><div class=\"metaTitle\">Källa</div><div class=\"metaText\">Publisher</div></div>" +
-                "<div class=\"metaHeading\"><div class=\"metaTitle\">Senast hämtad</div><div class=\"metaText\">FetchDate</div></div>" +
+                "<div class=\"metaHeading\"><div class=\"metaTitle\">Utf&auml;rdad</div><div class=\"metaText\">RelDate</div></div>" +
+                "<div class=\"metaHeading\"><div class=\"metaTitle\">K&auml;lla</div><div class=\"metaText\">Publisher</div></div>" +
+                "<div class=\"metaHeading\"><div class=\"metaTitle\">Senast h&auml;mtad</div><div class=\"metaText\">FetchDate</div></div>" +
                 "</div>" +
 
                 "<div class=\"lawBody\">" +
-                "<div class=\"part_divider\">Divider" +
-                "<div class=\"part_chapter\">Chapter" +
-                "<div class=\"part_heading\">Heading" +
-                "<div class=\"part_heading\">Heading2" +
-                "<div class=\"part_paragraph\">Paragraph" +
-                "<div class=\"part_section\">Section" +
-                "<div class=\"part_section_list_item\">SectionListItem" +
+                "<div class=\"part_divider\" id=\"\" title=\"\">Divider" +
+                "<div class=\"part_chapter\" id=\"\" title=\"Chapter\">Chapter" +
+                "<div class=\"part_heading\" id=\"\" title=\"Heading\">Heading" +
+                "<div class=\"part_heading\" id=\"\" title=\"Heading2\">Heading2" +
+                "<div class=\"part_paragraph\" id=\"\" title=\"\">Paragraph" +
+                "<div class=\"part_section\" id=\"\" title=\"\">Section" +
+                "<div class=\"part_section_list_item\" id=\"\" title=\"\">SectionListItem" +
                 "</div></div></div></div></div></div></div>" +
-                "<div class=\"part_deprecated\">Deprecated</div>" +
+                "<div class=\"part_deprecated\" id=\"\" title=\"\">Deprecated</div>" +
                 "</div></div>"
                 , html);
     }

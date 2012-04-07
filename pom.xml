@@ -165,6 +165,11 @@
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
+      <dependency>
+          <groupId>com.google.gwt</groupId>
+          <artifactId>gwt</artifactId>
+          <version>2.4.0</version>
+      </dependency>
   </dependencies>
 
   <build>
