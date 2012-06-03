@@ -3,6 +3,9 @@ package lawscraper.server.components;
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
 import lawscraper.server.entities.law.LawDocumentPartType;
+import lawscraper.server.repositories.LawPartRepository;
+import lawscraper.server.repositories.TextRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,6 +16,13 @@ import java.util.List;
 
 @Component
 public class LawRendererImpl implements LawRenderer {
+
+    @Autowired
+    TextRepository textRepository;
+
+    @Autowired
+    LawPartRepository lawPartRepository;
+
     @Override
     public String renderToHtml(Law law) {
         return element("div", renderMeta(law) + renderTableOfContents(law)
@@ -30,10 +40,12 @@ public class LawRendererImpl implements LawRenderer {
         String html = "";
 
         for (LawDocumentPart part : parts) {
+            String text = part.getTextElement().getText();
+
             if (part.getLawPartType() != LawDocumentPartType.PARAGRAPH &&
                     part.getLawPartType() != LawDocumentPartType.SECTION &&
                     part.getLawPartType() != LawDocumentPartType.SECTION_LIST_ITEM) {
-                html += element("div    ", element("a", part.getTextElement().getText(), "href", "#" + part.getId()),
+                html += element("div    ", element("a", text, "href", "#" + part.getId()),
                                 "class",
                                 "TOCElement_" + part.getType()) + renderTableOfContentsLawPart(
                         part.getSortedParts());
@@ -53,9 +65,11 @@ public class LawRendererImpl implements LawRenderer {
 
     private String renderPart(LawDocumentPart part) {
         String deprecatedString = "";
+        /*
         if (part.isDeprecated()) {
             deprecatedString = "_deprecated";
         }
+        */
         return renderPart(part, "part_" + part.getLawPartType().name().toLowerCase() + deprecatedString);
     }
 
@@ -63,16 +77,18 @@ public class LawRendererImpl implements LawRenderer {
         String idStr = "";
         String title = "";
 
+        String text = part.getTextElement().getText();
         if (part.getId() != null) {
             idStr = Long.toString(part.getId());
         }
 
         if (LawDocumentPartType.valueOf(part.getType()) == LawDocumentPartType.HEADING ||
                 LawDocumentPartType.valueOf(part.getType()) == LawDocumentPartType.CHAPTER) {
-            title = part.getTextElement().getText();
+            title = text;
         }
 
-        return element("div", part.getTextElement().getText() + renderParts(part.getSortedParts()), "class", cssClass,
+        part = lawPartRepository.findOne(part.getId());
+        return element("div", text + renderParts(part.getSortedParts()), "class", cssClass,
                        "id", idStr, "title", title);
     }
 

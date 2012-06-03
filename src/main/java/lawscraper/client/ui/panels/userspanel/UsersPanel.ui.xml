@@ -1,0 +1,51 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <ui:style>
+        .usersTable {
+            margin-left: 8px;
+        }
+
+        .controlBar {
+            background-image: url("http://gwt-cx.com/serendipity/serendipity/gwtcx/skins/aqua/images/navigation_pane_header.png");
+            background-repeat: repeat-x;
+            height: 26px;
+            border: 1px solid;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .container {
+            position: relative;
+        }
+
+        .bottomControlPanel {
+            float: right;
+        }
+
+        .closeButton {
+            margin-right: 2px;
+
+        }
+
+        .moreResults {
+            position: absolute;
+            left: 0;
+        }
+
+        .addUserButton {
+            margin-left: 8px;
+            margin-top: 16px;
+        }
+    </ui:style>
+
+
+    <g:FlowPanel addStyleNames="{style.container}">
+        <g:FlowPanel ui:field="usersContainer" addStyleNames="{style.usersTable}"/>
+        <g:FlowPanel addStyleNames="{style.addUserButton}">
+            <g:Button ui:field="addUserButton" text="Lägg till..."/>
+        </g:FlowPanel>
+    </g:FlowPanel>
+</ui:UiBinder>

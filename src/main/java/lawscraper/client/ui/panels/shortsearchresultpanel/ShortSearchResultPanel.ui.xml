@@ -17,6 +17,17 @@
             right: 0;
         }
 
+        .topControlBar {
+            background-image: url("http://gwt-cx.com/serendipity/serendipity/gwtcx/skins/aqua/images/navigation_pane_header.png");
+            background-repeat: repeat-x;
+            height: 26px;
+            border: 1px solid;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
         .container {
             position: relative;
         }
@@ -26,7 +37,7 @@
         }
 
         .closeButton {
-            margin-right: 2px;
+            margin-right: -1px;
 
         }
 
@@ -34,17 +45,30 @@
             position: absolute;
             left: 0;
         }
+
+        .headerFont {
+            color: #15428B;
+            cursor: default;
+            font-family: Tahoma, Verdana, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            position:absolute;
+            left: 4px;
+        }
     </ui:style>
 
 
     <g:FlowPanel addStyleNames="{style.container}">
+        <g:FlowPanel addStyleNames="{style.topControlBar}">
+            <g:FlowPanel addStyleNames="{style.bottomControlPanel}">
+                <g:HTML addStyleNames="{style.headerFont}">Sökresultat</g:HTML>
+                <g:Button ui:field="topCloseButton" text="X" addStyleNames="{style.closeButton}"/>
+            </g:FlowPanel>
+        </g:FlowPanel>
         <g:FlowPanel ui:field="lawTableContainer" addStyleNames="{style.lawTable}"/>
         <g:FlowPanel ui:field="searchControlBar" addStyleNames="{style.controlBar}">
             <g:FlowPanel addStyleNames="{style.bottomControlPanel}">
-                <g:Button ui:field="moreResultsButton" text="Visa flera sökresultat..." addStyleNames="{style.moreResults}"/>
-            </g:FlowPanel>
-            <g:FlowPanel addStyleNames="{style.bottomControlPanel}">
-                <g:Button ui:field="closeButton" text="Stäng" addStyleNames="{style.closeButton}"/>
+                <g:Button ui:field="bottomCloseButton" text="X" addStyleNames="{style.closeButton}"/>
             </g:FlowPanel>
         </g:FlowPanel>
     </g:FlowPanel>

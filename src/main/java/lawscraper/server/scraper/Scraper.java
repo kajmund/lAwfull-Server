@@ -226,7 +226,8 @@ public class Scraper {
         if (type != null) {
             lawDocumentPart.setLawPartType(type);
         }
-        return partFactory.createpart(type);
+        lawDocumentPart.setBelongsToLaw(law);
+        return lawDocumentPart;
     }
 
 

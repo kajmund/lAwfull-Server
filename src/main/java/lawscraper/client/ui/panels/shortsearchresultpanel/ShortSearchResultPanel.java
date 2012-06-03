@@ -12,8 +12,8 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.PopupPanel;
 import lawscraper.client.place.LawPlace;
 import lawscraper.client.ui.StartView;
 import lawscraper.shared.proxies.LawProxy;
@@ -27,21 +27,22 @@ import java.util.List;
  * Date: 2/24/12
  * Time: 2:31 PM
  */
-public class ShortSearchResultPanel extends Composite {
+public class ShortSearchResultPanel extends PopupPanel {
     private static LawResultPanelUiBinder uiBinder = GWT.create(LawResultPanelUiBinder.class);
 
     private CellTable<LawProxy> table;
     private List<LawProxy> laws = new ArrayList<LawProxy>();
     @UiField FlowPanel lawTableContainer;
     @UiField FlowPanel searchControlBar;
-    @UiField Button closeButton;
+    @UiField Button bottomCloseButton;
+    @UiField Button topCloseButton;
     private StartView.Presenter listener;
 
     interface LawResultPanelUiBinder extends UiBinder<FlowPanel, ShortSearchResultPanel> {
     }
 
     public ShortSearchResultPanel() {
-        initWidget(uiBinder.createAndBindUi(this));
+        setWidget(uiBinder.createAndBindUi(this));
         initPanel();
         lawTableContainer.add(table);
 
@@ -50,7 +51,7 @@ public class ShortSearchResultPanel extends Composite {
     public void initPanel() {
         table = new CellTable<LawProxy>();
         Column<LawProxy, String> lawNameColumn = addLawNameColumn(table);
-        table.setColumnWidth(lawNameColumn, 600, Style.Unit.PX);
+        table.setColumnWidth(lawNameColumn, 98, Style.Unit.PCT);
 
     }
 
@@ -89,11 +90,7 @@ public class ShortSearchResultPanel extends Composite {
         return column;
     }
 
-    public StartView.Presenter getListener() {
-        return listener;
-    }
-
-    public void setListener(StartView.Presenter listener) {
+    public void setPresenter(StartView.Presenter listener) {
         this.listener = listener;
     }
 
@@ -104,9 +101,9 @@ public class ShortSearchResultPanel extends Composite {
         table.redraw();
     }
 
-    @UiHandler("closeButton")
+    @UiHandler({"bottomCloseButton", "topCloseButton"})
     public void onClickCloseButton(ClickEvent event) {
-        this.setVisible(false);
+        hide();
     }
 
 }

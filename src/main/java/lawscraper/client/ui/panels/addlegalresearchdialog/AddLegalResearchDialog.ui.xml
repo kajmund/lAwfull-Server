@@ -1,0 +1,53 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+
+
+    <ui:style>
+        .panelBody {
+            max-width: 1024px;
+            max-height: 768px;
+        }
+
+        .buttonPanel {
+            margin-left: 4px;
+            margin-top: 8px;
+        }
+    </ui:style>
+
+    <g:FlowPanel styleName="{style.panelBody}">
+        <g:HTMLPanel>
+            <table>
+                <tr>
+                    <td>
+                        <g:Label text="Namn"/>
+                    </td>
+                    <td>
+                        <g:TextBox ui:field="name"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <g:Label ui:field="description" text="Beskrivning"/>
+                    </td>
+                    <td>
+                        <g:TextBox/>
+                    </td>
+                </tr>
+            </table>
+        </g:HTMLPanel>
+        <g:HTMLPanel styleName="{style.buttonPanel}">
+            <table>
+                <tr>
+                    <td>
+                        <g:Button ui:field="saveButton" text="Spara"/>
+                    </td>
+                    <td>
+                        <g:Button ui:field="closeButton" text="Stäng"/>
+                    </td>
+                </tr>
+            </table>
+
+        </g:HTMLPanel>
+    </g:FlowPanel>
+</ui:UiBinder>

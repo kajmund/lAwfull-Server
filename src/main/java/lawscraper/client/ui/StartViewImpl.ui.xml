@@ -2,7 +2,8 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:lawResultPanel="urn:import:lawscraper.client.ui.panels.lawresultpanel"
-             xmlns:searchPanels="urn:import:lawscraper.client.ui.panels.shortsearchresultpanel">
+             xmlns:searchPanels="urn:import:lawscraper.client.ui.panels.shortsearchresultpanel"
+             xmlns:roleBased="urn:import:lawscraper.client.ui.panels.rolebasedwidgets">
 
     <ui:style>
         .stackHeader {
@@ -17,6 +18,8 @@
             background-image: literal("-webkit-linear-gradient(bottom, rgb(255, 255, 255) 40%, rgb(101, 166, 245) 100%)");
             background-image: literal("-ms-linear-gradient(bottom, rgb(255, 255, 255) 40%, rgb(101, 166, 245) 100%)");
             background-image: literal("-webkit-gradient(linear, left bottom, left top, color-stop(0.4, rgb(255, 255, 255)), color-stop(4, rgb(101, 166, 245)))");
+            border: none;
+
         }
 
         .headerFont {
@@ -94,7 +97,7 @@
             float: left;
             width: 20%;
             height: 768px;
-            border: 0px;
+            border: none;
         }
 
         .menuTitleContainer {
@@ -112,7 +115,7 @@
             clear: both;
         }
 
-        .caseList {
+        .legalResearchList {
             width: 20%;
             position: absolute;
             right: 0;
@@ -144,11 +147,23 @@
         }
 
         .searchResultPanel {
-            height: 300px;
+            height: 100%;
         }
 
         .borderRight {
             border-right: solid 1px;
+        }
+
+        .addLegalResearch {
+            float: right;
+            font-size: 23px;
+            margin-right: 8px;
+            margin-top: -2px;
+        }
+
+        .loginDeckPanel {
+            float: right;
+            margin-right: 8px;
         }
 
     </ui:style>
@@ -160,16 +175,53 @@
                 <g:FlowPanel>
                     <g:HTML>Halvrätt</g:HTML>
                 </g:FlowPanel>
+                <g:FlowPanel ui:field="loginContainer">
+                    <g:DeckPanel ui:field="loginDeckPanel" addStyleNames="{style.loginDeckPanel}">
+                        <g:FormPanel method="POST" action="/authenticate.do" ui:field="loginForm">
+                            <g:HTMLPanel>
+                                <table>
+                                    <td>
+                                        Användarnamn:
+                                    </td>
+                                    <td>
+                                        <g:TextBox name="j_username" ui:field="userNameTextBox"/>
+                                    </td>
+                                    <td>
+                                        Lösenord:
+                                    </td>
+                                    <td>
+                                        <g:PasswordTextBox ui:field="passwordTextBox" name="j_password"/>
+                                    </td>
+                                </table>
+                            </g:HTMLPanel>
+                        </g:FormPanel>
+                        <g:HTMLPanel>
+                            <table>
+                                <tr>
+                                    <td>Inloggad som:</td>
+                                    <td>
+                                        <g:Label ui:field="userName"></g:Label>
+                                    </td>
+                                    <td>
+                                        <g:Anchor href="/logout.do">Logga ut</g:Anchor>
+                                    </td>
+                                </tr>
+                            </table>
+                        </g:HTMLPanel>
+                    </g:DeckPanel>
+                </g:FlowPanel>
             </g:FlowPanel>
             <g:FlowPanel addStyleNames="{style.menuContainer}">
                 <g:FlowPanel addStyleNames="{style.pageSection}, {style.borderRight}">
                     <g:HTMLPanel>
-                        <div style="float:left;">
-                            menu1, menu2, menu3, menu4
+                        <div style="float:left;margin-left:4px;">
+                            <g:Anchor text="Visa" ui:field="menuShowBookMarks"/>
                         </div>
                         <div style="float:right;">
                             <g:TextBox ui:field="searchTextBox" addStyleNames="{style.searchTextBox}"/>
-                            <g:ListBox addStyleNames="{style.caseList}"/>
+                            <roleBased:RoleBasedFlowPanel ui:field="legalResearchListBoxContainer"  requiresUserRole="ROLE_USER" visible="false">
+                                <g:ListBox ui:field="legalResearchListBox" addStyleNames="{style.legalResearchList}"/>
+                            </roleBased:RoleBasedFlowPanel>
                         </div>
                     </g:HTMLPanel>
                 </g:FlowPanel>
@@ -191,13 +243,8 @@
         </g:FlowPanel>
         <g:FlowPanel addStyleNames="{style.mainContentContainer}, {style.lightblueGradient}">
             <g:FlowPanel addStyleNames="{style.leftContainer}, {style.lightblueGradient}">
-                <g:StackLayoutPanel unit='PX' height="100%" addStyleNames="{style.lightblueGradient}">
-                    <g:stack>
-                        <g:header size='35'>
-                            <font size="2px" color="#15428B">Rättsutredningar</font>
-                        </g:header>
-                        <g:Label>Rättsutredningar</g:Label>
-                    </g:stack>
+                <g:StackLayoutPanel ui:field="stackPanel" unit='PX' height="100%"
+                                    addStyleNames="{style.lightblueGradient}">
                     <g:stack>
                         <g:header size='35'>
                             <font size="2px" color="#15428B">Utforska Lagrum</font>
@@ -357,16 +404,49 @@
                         </g:FlowPanel>
                     </g:stack>
                     <g:stack>
-                        <g:header size='35'>
-                            <font size="2px" color="#15428B">Administration</font>
-                        </g:header>
-                        <g:Label>Administration</g:Label>
+                        <g:customHeader size='35'>
+                            <roleBased:RoleBasedFlowPanel ui:field="legalResearchContainer"
+                                                          visible="false"
+                                                          requiresUserRole="ROLE_USER">
+
+                                <g:HTMLPanel>
+                                    <font size="2px" color="#15428B">Rättsutredningar</font>
+                                    <g:Anchor text="+" ui:field="addLegalResearch"
+                                              addStyleNames="{style.addLegalResearch}"/>
+                                </g:HTMLPanel>
+                            </roleBased:RoleBasedFlowPanel>
+                        </g:customHeader>
+                        <g:Tree ui:field="legalResearchTree"/>
+                    </g:stack>
+                    <g:stack>
+                        <g:customHeader size='35'>
+                            <roleBased:RoleBasedFlowPanel ui:field="adminTreeContainer"
+                                                          visible="false"
+                                                          requiresUserRole="ROLE_ADMINISTRATOR">
+
+                                <g:HTMLPanel>
+                                    <g:HTML>
+                                        <font size="2px" color="#15428B">Administration</font>
+                                    </g:HTML>
+                                </g:HTMLPanel>
+                            </roleBased:RoleBasedFlowPanel>
+
+                        </g:customHeader>
+                        <g:FlowPanel>
+                            <g:ScrollPanel height="100%">
+                                <g:Tree ui:field="adminTree">
+                                    <g:TreeItem text='Användare'/>
+                                </g:Tree>
+                            </g:ScrollPanel>
+                        </g:FlowPanel>
                     </g:stack>
                 </g:StackLayoutPanel>
             </g:FlowPanel>
             <g:FlowPanel addStyleNames="{style.mainContainer}, {style.lightblueGradient}">
-                <searchPanels:ShortSearchResultPanel ui:field="searchResultPanel" addStyleNames="{style.searchResultPanel}" visible="false"/>
-
+                <!--
+                <searchPanels:ShortSearchResultPanel ui:field="searchResultPanel"
+                                                     addStyleNames="{style.searchResultPanel}" visible="false"/>
+                -->
                 <g:FlowPanel ui:field="container">
                     <g:HTML>MainPanel</g:HTML>
                     <g:HTMLPanel>
@@ -374,9 +454,6 @@
                             <tr>
                                 <td>
                                     <g:Button text="Skrapa lagar" ui:field="scrapeButton"/>
-                                </td>
-                                <td>
-                                    <g:Button text="Hämta lag" ui:field="sendButton"/>
                                 </td>
                             </tr>
                         </table>

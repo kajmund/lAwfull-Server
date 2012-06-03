@@ -20,11 +20,16 @@ public class LawDocumentPart extends DocumentPart {
     @RelatedTo
     Law replacesLaw;
     String key;
+
     @RelatedTo
-    TextElement textElement = new TextElement();
-    @RelatedTo(type = "HAS_SUB_PART")
+    Law belongsToLaw;
+
     @Fetch
-    Set<LawDocumentPart> parts = new HashSet<LawDocumentPart>();
+    @RelatedTo(direction = Direction.INCOMING, type = "TEXT_ELEMENT")
+    TextElement textElement = new TextElement();
+    @Fetch
+    @RelatedTo(elementClass = LawDocumentPart.class, type = "HAS_SUB_PART")
+    Set<LawDocumentPart> parts;
     @RelatedTo(direction = Direction.INCOMING, type = "HAS_SUB_PART")
     LawDocumentPart parent;
     @RelatedTo(direction = Direction.INCOMING, type = "PREVIOUS_VERSION")
@@ -43,6 +48,7 @@ public class LawDocumentPart extends DocumentPart {
         this.replacesLaw = replacesLaw;
     }
 
+    @Fetch
     public TextElement getTextElement() {
         return textElement;
     }
@@ -67,8 +73,9 @@ public class LawDocumentPart extends DocumentPart {
         this.key = key;
     }
 
+    @Fetch
     public Set<LawDocumentPart> getParts() {
-        return parts;     
+        return parts;
     }
 
     public List<LawDocumentPart> getSortedParts() {
@@ -132,8 +139,20 @@ public class LawDocumentPart extends DocumentPart {
     }
 
     public void addDocumentPartChild(LawDocumentPart subPart) {
+        if (parts == null) {
+            parts = new HashSet<LawDocumentPart>();
+        }
+
         subPart.setOrder(parts.size());
         parts.add(subPart);
+    }
+
+    public Law getBelongsToLaw() {
+        return belongsToLaw;
+    }
+
+    public void setBelongsToLaw(Law belongsToLaw) {
+        this.belongsToLaw = belongsToLaw;
     }
 
 }

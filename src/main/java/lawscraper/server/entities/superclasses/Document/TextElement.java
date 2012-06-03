@@ -2,6 +2,8 @@ package lawscraper.server.entities.superclasses.Document;
 
 import lawscraper.server.entities.superclasses.EntityBase;
 import lawscraper.server.scraper.Utilities;
+import org.springframework.data.neo4j.annotation.Indexed;
+import org.springframework.data.neo4j.support.index.IndexType;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
@@ -9,9 +11,15 @@ import lawscraper.server.scraper.Utilities;
  * Date: 2/21/12
  * Time: 11:05 AM
  */
+
 public class TextElement extends EntityBase {
+    @Indexed(indexType = IndexType.FULLTEXT, indexName = "search")
     String text = "";
+
+    @Indexed
     String hash = "";
+
+
 
     public String getText() {
         return text;
@@ -28,7 +36,6 @@ public class TextElement extends EntityBase {
         this.setHash(tmpHash);
     }
 
-    //@Indexed
     public String getHash() {
         return hash;
     }

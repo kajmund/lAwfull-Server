@@ -15,4 +15,6 @@ import lawscraper.server.entities.law.Law;
 public interface LawProxy extends ValueProxy {
     Long getId();
     String getTitle();
+    String getReleaseDate();
+    String getFsNumber();
 }

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:beans="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security-3.1.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+
+    <!-- <sec:global-method-security pre-post-annotations="enabled"/>
+
+    <bean id="accessDeniedHandler"
+          class="lawscraper.server.handlers.AccessDeniedHandlerImpl">
+        <property name="errorPage" value="/notallowed.do"/>
+    </bean>
+        -->
+    <sec:http auto-config="true" access-denied-page="/notallowed.do">
+
+        <sec:intercept-url pattern="/favicon.ico" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <sec:intercept-url pattern="/law.html" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <sec:intercept-url pattern="/*.do" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+
+        <sec:form-login
+                login-page="/law.html?gwt.codesvr=127.0.0.1:9997"
+                login-processing-url="/authenticate.do"
+                authentication-failure-url="/failedlogin.do"
+                default-target-url="/login.do"/>
+        <sec:logout
+                logout-url="/logout.do"
+                logout-success-url="/law.html?gwt.codesvr=127.0.0.1:9997"/>
+
+    </sec:http>
+
+    <sec:global-method-security jsr250-annotations="enabled"/>
+
+
+    <sec:authentication-manager>
+        <sec:authentication-provider user-service-ref="userService">
+            <sec:password-encoder ref="passwordEncoder"/>
+        </sec:authentication-provider>
+    </sec:authentication-manager>
+
+    <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder"/>
+
+
+    <!--
+    <beans:bean organizationId="roleHierarchy" class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl">
+      <beans:property name="hierarchy">
+        <beans:value>
+          ROLE__ADMIN > ROLE_USER
+          ROLE_INSPECTERA_ADMIN > ROLE_USER
+          ROLE_ORGANIZATION_ADMIN > ROLE_USER
+          ROLE_USER > ROLE_ANONYMOUS
+        </beans:value>
+      </beans:property>
+    </beans:bean>
+
+    <beans:bean organizationId="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
+      <beans:property name="decisionVoters">
+        <beans:list>
+          <beans:bean class="org.springframework.security.web.access.expression.WebExpressionVoter">
+            <beans:property name="expressionHandler">
+              <beans:bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler">
+                <beans:property name="roleHierarchy" ref="roleHierarchy"/>
+              </beans:bean>
+            </beans:property>
+          </beans:bean>
+        </beans:list>
+      </beans:property>
+    </beans:bean>
+
+    <authentication-manager alias="authenticationManager">
+      <authentication-provider user-service-ref="userDetailsService">
+        <password-encoder hash="sha-256" base64="true">
+          <salt-source user-property="salt"/>
+        </password-encoder>
+      </authentication-provider>
+    </authentication-manager>
+
+    -->
+
+</beans>

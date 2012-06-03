@@ -11,7 +11,9 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
+import lawscraper.client.ui.LawView;
 import lawscraper.client.ui.utils.celltableresources.CellTableResources;
+import lawscraper.shared.proxies.DocumentBookMarkProxy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +27,18 @@ import java.util.List;
 public class BookMarkPanel extends Composite {
     private static BookMarkPanellUiBinder uiBinder = GWT.create(BookMarkPanellUiBinder.class);
 
-    private List<BookMark> bookMarks = new ArrayList<BookMark>();
+    private List<DocumentBookMarkProxy> bookMarks = new ArrayList<DocumentBookMarkProxy>();
     private CellTable.Resources resources;
+    private LawView.Presenter presenter;
+
+    public void setPresenter(LawView.Presenter presenter) {
+        this.presenter = presenter;
+    }
 
     interface BookMarkPanellUiBinder extends UiBinder<FlowPanel, BookMarkPanel> {
     }
 
-    private CellTable<BookMark> table;
+    private CellTable<DocumentBookMarkProxy> table;
     @UiField FlowPanel bookmarkContainer;
 
     public BookMarkPanel() {
@@ -42,8 +49,8 @@ public class BookMarkPanel extends Composite {
     }
 
     public void initPanel() {
-        table = new CellTable<BookMark>(0, resources);
-        Column<BookMark, String> lawNameColumn = addLawNameColumn(table);
+        table = new CellTable<DocumentBookMarkProxy>(0, resources);
+        Column<DocumentBookMarkProxy, String> lawNameColumn = addLawNameColumn(table);
         table.setColumnWidth(lawNameColumn, 100, Style.Unit.PCT);
         table.setWidth("100%", true);
         table.addColumnStyleName(0, "tableStyle");
@@ -51,40 +58,32 @@ public class BookMarkPanel extends Composite {
 
     }
 
-    public void clearView() {
-        this.bookMarks.clear();
+    public void setBookMarks(List<DocumentBookMarkProxy> bookMarks) {
+        this.bookMarks = bookMarks;
         updateBookMarkData();
     }
 
-
-    public void setBookMarks(List<BookMark> bookMarks) {
-        this.bookMarks = bookMarks;
-    }
-
-    public List<BookMark> getBookMarks() {
-        return bookMarks;
-    }
-
-    private Column<BookMark, String> addLawNameColumn(CellTable<BookMark> table) {
-        Column<BookMark, String> nameColumn = getNameColumn(new AnchorCell());
+    private Column<DocumentBookMarkProxy, String> addLawNameColumn(CellTable<DocumentBookMarkProxy> table) {
+        Column<DocumentBookMarkProxy, String> nameColumn = getNameColumn(new AnchorCell());
         table.addColumn(nameColumn, "");
         return nameColumn;
     }
 
-    private Column<BookMark, String> getNameColumn(final AbstractCell nameCell) {
-        Column<BookMark, String> column = new Column<BookMark, String>(nameCell) {
+    private Column<DocumentBookMarkProxy, String> getNameColumn(final AbstractCell nameCell) {
+        Column<DocumentBookMarkProxy, String> column = new Column<DocumentBookMarkProxy, String>(nameCell) {
             @Override
-            public String getValue(BookMark object) {
-                return String.valueOf(object.getId());
+            public String getValue(DocumentBookMarkProxy object) {
+                return String.valueOf(object.getDocumentId());
             }
         };
 
         // Add a selection model to handle user selection.
-        final SingleSelectionModel<BookMark> selectionModel = new SingleSelectionModel<BookMark>();
+        final SingleSelectionModel<DocumentBookMarkProxy> selectionModel =
+                new SingleSelectionModel<DocumentBookMarkProxy>();
         table.setSelectionModel(selectionModel);
         selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
             public void onSelectionChange(SelectionChangeEvent event) {
-                BookMark selected = selectionModel.getSelectedObject();
+                DocumentBookMarkProxy selected = selectionModel.getSelectedObject();
                 if (selected != null) {
 
                 }

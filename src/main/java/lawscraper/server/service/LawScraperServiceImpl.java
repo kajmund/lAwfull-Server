@@ -1,13 +1,15 @@
 package lawscraper.server.service;
 
-import lawscraper.server.components.LawStore;
 import lawscraper.server.components.PartFactory;
+import lawscraper.server.entities.law.Law;
+import lawscraper.server.repositories.LawRepository;
 import lawscraper.server.scraper.Scraper;
 import lawscraper.server.scraper.TestDataUtil;
 import lawscraper.shared.scraper.LawScraperSource;
 import lawscraper.shared.scraper.ScraperStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
@@ -19,12 +21,13 @@ import java.io.IOException;
  */
 
 @Service("LawScraperServiceImpl")
+@Transactional(readOnly = true)
 public class LawScraperServiceImpl implements LawScraperService {
 
     @Autowired
-    LawStore lawStore;
-    @Autowired
     PartFactory partFactory;
+    @Autowired
+    LawRepository lawRepository;
 
     public LawScraperServiceImpl() {
         System.out.println("ScraperService instantiated");
@@ -42,6 +45,7 @@ public class LawScraperServiceImpl implements LawScraperService {
         }
     }
 
+    @Transactional(readOnly = false)
     private ScraperStatus scrapeLawsFromZipFile() {
         ScraperStatus scraperStatus = new ScraperStatus();
         try {
@@ -50,7 +54,13 @@ public class LawScraperServiceImpl implements LawScraperService {
                 try {
                     scraper.parse(lawEntry.getInputStream());
                     scraperStatus.increaseScrapedLaws();
-                    //lawStore.persistLaw(scraper.getLaw());
+                    Law scrapedLaw = scraper.getLaw();
+                    Law result = lawRepository.save(scrapedLaw);
+                    System.out.println("--");
+                    System.out.println(result.getTitle());
+                    System.out.println(result.getId());
+                    System.out.println("--");
+
                 } catch (Exception e) {
                     System.out.println("Failed to parse " + lawEntry.getName());
                     e.printStackTrace();
@@ -59,6 +69,7 @@ public class LawScraperServiceImpl implements LawScraperService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return scraperStatus;
     }
 

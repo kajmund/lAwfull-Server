@@ -2,6 +2,7 @@ package lawscraper.server.components;
 
 import lawscraper.server.entities.law.LawDocumentPart;
 import lawscraper.server.entities.law.LawDocumentPartType;
+import lawscraper.server.entities.superclasses.Document.TextElement;
 
 /**
  * TODO Document this.
@@ -15,5 +16,11 @@ public class DummyPartFactory implements PartFactory {
         part.setLawPartType(type);
         part.setId(id++);
         return part;
+    }
+
+    @Override
+    public TextElement persistTextElement(TextElement textElement) {
+        //To change body of implemented methods use File | Settings | File Templates.
+        return textElement;
     }
 }

@@ -12,11 +12,12 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import lawscraper.client.ui.panels.bookmarkpanel.BookMark;
+import lawscraper.client.ui.LawView;
 import lawscraper.client.ui.panels.bookmarkpanel.BookMarkPanel;
 import lawscraper.client.ui.panels.boxpanel.BoxPanel;
 import lawscraper.client.ui.panels.shortcutpanel.ShortCutPanel;
 import lawscraper.client.ui.panels.utilities.ElementWrapper;
+import lawscraper.shared.proxies.DocumentBookMarkProxy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,19 @@ import java.util.List;
  * Time: 2:31 PM
  */
 public class LawPanel extends Composite {
+    private LawView.Presenter presenter;
+
+    public void setPresenter(LawView.Presenter presenter) {
+        this.presenter = presenter;
+        bookMarkPanel.setPresenter(presenter);
+    }
+
+    public BookMarkPanel getBookMarkPanel() {
+        return bookMarkPanel;
+
+    }
+
+
     interface LawPanelUiBinder extends UiBinder<FlowPanel, LawPanel> {
     }
 
@@ -70,13 +84,14 @@ public class LawPanel extends Composite {
     @UiField BoxPanel MetaBoxPanel;
     @UiField FlowPanel lawPanelContainer;
     BookMarkPanel bookMarkPanel = new BookMarkPanel();
+
+
     List<ShortCutElement> shortCutElements = new ArrayList<ShortCutElement>();
     private HTMLPanel htmlPanel;
 
 
     public LawPanel() {
         initWidget(uiBinder.createAndBindUi(this));
-
     }
 
     private void initScrollHandler() {
@@ -105,6 +120,7 @@ public class LawPanel extends Composite {
             public void onWindowScroll(Window.ScrollEvent event) {
                 long scrollTop = Window.getScrollTop();
 
+                //The panel always on top of screen
                 if (scrollTop < lawPanelContainer.getElement().getAbsoluteTop()) {
                     shortCutPanel.setVisible(false);
                     shortCutPanel.setText("");
@@ -139,38 +155,54 @@ public class LawPanel extends Composite {
         initScrollHandler();
     }
 
+    public void setBookMarkMarkings(List<DocumentBookMarkProxy> bookMarks) {
+        for (DocumentBookMarkProxy bookMark : bookMarks) {
+            Element el = htmlPanel.getElementById(bookMark.getDocumentId().toString());
+            el.getStyle().setBorderStyle(Style.BorderStyle.DOTTED);
+            el.getStyle().setBorderColor("red");
+
+        }
+
+    }
+
     private void initElementClickHandlers() {
         ClickHandler clickHandler = new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 event.stopPropagation();
                 Element lawElement = ((ElementWrapper) event.getSource()).getElement();
+                String id = lawElement.getId();
+
                 if (lawElement.getStyle().getBorderStyle().equals("dotted")) {
                     lawElement.getStyle().setBorderStyle(Style.BorderStyle.NONE);
+                    if (!id.equals("")) {
+                        presenter.removeBookMark(Long.decode(id));
+                    }
 
                 } else {
                     lawElement.getStyle().setBorderStyle(Style.BorderStyle.DOTTED);
                     lawElement.getStyle().setBorderColor("red");
+
+                    if (!id.equals("")) {
+                        presenter.addBookMark(Long.decode(id));
+                    }
                 }
 
-                String id = lawElement.getId();
-                if (!id.equals("")) {
-                    bookMarkPanel.getBookMarks().add(new BookMark("BookMark" + id, Integer.parseInt(id)));
-                }
                 bookMarkPanel.updateBookMarkData();
             }
         };
 
         NodeList<com.google.gwt.dom.client.Element> elements = htmlPanel.getElement().getElementsByTagName("div");
 
+        //traverse the list to find meta div, then convert it to widget and add it to the boxpanel
         for (int i = 0; i < elements.getLength(); i++) {
             com.google.gwt.dom.client.Element el = elements.getItem(i);
-            ElementWrapper elementWrapper = wrapElementWithWidget(el);
             if (el.getClassName().equals("lawMeta")) {
-                MetaBoxPanel.setContainerWidget(elementWrapper);
+                MetaBoxPanel.setContainerWidget(wrapElementWithWidget(el));
             }
         }
 
+        //traverse the list again to find the toc div, then convert it to widget and add it to the boxpanel
         for (int i = 0; i < elements.getLength(); i++) {
             com.google.gwt.dom.client.Element el = elements.getItem(i);
             ElementWrapper elementWrapper = wrapElementWithWidget(el);

@@ -4,6 +4,8 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import lawscraper.shared.proxies.LawProxy;
+import lawscraper.shared.proxies.LegalResearchProxy;
+import lawscraper.shared.proxies.UserProxy;
 
 import java.util.List;
 
@@ -22,11 +24,23 @@ public interface StartView extends IsWidget {
 
     FlowPanel getMainContainer();
 
+    void setUserLoggedIn(UserProxy user);
+
+    void setLegalResearch(List<LegalResearchProxy> response);
+
     public interface Presenter {
         void goTo(Place place);
 
-        void getLaw();
-
         void scrapeLaw();
+
+        void searchLaws(String query);
+
+        void checkCurrentUser();
+
+        void addLegalResearch(String title, String description);
+
+        void getLegalResearchByLoggedInUser();
+
+        void changeActiveLegalResearch(Long legalResearchId);
     }
 }

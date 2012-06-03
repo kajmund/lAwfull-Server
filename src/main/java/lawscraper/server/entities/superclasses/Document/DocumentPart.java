@@ -9,15 +9,19 @@ import lawscraper.server.entities.superclasses.EntityBase;
  * Time: 9:48 AM
  */
 public class DocumentPart extends EntityBase {
-    private int order;
+    private Integer order = 0;
     private String type;
 
     public int getOrder() {
         return order;
     }
 
-    public void setOrder(int order) {
-        this.order = order;
+    public void setOrder(Integer order) {
+        if (order == null) {
+            this.order = 0;
+        } else {
+            this.order = order;
+        }
     }
 
     public String getType() {
@@ -27,6 +31,5 @@ public class DocumentPart extends EntityBase {
     public void setType(String type) {
         this.type = type;
     }
-
 
 }

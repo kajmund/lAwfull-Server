@@ -1,5 +1,7 @@
 package lawscraper.server.entities.law;
 
+import org.springframework.data.neo4j.annotation.Indexed;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,6 +13,7 @@ import java.util.Set;
  */
 
 public class Law extends LawDocumentPart {
+    @Indexed
     String title = "";
     String fsNumber = "";
     String latestFetchFromGov = "";

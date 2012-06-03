@@ -10,8 +10,13 @@ import lawscraper.client.ClientFactory;
 import lawscraper.client.place.LawPlace;
 import lawscraper.client.ui.LawView;
 import lawscraper.client.ui.StartView;
+import lawscraper.shared.DocumentBookMarkRequestFactory;
 import lawscraper.shared.LawRequestFactory;
+import lawscraper.shared.UserRequestFactory;
+import lawscraper.shared.proxies.DocumentBookMarkProxy;
 import lawscraper.shared.proxies.HTMLProxy;
+
+import java.util.List;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
@@ -21,6 +26,8 @@ import lawscraper.shared.proxies.HTMLProxy;
  */
 public class LawViewActivity extends AbstractActivity implements LawView.Presenter {
     final LawRequestFactory requests = GWT.create(LawRequestFactory.class);
+    final DocumentBookMarkRequestFactory bookMarkRequests = GWT.create(DocumentBookMarkRequestFactory.class);
+    final UserRequestFactory userRequestFactory = GWT.create(UserRequestFactory.class);
     private ClientFactory clientFactory;
     private LawView lawView;
     private LawPlace place;
@@ -34,6 +41,9 @@ public class LawViewActivity extends AbstractActivity implements LawView.Present
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         requests.initialize(eventBus);
+        bookMarkRequests.initialize(eventBus);
+        userRequestFactory.initialize(eventBus);
+
         StartView startView = clientFactory.getStartView();
         panel.setWidget(startView.asWidget());
 
@@ -42,20 +52,76 @@ public class LawViewActivity extends AbstractActivity implements LawView.Present
         this.lawView = lawView;
         startView.getMainContainer().clear();
         startView.getMainContainer().add(lawView);
+
         getLaw();
     }
 
     @Override
-    public void getLaw(){
+    public void getLaw() {
         LawRequestFactory.LawRequest context = requests.lawRequest();
 
         context.findLawHTMLWrapped(Long.valueOf(place.getLawId())).fire(new Receiver<HTMLProxy>() {
             @Override
             public void onSuccess(HTMLProxy result) {
                 lawView.setLaw(result);
+                showBookMarks(place.getLawId());
             }
         });
     }
+
+    private void showBookMarks(String lawId) {
+        DocumentBookMarkRequestFactory.DocumentBookMarkRequest context = bookMarkRequests.documentBookMarkRequest();
+        context.findBookMarksByLawId(Long.decode(lawId)).fire(new Receiver<List<DocumentBookMarkProxy>>() {
+            @Override
+            public void onSuccess(List<DocumentBookMarkProxy> response) {
+                lawView.getBookMarkPanel().setBookMarks(response);
+                lawView.getLawPanel().setBookMarkMarkings(response);
+            }
+        });
+    }
+
+    @Override
+    public DocumentBookMarkProxy createBookMarkRequestProxy() {
+        DocumentBookMarkRequestFactory.DocumentBookMarkRequest documentBookMarkRequest =
+                bookMarkRequests.documentBookMarkRequest();
+        DocumentBookMarkProxy documentBookMarkProxy = documentBookMarkRequest.create(DocumentBookMarkProxy.class);
+        return documentBookMarkProxy;
+    }
+
+    @Override
+    public void addBookMark(final Long lawDocumentPartId) {
+        DocumentBookMarkRequestFactory.DocumentBookMarkRequest context = bookMarkRequests.documentBookMarkRequest();
+        context.addBookMark(lawDocumentPartId).fire(new Receiver<Void>() {
+            @Override
+            public void onSuccess(Void response) {
+                System.out.println("Added bookmark");
+                updateBookMarkPanel();
+            }
+        });
+    }
+
+    private void updateBookMarkPanel() {
+        DocumentBookMarkRequestFactory.DocumentBookMarkRequest context = bookMarkRequests.documentBookMarkRequest();
+        context.findBookMarksByLawId(Long.decode(place.getLawId())).fire(new Receiver<List<DocumentBookMarkProxy>>() {
+            @Override
+            public void onSuccess(List<DocumentBookMarkProxy> response) {
+                lawView.getBookMarkPanel().setBookMarks(response);
+            }
+        });
+    }
+
+    @Override
+    public void removeBookMark(final Long lawDocumentPartId) {
+        DocumentBookMarkRequestFactory.DocumentBookMarkRequest context = bookMarkRequests.documentBookMarkRequest();
+        context.removeBookMark(lawDocumentPartId).fire(new Receiver<Void>() {
+            @Override
+            public void onSuccess(Void response) {
+                System.out.println("Removed bookmark");
+                updateBookMarkPanel();
+            }
+        });
+    }
+
 
     @Override
     public void goTo(Place place) {
