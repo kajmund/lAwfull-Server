@@ -1,7 +1,7 @@
 package lawscraper.server.service;
 
 
-import lawscraper.server.components.LawRenderer;
+import lawscraper.server.components.renderers.lawrenderer.LawRenderer;
 import lawscraper.server.components.LawStore;
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
@@ -25,6 +25,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class LawServiceImpl implements LawService {
     LawStore lawStore = null;
+
+    @Autowired
     private LawRenderer lawRenderer;
     @Autowired
     private LawPartRepository lawPartRepository;
@@ -33,9 +35,8 @@ public class LawServiceImpl implements LawService {
     private LawRepository lawRepository;
 
     @Autowired
-    public LawServiceImpl(LawStore lawStore, LawRenderer lawRenderer) {
+    public LawServiceImpl(LawStore lawStore) {
         this.lawStore = lawStore;
-        this.lawRenderer = lawRenderer;
     }
 
     @Override

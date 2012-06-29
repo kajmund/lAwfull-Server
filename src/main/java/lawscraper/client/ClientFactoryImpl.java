@@ -14,8 +14,10 @@ public class ClientFactoryImpl implements ClientFactory {
     private final LawView lawView = new LawViewImpl(this);
     private final UserView userView = new UserViewImpl(this);
     private final StartView startView = new StartViewImpl(this);
+    private final CaseLawView caseLawView = new CaseLawViewImpl(this);
 
     private static final RoleBasedWidgetHandlerImpl roleBasedWidgetHandler = new RoleBasedWidgetHandlerImpl();
+
 
     @Override
     public EventBus getEventBus() {
@@ -41,6 +43,11 @@ public class ClientFactoryImpl implements ClientFactory {
     public LawView getLawView() {
         return lawView;
 
+    }
+
+    @Override
+    public CaseLawView getCaseLawView() {
+        return caseLawView;
     }
 
     @Override

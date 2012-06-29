@@ -1,7 +1,7 @@
 package lawscraper.server.components;
 
 import lawscraper.server.entities.law.LawDocumentPart;
-import lawscraper.server.entities.law.LawDocumentPartType;
+import lawscraper.shared.DocumentPartType;
 import lawscraper.server.entities.superclasses.Document.TextElement;
 
 /**
@@ -9,7 +9,7 @@ import lawscraper.server.entities.superclasses.Document.TextElement;
  */
 public interface PartFactory {
     
-    LawDocumentPart createpart(LawDocumentPartType type);
+    LawDocumentPart createpart(DocumentPartType type);
 
     TextElement persistTextElement(TextElement textElement);
 }

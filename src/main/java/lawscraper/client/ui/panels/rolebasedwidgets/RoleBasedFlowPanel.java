@@ -13,6 +13,10 @@ public class RoleBasedFlowPanel extends FlowPanel implements RoleBasedWidget {
     private UserRole viewRequiresRole;
     private UserRole editRequiresRole;
 
+    public RoleBasedFlowPanel() {
+        this.setVisible(false);
+    }
+
     public void setViewRequiresUserRole(UserRole viewRequiresRole) {
         this.viewRequiresRole = viewRequiresRole;
     }
@@ -29,6 +33,7 @@ public class RoleBasedFlowPanel extends FlowPanel implements RoleBasedWidget {
     @Override
     public void configureAsEditable(UserRole userRole) {
         this.setVisible(true);
+
     }
 
     @Override

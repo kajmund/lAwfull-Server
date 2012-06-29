@@ -1,9 +1,9 @@
 package lawscraper.server.service;
 
-import lawscraper.server.components.LawRendererImpl;
+import lawscraper.server.components.renderers.lawrenderer.LawRendererImpl;
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
-import lawscraper.server.entities.law.LawDocumentPartType;
+import lawscraper.shared.DocumentPartType;
 import lawscraper.server.entities.superclasses.Document.TextElement;
 import org.junit.Test;
 
@@ -43,14 +43,14 @@ public class LawRendererImplTest {
         law.setReleaseDate("RelDate");
         law.setLatestFetchFromGov("FetchDate");
 
-        LawDocumentPart sli = getPart("SectionListItem", LawDocumentPartType.SECTION_LIST_ITEM);
-        LawDocumentPart s = getPart("Section", LawDocumentPartType.SECTION);
-        LawDocumentPart p = getPart("Paragraph", LawDocumentPartType.PARAGRAPH);
-        LawDocumentPart h = getPart("Heading", LawDocumentPartType.HEADING);
-        LawDocumentPart h2 = getPart("Heading2", LawDocumentPartType.HEADING);
-        LawDocumentPart c = getPart("Chapter", LawDocumentPartType.CHAPTER);
-        LawDocumentPart d1 = getPart("Divider", LawDocumentPartType.DIVIDER);
-        LawDocumentPart dep = getPart("Deprecated", LawDocumentPartType.DEPRECATED);
+        LawDocumentPart sli = getPart("SectionListItem", DocumentPartType.SECTION_LIST_ITEM);
+        LawDocumentPart s = getPart("Section", DocumentPartType.SECTION);
+        LawDocumentPart p = getPart("Paragraph", DocumentPartType.PARAGRAPH);
+        LawDocumentPart h = getPart("Heading", DocumentPartType.HEADING);
+        LawDocumentPart h2 = getPart("Heading2", DocumentPartType.HEADING);
+        LawDocumentPart c = getPart("Chapter", DocumentPartType.CHAPTER);
+        LawDocumentPart d1 = getPart("Divider", DocumentPartType.DIVIDER);
+        LawDocumentPart dep = getPart("Deprecated", DocumentPartType.PARAGRAPH_DEPRECATED);
 
         d1.addDocumentPartChild(c);
         c.addDocumentPartChild(h);
@@ -85,7 +85,7 @@ public class LawRendererImplTest {
                 , html);
     }
 
-    private LawDocumentPart getPart(String text, LawDocumentPartType type) {
+    private LawDocumentPart getPart(String text, DocumentPartType type) {
         TextElement textElement = new TextElement();
         textElement.setText(text);
         LawDocumentPart divider = new LawDocumentPart();

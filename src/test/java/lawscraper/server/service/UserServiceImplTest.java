@@ -2,7 +2,6 @@ package lawscraper.server.service;
 
 import lawscraper.server.entities.user.User;
 import lawscraper.server.repositories.LawPartRepository;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +27,6 @@ public class UserServiceImplTest {
 
     @Autowired
     LawPartRepository lawPartRepository;
-
-    @Test
-    @Ignore
-    public void testFind() throws Exception {
-
-    }
 
     @Test
     public void testAddUser() throws Exception {

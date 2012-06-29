@@ -9,7 +9,13 @@ import com.google.web.bindery.requestfactory.shared.Receiver;
 import lawscraper.client.ClientFactory;
 import lawscraper.client.place.LawPlace;
 import lawscraper.client.ui.LawView;
+import lawscraper.client.ui.LawViewImpl;
 import lawscraper.client.ui.StartView;
+import lawscraper.client.ui.events.SetCurrentLegalResearchEvent;
+import lawscraper.client.ui.events.SetCurrentLegalResearchEventHandler;
+import lawscraper.client.ui.events.SetCurrentUserEvent;
+import lawscraper.client.ui.events.SetCurrentUserEventHandler;
+import lawscraper.client.ui.panels.rolebasedwidgets.RoleBasedFlowPanel;
 import lawscraper.shared.DocumentBookMarkRequestFactory;
 import lawscraper.shared.LawRequestFactory;
 import lawscraper.shared.UserRequestFactory;
@@ -35,6 +41,14 @@ public class LawViewActivity extends AbstractActivity implements LawView.Present
     public LawViewActivity(LawPlace place, final ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
         this.place = place;
+
+        LawView lawView = clientFactory.getLawView();
+        lawView.setPresenter(this);
+        this.lawView = lawView;
+
+        for (RoleBasedFlowPanel widget : lawView.getLawPanel().getRoleBasedWidgets()) {
+            clientFactory.getRoleBasedWidgetHandler().addRoleBaseWidget(widget, LawViewImpl.class);
+        }
     }
 
 
@@ -47,14 +61,44 @@ public class LawViewActivity extends AbstractActivity implements LawView.Present
         StartView startView = clientFactory.getStartView();
         panel.setWidget(startView.asWidget());
 
-        LawView lawView = clientFactory.getLawView();
-        lawView.setPresenter(this);
-        this.lawView = lawView;
         startView.getMainContainer().clear();
         startView.getMainContainer().add(lawView);
-
+        clientFactory.getRoleBasedWidgetHandler().handleRoleBasedViews(LawViewImpl.class);
+        subscribeToChangeUserEvent(eventBus);
+        subscribeToChangeLegalResearchEvent(eventBus);
         getLaw();
     }
+
+    /**
+     * If the current user is changed. Update the view accordingly.
+     *
+     * @param eventBus
+     */
+    private void subscribeToChangeUserEvent(EventBus eventBus) {
+        eventBus.addHandler(SetCurrentUserEvent.TYPE, new SetCurrentUserEventHandler() {
+            @Override
+            public void onSetCurrentUser(SetCurrentUserEvent event) {
+                clientFactory.getRoleBasedWidgetHandler().handleRoleBasedViews(LawViewImpl.class);
+                getLaw();
+            }
+        });
+    }
+
+    /**
+     * If the current legal research is changed. Update the view accordingly.
+     *
+     * @param eventBus
+     */
+    private void subscribeToChangeLegalResearchEvent(EventBus eventBus) {
+        eventBus.addHandler(SetCurrentLegalResearchEvent.TYPE, new SetCurrentLegalResearchEventHandler() {
+
+            @Override
+            public void onSetCurrentLegalResearch(SetCurrentLegalResearchEvent event) {
+                getLaw();
+            }
+        });
+    }
+
 
     @Override
     public void getLaw() {

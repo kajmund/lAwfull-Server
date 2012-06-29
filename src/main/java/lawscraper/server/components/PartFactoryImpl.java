@@ -1,7 +1,7 @@
 package lawscraper.server.components;
 
 import lawscraper.server.entities.law.LawDocumentPart;
-import lawscraper.server.entities.law.LawDocumentPartType;
+import lawscraper.shared.DocumentPartType;
 import lawscraper.server.entities.superclasses.Document.TextElement;
 import lawscraper.server.repositories.LawPartRepository;
 import lawscraper.server.repositories.TextRepository;
@@ -24,7 +24,7 @@ public class PartFactoryImpl implements PartFactory {
 
     @Override
     @Transactional(readOnly = false)
-    public LawDocumentPart createpart(LawDocumentPartType type) {
+    public LawDocumentPart createpart(DocumentPartType type) {
         LawDocumentPart part = new LawDocumentPart();
         part.setLawPartType(type);
         LawDocumentPart savedPart = repository.save(part);

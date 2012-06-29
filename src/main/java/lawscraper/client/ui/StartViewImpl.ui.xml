@@ -453,7 +453,12 @@
                         <table>
                             <tr>
                                 <td>
-                                    <g:Button text="Skrapa lagar" ui:field="scrapeButton"/>
+                                    <g:Button text="Skrapa lagar" ui:field="scrapeLawButton"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <g:Button text="Skrapa rättsfall" ui:field="scrapeCaseLawButton"/>
                                 </td>
                             </tr>
                         </table>

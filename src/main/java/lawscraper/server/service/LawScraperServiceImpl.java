@@ -3,8 +3,8 @@ package lawscraper.server.service;
 import lawscraper.server.components.PartFactory;
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.repositories.LawRepository;
-import lawscraper.server.scraper.Scraper;
-import lawscraper.server.scraper.TestDataUtil;
+import lawscraper.server.scrapers.lawscraper.LawScraper;
+import lawscraper.server.scrapers.ZipDataUtil;
 import lawscraper.shared.scraper.LawScraperSource;
 import lawscraper.shared.scraper.ScraperStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +49,8 @@ public class LawScraperServiceImpl implements LawScraperService {
     private ScraperStatus scrapeLawsFromZipFile() {
         ScraperStatus scraperStatus = new ScraperStatus();
         try {
-            for (TestDataUtil.LawEntry lawEntry : TestDataUtil.getAllLaws()) {
-                Scraper scraper = new Scraper(partFactory);
+            for (ZipDataUtil.LawEntry lawEntry : ZipDataUtil.getAllLaws()) {
+                LawScraper scraper = new LawScraper(partFactory);
                 try {
                     scraper.parse(lawEntry.getInputStream());
                     scraperStatus.increaseScrapedLaws();

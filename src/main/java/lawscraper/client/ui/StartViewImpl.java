@@ -38,7 +38,7 @@ public class StartViewImpl extends Composite implements StartView {
     interface StartViewImplUiBinder extends UiBinder<Widget, StartViewImpl> {
     }
 
-    @UiField Button scrapeButton;
+    @UiField Button scrapeLawButton;
     @UiField FlowPanel container;
     @UiField TextBox searchTextBox;
     @UiField Anchor addLegalResearch;
@@ -54,6 +54,7 @@ public class StartViewImpl extends Composite implements StartView {
     @UiField Tree legalResearchTree;
     @UiField ListBox legalResearchListBox;
     @UiField RoleBasedFlowPanel legalResearchListBoxContainer;
+    @UiField Button scrapeCaseLawButton;
 
     ShortSearchResultPanel searchResultPanel;
     private Presenter presenter;
@@ -121,9 +122,14 @@ public class StartViewImpl extends Composite implements StartView {
         new AddLegalResearchDialog(presenter);
     }
 
-    @UiHandler("scrapeButton")
-    void onClickScrapeButton(ClickEvent e) {
+    @UiHandler("scrapeLawButton")
+    void onClickScrapeLawButton(ClickEvent e) {
         presenter.scrapeLaw();
+    }
+
+    @UiHandler("scrapeCaseLawButton")
+    void onClickScrapeCaseLawButton(ClickEvent e) {
+        presenter.scrapeCaseLaw();
     }
 
     @Override

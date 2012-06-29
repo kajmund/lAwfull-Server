@@ -15,12 +15,15 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import lawscraper.client.ui.LawView;
 import lawscraper.client.ui.panels.bookmarkpanel.BookMarkPanel;
 import lawscraper.client.ui.panels.boxpanel.BoxPanel;
+import lawscraper.client.ui.panels.rolebasedwidgets.RoleBasedFlowPanel;
 import lawscraper.client.ui.panels.shortcutpanel.ShortCutPanel;
 import lawscraper.client.ui.panels.utilities.ElementWrapper;
 import lawscraper.shared.proxies.DocumentBookMarkProxy;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
@@ -30,6 +33,7 @@ import java.util.List;
  */
 public class LawPanel extends Composite {
     private LawView.Presenter presenter;
+    private Set<RoleBasedFlowPanel> roleBasedWidgets = new HashSet<RoleBasedFlowPanel>();
 
     public void setPresenter(LawView.Presenter presenter) {
         this.presenter = presenter;
@@ -83,6 +87,7 @@ public class LawPanel extends Composite {
     @UiField BoxPanel TOCBoxPanel;
     @UiField BoxPanel MetaBoxPanel;
     @UiField FlowPanel lawPanelContainer;
+    @UiField RoleBasedFlowPanel bookMarkBoxPanelContainer;
     BookMarkPanel bookMarkPanel = new BookMarkPanel();
 
 
@@ -92,6 +97,12 @@ public class LawPanel extends Composite {
 
     public LawPanel() {
         initWidget(uiBinder.createAndBindUi(this));
+        roleBasedWidgets.add(bookMarkBoxPanelContainer);
+        TOCBoxPanel.setVisible(false);
+    }
+
+    public Set<RoleBasedFlowPanel> getRoleBasedWidgets() {
+        return roleBasedWidgets;
     }
 
     private void initScrollHandler() {
@@ -141,6 +152,7 @@ public class LawPanel extends Composite {
                         break;
                     }
                 }
+
             }
 
         });
@@ -208,7 +220,12 @@ public class LawPanel extends Composite {
             ElementWrapper elementWrapper = wrapElementWithWidget(el);
             if (el.getClassName().equals("lawTableOfContents")) {
                 TOCBoxPanel.setContainerWidget(elementWrapper);
-            } else {
+                if (el.getChildCount() > 0) {
+                    TOCBoxPanel.setVisible(true);
+                } else {
+                    TOCBoxPanel.setVisible(false);
+                }
+            } else if (bookMarkBoxPanelContainer.isVisible()) {
                 addClickHandlerToElement(clickHandler, elementWrapper);
             }
         }

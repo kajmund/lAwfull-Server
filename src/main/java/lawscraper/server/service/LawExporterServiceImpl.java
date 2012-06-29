@@ -1,6 +1,6 @@
 package lawscraper.server.service;
 
-import lawscraper.server.components.LawRenderer;
+import lawscraper.server.components.renderers.lawrenderer.LawRenderer;
 import lawscraper.server.entities.law.Law;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +21,7 @@ public class LawExporterServiceImpl implements LawExporterService {
 
     LawService lawService = null;
     LawRenderer lawRenderer = null;
+    private static final String FILEPATH = "/tmp/lawexport/";
 
     @Autowired
     public LawExporterServiceImpl(LawService lawService, LawRenderer lawRenderer) {
@@ -40,7 +41,7 @@ public class LawExporterServiceImpl implements LawExporterService {
         String buffer = lawRenderer.renderToHtml(law);
         try {
             // Create file
-            FileWriter fstream = new FileWriter("/tmp/lawexport/" + law.getFsNumber() + ".html");
+            FileWriter fstream = new FileWriter(FILEPATH + law.getFsNumber() + ".html");
             BufferedWriter out = new BufferedWriter(fstream);
             out.write(buffer);
             //Close the output stream

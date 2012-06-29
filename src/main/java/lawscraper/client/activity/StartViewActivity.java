@@ -10,6 +10,7 @@ import com.google.web.bindery.requestfactory.shared.ServerFailure;
 import lawscraper.client.ClientFactory;
 import lawscraper.client.ui.StartView;
 import lawscraper.client.ui.StartViewImpl;
+import lawscraper.client.ui.events.SetCurrentLegalResearchEvent;
 import lawscraper.client.ui.events.SetCurrentUserEvent;
 import lawscraper.client.ui.events.SetCurrentUserEventHandler;
 import lawscraper.shared.*;
@@ -24,7 +25,10 @@ import java.util.List;
 
 public class StartViewActivity extends AbstractActivity implements StartView.Presenter {
     final LawRequestFactory requests = GWT.create(LawRequestFactory.class);
-    final LawScraperRequestFactory scraperRequests = GWT.create(LawScraperRequestFactory.class);
+    final LawScraperRequestFactory lawScraperRequests = GWT.create(LawScraperRequestFactory.class);
+
+    final CaseLawScraperRequestFactory caseLawScraperRequests = GWT.create(CaseLawScraperRequestFactory.class);
+
     final UserRequestFactory userRequests = GWT.create(UserRequestFactory.class);
     final LegalResearchRequestFactory legalResearchRequests = GWT.create(LegalResearchRequestFactory.class);
 
@@ -48,7 +52,8 @@ public class StartViewActivity extends AbstractActivity implements StartView.Pre
 
         //init with the eventbus - pls remember this.
         requests.initialize(eventBus);
-        scraperRequests.initialize(eventBus);
+        lawScraperRequests.initialize(eventBus);
+        caseLawScraperRequests.initialize(eventBus);
         userRequests.initialize(eventBus);
         legalResearchRequests.initialize(eventBus);
 
@@ -90,11 +95,28 @@ public class StartViewActivity extends AbstractActivity implements StartView.Pre
     }
 
     @Override
+    public void scrapeCaseLaw() {
+        System.out.println("Scraping case laws");
+
+        CaseLawScraperRequestFactory.CaseLawScraperRequest context = caseLawScraperRequests.caseLawScraperRequest();
+
+        context.scrapeCaseLaws(LawScraperSource.ZIPFILE).fire(new Receiver<ScraperStatusProxy>() {
+            @Override
+            public void onSuccess(ScraperStatusProxy response) {
+                System.out.println("Färdigt");
+                System.out.println("Antal lästa rättsfall: " + response.getScrapedLaws());
+            }
+        });
+
+    }
+
+
+    @Override
     public void scrapeLaw() {
 
         System.out.println("Scraping laws");
 
-        LawScraperRequestFactory.LawScraperRequest context = scraperRequests.lawScraperRequest();
+        LawScraperRequestFactory.LawScraperRequest context = lawScraperRequests.lawScraperRequest();
 
         context.scrapeLaws(LawScraperSource.ZIPFILE).fire(new Receiver<ScraperStatusProxy>() {
             @Override
@@ -145,6 +167,7 @@ public class StartViewActivity extends AbstractActivity implements StartView.Pre
             @Override
             public void onSuccess(Void response) {
                 System.out.println("LegalResearch set to active");
+                eventBus.fireEvent(new SetCurrentLegalResearchEvent(null));
             }
         });
     }

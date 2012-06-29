@@ -7,6 +7,7 @@ import lawscraper.server.entities.legalresearch.LegalResearch;
 import lawscraper.server.entities.user.User;
 import lawscraper.server.repositories.DocumentBookMarkRepository;
 import lawscraper.server.repositories.LegalResearchRepository;
+import lawscraper.shared.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -61,21 +62,24 @@ public class DocumentBookMarkServiceImpl implements DocumentBookMarkService {
         //get active legal research
         LegalResearch legalResearch = user.getActiveLegalResearch();
 
-        //get clicked documentpart
-        LawDocumentPart documentLawPart = lawService.findLawDocumentPart(documentPartId);
-
-        //create bookmark
-        DocumentBookMark documentBookMark = new DocumentBookMark();
-        documentBookMark.setDescription(documentLawPart.getKey());
-        documentBookMark.setTitle(documentLawPart.getKey());
-
-        documentBookMark.setLawDocumentPart(documentLawPart);
-
-        documentBookMark = documentBookMarkRepository.save(documentBookMark);
-
         //add bookmark to legalresearch
-        legalResearch.addBookMark(documentBookMark);
-        legalResearchRepository.save(legalResearch);
+        if (legalResearch != null) {
+
+            //get clicked documentpart
+            LawDocumentPart documentLawPart = lawService.findLawDocumentPart(documentPartId);
+
+            //create bookmark
+            DocumentBookMark documentBookMark = new DocumentBookMark();
+            documentBookMark.setDescription(documentLawPart.getKey());
+            documentBookMark.setTitle(documentLawPart.getKey());
+
+            documentBookMark.setLawDocumentPart(documentLawPart);
+
+            documentBookMark = documentBookMarkRepository.save(documentBookMark);
+
+            legalResearch.addBookMark(documentBookMark);
+            legalResearchRepository.save(legalResearch);
+        }
     }
 
     @Override
@@ -105,6 +109,10 @@ public class DocumentBookMarkServiceImpl implements DocumentBookMarkService {
     public List<DocumentBookMark> findBookMarksByLawId(Long lawId) {
         User user = userService.getCurrentUser();
         List<DocumentBookMark> ret = new ArrayList<DocumentBookMark>();
+        if (user.getUserRole() == UserRole.Anonymous) {
+            return ret;
+        }
+
         //get active legal research
         LegalResearch legalResearch = user.getActiveLegalResearch();
         for (DocumentBookMark documentBookMark : legalResearch.getBookMarks()) {

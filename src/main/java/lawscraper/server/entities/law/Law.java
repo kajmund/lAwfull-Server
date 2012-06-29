@@ -1,5 +1,6 @@
 package lawscraper.server.entities.law;
 
+import lawscraper.shared.DocumentPartType;
 import org.springframework.data.neo4j.annotation.Indexed;
 
 import java.util.HashSet;
@@ -25,7 +26,7 @@ public class Law extends LawDocumentPart {
     Set<String> propositions = new HashSet<String>();
 
     public Law() {
-        this.setLawPartType(LawDocumentPartType.LAW);
+        this.setLawPartType(DocumentPartType.LAW);
     }
 
     public String getCreator() {

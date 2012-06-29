@@ -42,5 +42,7 @@ public interface StartView extends IsWidget {
         void getLegalResearchByLoggedInUser();
 
         void changeActiveLegalResearch(Long legalResearchId);
+
+        void scrapeCaseLaw();
     }
 }

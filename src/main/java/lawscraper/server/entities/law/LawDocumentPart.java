@@ -2,6 +2,7 @@ package lawscraper.server.entities.law;
 
 import lawscraper.server.entities.superclasses.Document.DocumentPart;
 import lawscraper.server.entities.superclasses.Document.TextElement;
+import lawscraper.shared.DocumentPartType;
 import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.RelatedTo;
@@ -27,15 +28,20 @@ public class LawDocumentPart extends DocumentPart {
     @Fetch
     @RelatedTo(direction = Direction.INCOMING, type = "TEXT_ELEMENT")
     TextElement textElement = new TextElement();
+
     @Fetch
     @RelatedTo(elementClass = LawDocumentPart.class, type = "HAS_SUB_PART")
     Set<LawDocumentPart> parts;
+
     @RelatedTo(direction = Direction.INCOMING, type = "HAS_SUB_PART")
     LawDocumentPart parent;
+
     @RelatedTo(direction = Direction.INCOMING, type = "PREVIOUS_VERSION")
     LawDocumentPart nextVersion;
+
     @RelatedTo(type = "PREVIOUS_VERSION")
     LawDocumentPart previousVersion;
+
     @RelatedTo
     LawDocumentPart transitionalProvision;
     private boolean deprecated;
@@ -130,12 +136,12 @@ public class LawDocumentPart extends DocumentPart {
         return deprecated;
     }
 
-    public void setLawPartType(LawDocumentPartType type) {
+    public void setLawPartType(DocumentPartType type) {
         setType(type.name());
     }
 
-    public LawDocumentPartType getLawPartType() {
-        return LawDocumentPartType.valueOf(getType());
+    public DocumentPartType getLawPartType() {
+        return DocumentPartType.valueOf(getType());
     }
 
     public void addDocumentPartChild(LawDocumentPart subPart) {

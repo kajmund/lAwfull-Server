@@ -3,7 +3,8 @@
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:bookMark="urn:import:lawscraper.client.ui.panels.bookmarkpanel"
              xmlns:shortCut="urn:import:lawscraper.client.ui.panels.shortcutpanel"
-             xmlns:boxPanel="urn:import:lawscraper.client.ui.panels.boxpanel">
+             xmlns:boxPanel="urn:import:lawscraper.client.ui.panels.boxpanel"
+             xmlns:roleBased="urn:import:lawscraper.client.ui.panels.rolebasedwidgets">
 
     <ui:style>
         .rightWingPanel {
@@ -112,7 +113,9 @@
         <g:FlowPanel ui:field="rightWingPanel" addStyleNames="{style.rightWingPanel}">
             <boxPanel:BoxPanel ui:field="MetaBoxPanel" headerTitle="Information"/>
             <boxPanel:BoxPanel ui:field="TOCBoxPanel" headerTitle="Innehåll" addStyleNames="{style.tocBoxPanel}"/>
-            <boxPanel:BoxPanel ui:field="bookMarkBoxPanel" headerTitle="Bokmärken"/>
+            <roleBased:RoleBasedFlowPanel ui:field="bookMarkBoxPanelContainer" requiresUserRole="ROLE_USER">
+                <boxPanel:BoxPanel ui:field="bookMarkBoxPanel" headerTitle="Bokmärken"/>
+            </roleBased:RoleBasedFlowPanel>
         </g:FlowPanel>
     </g:FlowPanel>
 </ui:UiBinder>

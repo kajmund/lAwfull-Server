@@ -1,7 +1,7 @@
 package lawscraper.server.entities.superclasses.Document;
 
 import lawscraper.server.entities.superclasses.EntityBase;
-import lawscraper.server.scraper.Utilities;
+import lawscraper.server.scrapers.Utilities;
 import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.support.index.IndexType;
 
@@ -19,6 +19,13 @@ public class TextElement extends EntityBase {
     @Indexed
     String hash = "";
 
+    public TextElement(String text) {
+        setText(text);
+    }
+
+    public TextElement() {
+
+    }
 
 
     public String getText() {

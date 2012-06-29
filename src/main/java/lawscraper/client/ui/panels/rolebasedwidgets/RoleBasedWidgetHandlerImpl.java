@@ -48,12 +48,10 @@ public class RoleBasedWidgetHandlerImpl implements RoleBasedWidgetHandler {
             roleBasedWidgetMap.put(parentWidgetClass, roleBasedWidgets);
         } else {
             Set<RoleBasedWidget> widgetSet = roleBasedWidgetMap.get(parentWidgetClass);
-            widgetSet.add(roleBasedWidget);
+            if (!widgetSet.contains(roleBasedWidget)) {
+                widgetSet.add(roleBasedWidget);
+            }
         }
-    }
-
-    public UserProxy getUserProxy() {
-        return userProxy;
     }
 
     public void setUserProxy(UserProxy userProxy) {
