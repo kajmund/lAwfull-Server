@@ -19,10 +19,16 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import lawscraper.client.ClientFactory;
 import lawscraper.client.ClientFactoryImpl;
+import lawscraper.client.place.LawPlace;
 import lawscraper.client.place.UserPlace;
 import lawscraper.client.ui.loginrequest.LoginRequest;
 import lawscraper.client.ui.panels.addlegalresearchdialog.AddLegalResearchDialog;
+import lawscraper.client.ui.panels.lawcasesbyyearpanel.LawCasesByYearPanel;
+import lawscraper.client.ui.panels.lawsbycategorypanel.LawCategoryChangeEvent;
+import lawscraper.client.ui.panels.lawsbycategorypanel.LawsByCategoryPanel;
+import lawscraper.client.ui.panels.lawsbynamepanel.LawsByNamePanel;
 import lawscraper.client.ui.panels.rolebasedwidgets.RoleBasedFlowPanel;
+import lawscraper.client.ui.panels.shortsearchresultpanel.SearchChangeEvent;
 import lawscraper.client.ui.panels.shortsearchresultpanel.ShortSearchResultPanel;
 import lawscraper.shared.proxies.LawProxy;
 import lawscraper.shared.proxies.LegalResearchProxy;
@@ -40,7 +46,6 @@ public class StartViewImpl extends Composite implements StartView {
 
     @UiField Button scrapeLawButton;
     @UiField FlowPanel container;
-    @UiField TextBox searchTextBox;
     @UiField Anchor addLegalResearch;
     @UiField Tree adminTree;
     @UiField FormPanel loginForm;
@@ -55,8 +60,24 @@ public class StartViewImpl extends Composite implements StartView {
     @UiField ListBox legalResearchListBox;
     @UiField RoleBasedFlowPanel legalResearchListBoxContainer;
     @UiField Button scrapeCaseLawButton;
+    @UiField ToggleButton lawsCategoriesButton;
+    @UiField FlowPanel leftContainer;
+    @UiField FlowPanel mainContainer;
+    @UiField ToggleButton searchLawsMenuButton;
+    @UiField StackLayoutPanel stackPanel;
+    @UiField ShortSearchResultPanel searchResultPanel;
+    @UiField LawsByNamePanel lawsByNamePanel;
+    @UiField LawsByCategoryPanel lawsByCategoryPanel;
+    @UiField LawCasesByYearPanel lawCasesByYearPanel;
+    @UiField ToggleButton lawCasesMenuButton;
+    @UiField ToggleButton searchLawCasesMenuButton;
+    @UiField ToggleButton lawsByNameButton;
+    @UiField ToggleButton myLegalResearchMenuButton;
+    @UiField ToggleButton searchLegalResearchMenuButton;
+    @UiField FlowPanel leftMenuContainer;
+    @UiField SplitLayoutPanel splitLayoutPanel;
+    @UiField FlowPanel flerpTabPanelContainer;
 
-    ShortSearchResultPanel searchResultPanel;
     private Presenter presenter;
 
     public StartViewImpl(ClientFactoryImpl clientFactory) {
@@ -68,22 +89,15 @@ public class StartViewImpl extends Composite implements StartView {
                 presenter.goTo(new UserPlace());
             }
         });
+
         loginDeckPanel.showWidget(0);
-        setupSearchResultPanel();
         this.clientFactory.getRoleBasedWidgetHandler().addRoleBaseWidget(adminTreeContainer, StartViewImpl.class);
         this.clientFactory.getRoleBasedWidgetHandler().addRoleBaseWidget(legalResearchContainer, StartViewImpl.class);
-        this.clientFactory.getRoleBasedWidgetHandler().addRoleBaseWidget(legalResearchListBoxContainer, StartViewImpl.class);
+        this.clientFactory.getRoleBasedWidgetHandler()
+                          .addRoleBaseWidget(legalResearchListBoxContainer, StartViewImpl.class);
 
-    }
+        splitLayoutPanel.getElement().getStyle().setPosition(Style.Position.STATIC);
 
-    //extract to own panel
-    private void setupSearchResultPanel() {
-        searchResultPanel = new ShortSearchResultPanel();
-        searchResultPanel.setAnimationEnabled(true);
-        searchResultPanel.getElement().getStyle().setMarginRight(80, Style.Unit.PCT);
-        searchResultPanel.getElement().getStyle().setMarginTop(81, Style.Unit.PX);
-        searchResultPanel.getElement().getStyle().setRight(0, Style.Unit.PX);
-        searchResultPanel.hide();
     }
 
     @Override
@@ -109,6 +123,11 @@ public class StartViewImpl extends Composite implements StartView {
 
         }
 
+    }
+
+    @Override
+    public void addFlerpContainer(FlowPanel flerpContainer) {
+        flerpTabPanelContainer.add(flerpContainer);
     }
 
     @UiHandler("legalResearchListBox")
@@ -141,6 +160,7 @@ public class StartViewImpl extends Composite implements StartView {
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
         this.searchResultPanel.setPresenter(presenter);
+        lawsByNamePanel.setPresenter(presenter);
         presenter.checkCurrentUser();
     }
 
@@ -185,13 +205,78 @@ public class StartViewImpl extends Composite implements StartView {
 
     }
 
-    @UiHandler("searchTextBox")
-    public void onChangeTextBox(KeyUpEvent e) {
-        if (searchTextBox.getText().length() > 3) {
-            searchResultPanel.show();
-            presenter.searchLaws(searchTextBox.getText());
-        } else {
-            searchResultPanel.hide();
+    @UiHandler("searchLawsMenuButton")
+    public void searchMenuButtonPressed(ClickEvent e) {
+        handleLeftMenu();
+        setOnlyThisWidgetVisible(searchResultPanel);
+
+        lawsCategoriesButton.setDown(false);
+    }
+
+    private void setOnlyThisWidgetVisible(Widget visibleWidget) {
+        for (int i = 0; i < leftContainer.getWidgetCount(); i++) {
+            if (leftContainer.getWidget(i) != visibleWidget) {
+                leftContainer.getWidget(i).setVisible(false);
+            } else {
+                leftContainer.getWidget(i).setVisible(true);
+            }
         }
+    }
+
+    @UiHandler("lawsByNameButton")
+    public void lawByNamePressed(ClickEvent e) {
+        handleLeftMenu();
+        setOnlyThisWidgetVisible(lawsByNamePanel);
+        searchLawsMenuButton.setDown(false);
+    }
+
+    @UiHandler("lawsCategoriesButton")
+    public void lawExplorerPressed(ClickEvent e) {
+        handleLeftMenu();
+        setOnlyThisWidgetVisible(lawsByCategoryPanel);
+
+        searchLawsMenuButton.setDown(false);
+    }
+
+    @UiHandler("searchResultPanel")
+    public void searchResultChange(SearchChangeEvent searchChangeEvent) {
+        presenter.searchLaws(searchChangeEvent.getQuery());
+    }
+
+    @UiHandler("lawCasesMenuButton")
+    public void lawCasesByYearPressedTest(ClickEvent clickEvent) {
+        handleLeftMenu();
+        setOnlyThisWidgetVisible(lawCasesByYearPanel);
+        searchLawsMenuButton.setDown(false);
+    }
+
+    @UiHandler("lawsByCategoryPanel")
+    public void onLawCategoryChange(LawCategoryChangeEvent changeEvent) {
+        presenter.goTo(new LawPlace(changeEvent.getLawKey()));
+    }
+
+    private void handleLeftMenu() {
+        //todo: make a new style in uibinder and switch between them
+        if (anyToggleButtonIsDown()) {
+            leftContainer.getElement().getStyle().setDisplay(Style.Display.BLOCK);
+            mainContainer.getElement().getStyle().setWidth(80, Style.Unit.PCT);
+        } else {
+            leftContainer.getElement().getStyle().setDisplay(Style.Display.NONE);
+            mainContainer.getElement().getStyle().setWidth(100, Style.Unit.PCT);
+        }
+    }
+
+    private boolean anyToggleButtonIsDown() {
+        for (int i = 0; i < leftMenuContainer.getWidgetCount(); i++) {
+            Widget widget = leftMenuContainer.getWidget(i);
+            if (widget.getClass().getName().endsWith("ToggleButton")) {
+                ToggleButton toggleButton = (ToggleButton) widget;
+                if (toggleButton.isDown()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+
     }
 }

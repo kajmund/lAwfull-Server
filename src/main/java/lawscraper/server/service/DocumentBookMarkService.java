@@ -20,4 +20,6 @@ public interface DocumentBookMarkService {
     void removeBookMark(Long documentPartId);
 
     void addBookMark(Long documentPartId);
+
+    List<DocumentBookMark> findBookMarksByLawKey(String lawKey);
 }

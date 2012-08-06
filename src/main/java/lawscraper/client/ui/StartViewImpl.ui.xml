@@ -1,9 +1,11 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
-             xmlns:lawResultPanel="urn:import:lawscraper.client.ui.panels.lawresultpanel"
-             xmlns:searchPanels="urn:import:lawscraper.client.ui.panels.shortsearchresultpanel"
-             xmlns:roleBased="urn:import:lawscraper.client.ui.panels.rolebasedwidgets">
+             xmlns:roleBased="urn:import:lawscraper.client.ui.panels.rolebasedwidgets"
+             xmlns:lawsbynamepanel="urn:import:lawscraper.client.ui.panels.lawsbynamepanel"
+             xmlns:lawsbycategorypanel="urn:import:lawscraper.client.ui.panels.lawsbycategorypanel"
+             xmlns:lawcasesbyyearpanel="urn:import:lawscraper.client.ui.panels.lawcasesbyyearpanel"
+             xmlns:searchPanels="urn:import:lawscraper.client.ui.panels.shortsearchresultpanel">
 
     <ui:style>
         .stackHeader {
@@ -12,12 +14,14 @@
         }
 
         .lightblueGradient {
+            /*
             background-image: literal("linear-gradient(bottom, rgb(255, 255, 255) 40%, rgb(101, 166, 245) 100%)");
             background-image: literal("-o-linear-gradient(bottom, rgb(255, 255, 255) 40%, rgb(101, 166, 245) 100%)");
             background-image: literal("-moz-linear-gradient(bottom, rgb(255,255,255) 40%, rgb(222,237,255) 100%)");
             background-image: literal("-webkit-linear-gradient(bottom, rgb(255, 255, 255) 40%, rgb(101, 166, 245) 100%)");
             background-image: literal("-ms-linear-gradient(bottom, rgb(255, 255, 255) 40%, rgb(101, 166, 245) 100%)");
             background-image: literal("-webkit-gradient(linear, left bottom, left top, color-stop(0.4, rgb(255, 255, 255)), color-stop(4, rgb(101, 166, 245)))");
+            */
             border: none;
 
         }
@@ -83,8 +87,10 @@
 
         .mainContentContainer {
             height: 100%;
-            left: 0;
             right: 0;
+            width: 98%;
+            position: relative;
+            float: left;
         }
 
         .mainContainer {
@@ -95,15 +101,8 @@
 
         .leftContainer {
             float: left;
-            width: 20%;
+            width: 100%;
             height: 768px;
-            border: none;
-        }
-
-        .menuTitleContainer {
-            float: left;
-            width: 20%;
-            height: 5%;
         }
 
         .parentContainer {
@@ -166,6 +165,43 @@
             margin-right: 8px;
         }
 
+        .leftMenu {
+            width: 2%;
+            min-height: 768px;
+            height: 100%;
+            padding-top: 25px;
+            float: left;
+
+        }
+
+        .verticalText {
+            -moz-transform: rotate(270deg);
+            -moz-transform-origin: top left;
+            -webkit-transform: rotate(270deg);
+            -webkit-transform-origin: top left;
+            -o-transform: rotate(270deg);
+            -o-transform-origin: top left;
+            filter: progid:DXImageTransform.Microsoft.BasicImage(rotation = 1);
+        }
+
+        .leftMenuButtons {
+            margin-left: 3px;
+            margin-top: 68px;
+            width: 75px;
+            text-align: center;
+        }
+
+        .splitPanel {
+            position: static;
+        }
+
+        .gwt-SplitLayoutPanel {
+            position: static;
+        }
+
+        @external .gwt-SplitLayoutPanel;
+
+
     </ui:style>
 
 
@@ -173,7 +209,7 @@
         <g:FlowPanel>
             <g:FlowPanel addStyleNames="{style.headerContainer}" ui:field="header">
                 <g:FlowPanel>
-                    <g:HTML>Halvrätt</g:HTML>
+                    <g:Label>lAwfull</g:Label>
                 </g:FlowPanel>
                 <g:FlowPanel ui:field="loginContainer">
                     <g:DeckPanel ui:field="loginDeckPanel" addStyleNames="{style.loginDeckPanel}">
@@ -211,260 +247,134 @@
                     </g:DeckPanel>
                 </g:FlowPanel>
             </g:FlowPanel>
+
+
             <g:FlowPanel addStyleNames="{style.menuContainer}">
                 <g:FlowPanel addStyleNames="{style.pageSection}, {style.borderRight}">
+                    <g:FlowPanel ui:field="flerpTabPanelContainer"/>
+                    <g:FlowPanel addStyleNames="{style.clearBoth}"/>
                     <g:HTMLPanel>
-                        <div style="float:left;margin-left:4px;">
-                            <g:Anchor text="Visa" ui:field="menuShowBookMarks"/>
-                        </div>
                         <div style="float:right;">
-                            <g:TextBox ui:field="searchTextBox" addStyleNames="{style.searchTextBox}"/>
-                            <roleBased:RoleBasedFlowPanel ui:field="legalResearchListBoxContainer"  requiresUserRole="ROLE_USER" visible="false">
+                            <roleBased:RoleBasedFlowPanel ui:field="legalResearchListBoxContainer"
+                                                          requiresUserRole="ROLE_USER" visible="false">
                                 <g:ListBox ui:field="legalResearchListBox" addStyleNames="{style.legalResearchList}"/>
                             </roleBased:RoleBasedFlowPanel>
                         </div>
                     </g:HTMLPanel>
                 </g:FlowPanel>
-
             </g:FlowPanel>
         </g:FlowPanel>
-        <g:FlowPanel addStyleNames="{style.titleContainer}">
-            <g:FlowPanel addStyleNames="{style.menuTitleContainer}">
-                <g:FlowPanel addStyleNames="{style.pageSection}">
-                    <g:HTML addStyleNames="{style.headerFont}">Huvudmeny</g:HTML>
-                </g:FlowPanel>
-            </g:FlowPanel>
-            <g:FlowPanel addStyleNames="{style.mainContentTitleContainer}">
-                <g:FlowPanel addStyleNames="{style.mainContentTitle}, {style.pageSection}, {style.borderRight}">
-                    <g:HTML addStyleNames="{style.headerFont}">Sök</g:HTML>
-                </g:FlowPanel>
-            </g:FlowPanel>
-            <g:FlowPanel addStyleNames="{style.clearBoth}"/>
+
+
+        <g:FlowPanel addStyleNames="{style.leftMenu}" ui:field="leftMenuContainer">
+            <g:ToggleButton ui:field="lawsCategoriesButton" down="true"
+                            addStyleNames="{style.verticalText} {style.leftMenuButtons}">Kategorier
+            </g:ToggleButton>
+
+            <g:ToggleButton ui:field="lawsByNameButton" down="false"
+                            addStyleNames="{style.verticalText} {style.leftMenuButtons}">Lagnamn
+            </g:ToggleButton>
+
+            <g:ToggleButton ui:field="searchLawsMenuButton" down="false"
+                            addStyleNames="{style.verticalText} {style.leftMenuButtons}">Sök lag
+            </g:ToggleButton>
+
+            <g:ToggleButton ui:field="lawCasesMenuButton" down="false"
+                            addStyleNames="{style.verticalText} {style.leftMenuButtons}">Rättsfall
+            </g:ToggleButton>
+
+            <g:ToggleButton ui:field="searchLawCasesMenuButton" down="false"
+                            addStyleNames="{style.verticalText} {style.leftMenuButtons}">Sök rättsfall
+            </g:ToggleButton>
+
+            <g:ToggleButton ui:field="myLegalResearchMenuButton" down="false"
+                            addStyleNames="{style.verticalText} {style.leftMenuButtons}">Utredningar
+            </g:ToggleButton>
+
+            <g:ToggleButton ui:field="searchLegalResearchMenuButton" down="false"
+                            addStyleNames="{style.verticalText} {style.leftMenuButtons}">Sök utredn.
+            </g:ToggleButton>
         </g:FlowPanel>
         <g:FlowPanel addStyleNames="{style.mainContentContainer}, {style.lightblueGradient}">
-            <g:FlowPanel addStyleNames="{style.leftContainer}, {style.lightblueGradient}">
-                <g:StackLayoutPanel ui:field="stackPanel" unit='PX' height="100%"
-                                    addStyleNames="{style.lightblueGradient}">
-                    <g:stack>
-                        <g:header size='35'>
-                            <font size="2px" color="#15428B">Utforska Lagrum</font>
-                        </g:header>
-                        <g:FlowPanel>
-                            <g:ScrollPanel height="100%">
-                                <g:Tree>
-                                    <g:TreeItem text='Familjerätt'>
-                                        <g:TreeItem text='Föräldrabalk (FB)'/>
-                                        <g:TreeItem text='Ärvdabalk (ÄB)'/>
-                                        <g:TreeItem text='Äktenskapsbalk (ÄktB)'/>
-                                        <g:TreeItem text='Namnlag'/>
-                                        <g:TreeItem text='Sambolag'/>
-                                    </g:TreeItem>
-                                    <g:TreeItem text='Arbetsrätt'>
-                                        <g:TreeItem text='Medbestämmandelag (MBL)'/>
-                                        <g:TreeItem text='Lag om anställningsskydd (LAS)'/>
-                                        <g:TreeItem text='Lagen om rättegången i arbetstvister (LRA)'/>
-                                        <g:TreeItem text='Semesterlag'/>
-                                        <g:TreeItem text='Arbetstidslag'/>
-                                        <g:TreeItem text='Lag om offentlig anställning (LOA)'/>
-                                    </g:TreeItem>
-                                    <g:TreeItem text='Allmän avtalsrätt'>
-                                        <g:TreeItem text='Avtalslag (AvtL)'/>
-                                        <g:TreeItem text='Prokuralag'/>
-                                        <g:TreeItem text='Avtalsvillkor mellan näringsidkare (AVLN)'/>
-                                        <g:TreeItem text='Avtalsvillkor i konsumentförhållanden (AVLK)'/>
-                                        <g:TreeItem text='Kommissionslag'/>
-                                    </g:TreeItem>
-                                    <g:TreeItem text='Speciell avtalsrätt'>
-                                        <g:TreeItem text='Köplag (KöpL)'/>
-                                        <g:TreeItem text='Konsumentköplag (KKöpL)'/>
-                                        <g:TreeItem text='Gåvolag'/>
-                                        <g:TreeItem text='Konsumenttjänstlag (KTjL)'/>
-                                        <g:TreeItem text='Lag om internationella köp (CISC)'/>
-                                        <g:TreeItem text='Distans- och hemförsäljningslag'/>
-                                    </g:TreeItem>
-                                    <g:TreeItem text='Fordringsrätt'>
-                                        <g:TreeItem text='Skuldebrevslag (SkbrL)'/>
-                                        <g:TreeItem text='Räntelag'/>
-                                        <g:TreeItem text='Preskriptionslag'/>
-                                    </g:TreeItem>
-                                    <g:TreeItem text='Sakrätt'>
-                                        <g:TreeItem text='Lösöresköpslag'/>
-                                        <g:TreeItem text='Samäganderättslag'/>
-                                        <g:TreeItem text='Förmånsrättslag'/>
-                                        <g:TreeItem text='Lag om godtrosförvärv av lösöre'/>
-                                    </g:TreeItem>
-                                    <g:TreeItem text='Skadeståndsrätt'>
-                                        <g:TreeItem text='Skadeståndslag'/>
-                                        <g:TreeItem text='Trafikskadelag'/>
-                                        <g:TreeItem text='Brottsskadelag'/>
-                                        <g:TreeItem text='Produktansvarslag'/>
-                                        <g:TreeItem text='Patientskadelag'/>
-                                    </g:TreeItem>
-                                    <g:TreeItem text='IT-rätt'>
-                                        <g:TreeItem text='Personuppgiftslag (PUL)'/>
-                                        <g:TreeItem text='BBS-lag'/>
-                                        <g:TreeItem text='E-handelslag'/>
-                                        <g:TreeItem text='Lag om elektronisk kommunikation (LEK)'/>
-                                    </g:TreeItem>
-                                    <g:TreeItem text='Immaterialrätt'>
-                                        <g:TreeItem text='Varumärkeslag (VML)'/>
-                                        <g:TreeItem text='Upphovsrättslag (URL)'/>
-                                        <g:TreeItem text='Patentlag (PL)'/>
-                                        <g:TreeItem text='Mönsterskyddslag'/>
-                                        <g:TreeItem text='Firmalag'/>
-                                    </g:TreeItem>
-                                    <g:TreeItem text='Fastighetsrätt'>
-                                        <g:TreeItem text='Jordabalk (JB)'/>
-                                        <g:TreeItem text='Fastighetsbildningslag (FBL)'/>
-                                        <g:TreeItem text='Expropriationslag (ExprL)'/>
-                                        <g:TreeItem text='Plan- och bygglag (PBL)'/>
-                                        <g:TreeItem text='Bostadsrättslag'/>
-                                        <g:TreeItem text='Miljöbalken (MB)'/>
-                                    </g:TreeItem>
-                                    <g:TreeItem text='Associationsrätt'>
-                                        <g:TreeItem text='Lag om handelsbolag och enkla bolag'/>
-                                        <g:TreeItem text='Lag om ekonomiska föreningar'/>
-                                        <g:TreeItem text='Stiftelselag'/>
-                                        <g:TreeItem text='Årsredovisningslag (ÅRL)'/>
-                                        <g:TreeItem text='Bokföringslag (BFL)'/>
-                                        <g:TreeItem text='Aktiebolagslag (ABL)'/>
-                                    </g:TreeItem>
-                                    <g:TreeItem text='Straffrätt'>
-                                        <g:TreeItem text='Brottsbalk (BrB)'/>
-                                        <g:TreeItem text='Trafikbrottslag'/>
-                                        <g:TreeItem text='Narkotikastrafflag (NSL)'/>
-                                        <g:TreeItem text='Skattebrottslag (SBL)'/>
-                                        <g:TreeItem text='Smugglingslag'/>
-                                    </g:TreeItem>
-                                    <g:TreeItem text='Processrätt'>
-                                        <g:TreeItem text='Rättegångsbalk (RB)'/>
-                                        <g:TreeItem text='Utsökningsbalk'/>
-                                        <g:TreeItem text='Konkurslag'/>
-                                        <g:TreeItem text='Lag om domstolsärenden (ärendelagen)'/>
-                                        <g:TreeItem text='Lag om skiljeförfarande'/>
-                                    </g:TreeItem>
-                                    <g:TreeItem text='Statsrätt'>
-                                        <g:TreeItem text='Tryckfrihetsförordningen (TF)'/>
-                                        <g:TreeItem text='Successionsordningen'/>
-                                        <g:TreeItem text='Regeringsformen (RF)'/>
-                                        <g:TreeItem text='Riksdagsordningen (RO)'/>
-                                        <g:TreeItem text='Yttrandefrihetsgrundlag (YGL)'/>
-                                        <g:TreeItem text='Europakonventionen'/>
-                                        <g:TreeItem text='Utlänningslag'/>
-                                    </g:TreeItem>
-                                    <g:TreeItem text='Skatterätt'>
-                                        <g:TreeItem text='Inkomstskattelag (IL)'/>
-                                        <g:TreeItem text='Fastighetstaxeringslag (FTL)'/>
-                                        <g:TreeItem text='Särskild inkomstskatt... (SINK)'/>
-                                        <g:TreeItem text='Mervärdesskattelag (ML)'/>
-                                        <g:TreeItem text='Lag mot skatteflykt'/>
-                                    </g:TreeItem>
-                                    <g:TreeItem text='Allmän förvaltningsrätt'>
-                                        <g:TreeItem text='Förvaltningslag (FL)'/>
-                                        <g:TreeItem text='Offentlighets- och sekretesslag (OSL)'/>
-                                        <g:TreeItem text='Förvaltningsprocesslag (FPL)'/>
-                                        <g:TreeItem text='Avgiftsförordning'/>
-                                        <g:TreeItem text='Lag om offentlig upphandling (LOU)'/>
-                                    </g:TreeItem>
-                                    <g:TreeItem text='Speciell förvaltningsrätt'>
-                                        <g:TreeItem text='Socialförsäkringsbalk (SFB)'/>
-                                        <g:TreeItem text='Fängelselag'/>
-                                        <g:TreeItem text='Hälso- och sjukvårdslag (HSL)'/>
-                                        <g:TreeItem text='Polislag (PL)'/>
-                                        <g:TreeItem text='Ordningslag (OL)'/>
-                                        <g:TreeItem text='Socialtjänstlag (SoL)'/>
-                                        <g:TreeItem
-                                                text='Lag om signalspaning (FRA-lagen)'/>
-                                    </g:TreeItem>
-                                    <g:TreeItem text='Kommunalrätt'>
-                                        <g:TreeItem text='Kommunallag'/>
-                                    </g:TreeItem>
-                                    <g:TreeItem text='Marknadsrätt'>
-                                        <g:TreeItem text='Marknadsföringslag (MFL)'/>
-                                        <g:TreeItem text='Konkurrenslag'/>
-                                    </g:TreeItem>
-                                </g:Tree>
-                            </g:ScrollPanel>
+
+            <g:FlowPanel ui:field="mainContainer" addStyleNames="{style.mainContainer}, {style.lightblueGradient}">
+
+                <g:SplitLayoutPanel ui:field="splitLayoutPanel" width="400" height="400"
+                                    addStyleNames="{style.gwt-SplitLayoutPanel}">
+                    <g:west size="210">
+                        <!-- todo: use deckpanel -->
+                        <g:FlowPanel ui:field="leftContainer"
+                                     addStyleNames="{style.leftContainer}, {style.lightblueGradient}">
+                            <searchPanels:ShortSearchResultPanel ui:field="searchResultPanel"
+                                                                 addStyleNames="{style.searchResultPanel}"
+                                                                 visible="false"/>
+
+                            <lawsbynamepanel:LawsByNamePanel ui:field="lawsByNamePanel"/>
+                            <lawsbycategorypanel:LawsByCategoryPanel ui:field="lawsByCategoryPanel"/>
+                            <lawcasesbyyearpanel:LawCasesByYearPanel ui:field="lawCasesByYearPanel"/>
+
+                            <g:StackLayoutPanel ui:field="stackPanel" unit='PX' height="100%"
+                                                addStyleNames="{style.lightblueGradient}">
+                                <g:stack>
+                                    <g:customHeader size='35'>
+                                        <roleBased:RoleBasedFlowPanel ui:field="legalResearchContainer"
+                                                                      visible="false"
+                                                                      requiresUserRole="ROLE_USER">
+
+                                            <g:HTMLPanel>
+                                                <font size="2px" color="#15428B">Rättsutredningar</font>
+                                                <g:Anchor text="+" ui:field="addLegalResearch"
+                                                          addStyleNames="{style.addLegalResearch}"/>
+                                            </g:HTMLPanel>
+                                        </roleBased:RoleBasedFlowPanel>
+                                    </g:customHeader>
+                                    <g:Tree ui:field="legalResearchTree"/>
+                                </g:stack>
+                                <g:stack>
+                                    <g:customHeader size='35'>
+                                        <roleBased:RoleBasedFlowPanel ui:field="adminTreeContainer"
+                                                                      visible="false"
+                                                                      requiresUserRole="ROLE_ADMINISTRATOR">
+
+                                            <g:HTMLPanel>
+                                                <g:HTML>
+                                                    <font size="2px" color="#15428B">Administration</font>
+                                                </g:HTML>
+                                            </g:HTMLPanel>
+                                        </roleBased:RoleBasedFlowPanel>
+
+                                    </g:customHeader>
+                                    <g:FlowPanel>
+                                        <g:ScrollPanel height="100%">
+                                            <g:Tree ui:field="adminTree">
+                                                <g:TreeItem text='Användare'/>
+                                            </g:Tree>
+                                        </g:ScrollPanel>
+                                    </g:FlowPanel>
+                                </g:stack>
+                            </g:StackLayoutPanel>
                         </g:FlowPanel>
-                    </g:stack>
-                    <g:stack>
-                        <g:header size='35'>
-                            <font size="2px" color="#15428B">Utforska Rättsfall</font>
-                        </g:header>
-                        <g:FlowPanel>
-                            <g:Label>Högsta domstolen</g:Label>
-                            <g:Label>Miljööverdomstolen</g:Label>
-                            <g:Label>Migrationsöverdomstolen</g:Label>
-                            <g:Label>Arbetsdomstolen</g:Label>
-                            <g:Label>Kammarrätterna</g:Label>
-                            <g:Label>Marknadsdomstolen</g:Label>
-                            <g:Label>Regeringsrätten</g:Label>
-                            <g:Label>Högsta förvaltningsdomstolen</g:Label>
-                            <g:Label>Hovrätterna</g:Label>
+                    </g:west>
+                    <g:center>
+                        <g:FlowPanel ui:field="container">
+                            <g:HTMLPanel>
+
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <g:Button text="Skrapa lagar" ui:field="scrapeLawButton"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <g:Button text="Skrapa rättsfall" ui:field="scrapeCaseLawButton"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </g:HTMLPanel>
                         </g:FlowPanel>
-                    </g:stack>
-                    <g:stack>
-                        <g:customHeader size='35'>
-                            <roleBased:RoleBasedFlowPanel ui:field="legalResearchContainer"
-                                                          visible="false"
-                                                          requiresUserRole="ROLE_USER">
-
-                                <g:HTMLPanel>
-                                    <font size="2px" color="#15428B">Rättsutredningar</font>
-                                    <g:Anchor text="+" ui:field="addLegalResearch"
-                                              addStyleNames="{style.addLegalResearch}"/>
-                                </g:HTMLPanel>
-                            </roleBased:RoleBasedFlowPanel>
-                        </g:customHeader>
-                        <g:Tree ui:field="legalResearchTree"/>
-                    </g:stack>
-                    <g:stack>
-                        <g:customHeader size='35'>
-                            <roleBased:RoleBasedFlowPanel ui:field="adminTreeContainer"
-                                                          visible="false"
-                                                          requiresUserRole="ROLE_ADMINISTRATOR">
-
-                                <g:HTMLPanel>
-                                    <g:HTML>
-                                        <font size="2px" color="#15428B">Administration</font>
-                                    </g:HTML>
-                                </g:HTMLPanel>
-                            </roleBased:RoleBasedFlowPanel>
-
-                        </g:customHeader>
-                        <g:FlowPanel>
-                            <g:ScrollPanel height="100%">
-                                <g:Tree ui:field="adminTree">
-                                    <g:TreeItem text='Användare'/>
-                                </g:Tree>
-                            </g:ScrollPanel>
-                        </g:FlowPanel>
-                    </g:stack>
-                </g:StackLayoutPanel>
-            </g:FlowPanel>
-            <g:FlowPanel addStyleNames="{style.mainContainer}, {style.lightblueGradient}">
-                <!--
-                <searchPanels:ShortSearchResultPanel ui:field="searchResultPanel"
-                                                     addStyleNames="{style.searchResultPanel}" visible="false"/>
-                -->
-                <g:FlowPanel ui:field="container">
-                    <g:HTML>MainPanel</g:HTML>
-                    <g:HTMLPanel>
-                        <table>
-                            <tr>
-                                <td>
-                                    <g:Button text="Skrapa lagar" ui:field="scrapeLawButton"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <g:Button text="Skrapa rättsfall" ui:field="scrapeCaseLawButton"/>
-                                </td>
-                            </tr>
-                        </table>
-
-                    </g:HTMLPanel>
-                </g:FlowPanel>
+                    </g:center>
+                </g:SplitLayoutPanel>
             </g:FlowPanel>
         </g:FlowPanel>
     </g:FlowPanel>

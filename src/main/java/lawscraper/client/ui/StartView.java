@@ -3,6 +3,7 @@ package lawscraper.client.ui;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import lawscraper.client.ui.panels.lawsbynamepanel.LawsByNamePanel;
 import lawscraper.shared.proxies.LawProxy;
 import lawscraper.shared.proxies.LegalResearchProxy;
 import lawscraper.shared.proxies.UserProxy;
@@ -28,6 +29,8 @@ public interface StartView extends IsWidget {
 
     void setLegalResearch(List<LegalResearchProxy> response);
 
+    void addFlerpContainer(FlowPanel flerpContainer);
+
     public interface Presenter {
         void goTo(Place place);
 
@@ -44,5 +47,7 @@ public interface StartView extends IsWidget {
         void changeActiveLegalResearch(Long legalResearchId);
 
         void scrapeCaseLaw();
+
+        void getLawsByAlphabet(String character, LawsByNamePanel lawsByNamePanel);
     }
 }

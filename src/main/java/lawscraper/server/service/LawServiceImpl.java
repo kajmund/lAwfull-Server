@@ -1,8 +1,9 @@
 package lawscraper.server.service;
 
 
-import lawscraper.server.components.renderers.lawrenderer.LawRenderer;
+import com.googlecode.ehcache.annotations.Cacheable;
 import lawscraper.server.components.LawStore;
+import lawscraper.server.components.renderers.lawrenderer.LawRenderer;
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
 import lawscraper.server.repositories.LawPartRepository;
@@ -57,23 +58,34 @@ public class LawServiceImpl implements LawService {
 
     @Override
     public HTMLWrapper findLawHTMLWrapped(Long id) {
-        return new HTMLWrapper(lawRenderer.renderToHtml(lawRepository.findOne(id)));
+        Law law = lawRepository.findOne(id);
+        return new HTMLWrapper(law.getTitle(), law.getFsNumber(), lawRenderer.renderToHtml(law));
     }
 
     @Override
+    @Cacheable(cacheName = "lawCache")
+    public HTMLWrapper findLawHTMLWrappedByLawKey(String lawKey) {
+        Law law = lawRepository.findAllByPropertyValue("fsNumber", lawKey).iterator().next();
+        return new HTMLWrapper(law.getTitle(), law.getFsNumber(), lawRenderer.renderToHtml(law));
+    }
+
+    @Override
+    @Cacheable(cacheName = "lawCache")
     public List<Law> findLawByQuery(String query) {
         List<Law> result = new ArrayList<Law>();
         /* todo: fix paging */
         String queryString = "*" + query + "*";
-        Iterable<Law> foundLaw = lawRepository.findAllByQuery("title", queryString);
-        int i = 20;
-        for (Law law : foundLaw) {
+        Iterable<Law> foundLaws = lawRepository.findAllByQuery("title", queryString);
+        int i = 100;
+        for (Law law : foundLaws) {
 
             if (i-- == 0) {
                 break;
             }
             result.add(law);
         }
+
+        System.out.println(queryString);
         return result;
     }
 

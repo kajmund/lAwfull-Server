@@ -13,4 +13,7 @@ import lawscraper.server.service.HTMLWrapper;
 @ProxyFor(value = HTMLWrapper.class)
 public interface HTMLProxy extends ValueProxy {
     String getHtml();
+    String getName();
+    String getLawKey();
+    //add Long id and ViewType viewType
 }

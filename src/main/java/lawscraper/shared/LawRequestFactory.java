@@ -25,6 +25,7 @@ public interface LawRequestFactory extends RequestFactory{
         Request<List<LawProxy>> findAll();
         Request<HTMLProxy>findLawHTMLWrapped(Long id);
         Request<List<LawProxy>> findLawByQuery(String query);
+        Request<HTMLProxy> findLawHTMLWrappedByLawKey(String lawKey);
     }
 
     LawRequest lawRequest();

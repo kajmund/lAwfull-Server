@@ -5,14 +5,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 import lawscraper.client.ClientFactory;
 import lawscraper.client.ui.StartView;
 import lawscraper.client.ui.StartViewImpl;
-import lawscraper.client.ui.events.SetCurrentLegalResearchEvent;
-import lawscraper.client.ui.events.SetCurrentUserEvent;
-import lawscraper.client.ui.events.SetCurrentUserEventHandler;
+import lawscraper.client.ui.events.*;
+import lawscraper.client.ui.panels.lawsbynamepanel.LawsByNamePanel;
 import lawscraper.shared.*;
 import lawscraper.shared.proxies.LawProxy;
 import lawscraper.shared.proxies.LegalResearchProxy;
@@ -36,6 +36,7 @@ public class StartViewActivity extends AbstractActivity implements StartView.Pre
     // Alternatively, could be injected via GIN
     private ClientFactory clientFactory;
     private EventBus eventBus;
+    private FlowPanel flerpContainer;
 
     public StartViewActivity(final ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
@@ -59,6 +60,7 @@ public class StartViewActivity extends AbstractActivity implements StartView.Pre
 
         this.eventBus = eventBus;
         subscribeToChangeUserEvent(eventBus);
+        subscribeToChangeLawEvent(eventBus);
         startView.setPresenter(this);
         getLegalResearchByLoggedInUser();
         clientFactory.getRoleBasedWidgetHandler().handleRoleBasedViews(StartViewImpl.class);
@@ -75,6 +77,18 @@ public class StartViewActivity extends AbstractActivity implements StartView.Pre
             public void onSetCurrentUser(SetCurrentUserEvent event) {
                 clientFactory.getRoleBasedWidgetHandler().handleRoleBasedViews(StartViewImpl.class);
                 getLegalResearchByLoggedInUser();
+            }
+        });
+    }
+
+    private void subscribeToChangeLawEvent(EventBus eventBus) {
+        eventBus.addHandler(SetCurrentLawEvent.TYPE, new SetCurrentLawEventHandler() {
+            @Override
+            public void onSetCurrentLaw(SetCurrentLawEvent event) {
+                if (flerpContainer == null) {
+                    flerpContainer = event.getFlerpContainer();
+                    clientFactory.getStartView().addFlerpContainer(flerpContainer);
+                }
             }
         });
     }
@@ -105,6 +119,21 @@ public class StartViewActivity extends AbstractActivity implements StartView.Pre
             public void onSuccess(ScraperStatusProxy response) {
                 System.out.println("Färdigt");
                 System.out.println("Antal lästa rättsfall: " + response.getScrapedLaws());
+            }
+        });
+
+    }
+
+    @Override
+    public void getLawsByAlphabet(String query, final LawsByNamePanel lawsByNamePanel) {
+        query += "*";
+
+        LawRequestFactory.LawRequest context = requests.lawRequest();
+        context.findLawByQuery(query).fire(new Receiver<List<LawProxy>>() {
+
+            @Override
+            public void onSuccess(List<LawProxy> response) {
+                lawsByNamePanel.setLaws(response);
             }
         });
 

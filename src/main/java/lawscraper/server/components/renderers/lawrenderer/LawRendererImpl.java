@@ -45,7 +45,7 @@ public class LawRendererImpl implements LawRenderer {
             if (part.getLawPartType() != DocumentPartType.PARAGRAPH &&
                     part.getLawPartType() != DocumentPartType.SECTION &&
                     part.getLawPartType() != DocumentPartType.SECTION_LIST_ITEM) {
-                html += element("div    ", element("a", text, "href", "#" + part.getId()),
+                html += element("div    ", element("lawTocItem", text, "href", "#" + part.getId()),
                                 "class",
                                 "TOCElement_" + part.getType()) + renderTableOfContentsLawPart(
                         part.getSortedParts());

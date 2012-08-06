@@ -2,6 +2,7 @@ package lawscraper.server.service;
 
 
 import lawscraper.server.entities.documentbookmark.DocumentBookMark;
+import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
 import lawscraper.server.entities.legalresearch.LegalResearch;
 import lawscraper.server.entities.user.User;
@@ -117,6 +118,26 @@ public class DocumentBookMarkServiceImpl implements DocumentBookMarkService {
         LegalResearch legalResearch = user.getActiveLegalResearch();
         for (DocumentBookMark documentBookMark : legalResearch.getBookMarks()) {
             if (documentBookMark.getLawDocumentPart().getBelongsToLaw().getId().equals(lawId)) {
+                ret.add(documentBookMark);
+            }
+        }
+
+        return ret;
+    }
+
+    @Override
+    public List<DocumentBookMark> findBookMarksByLawKey(String lawKey) {
+        User user = userService.getCurrentUser();
+        List<DocumentBookMark> ret = new ArrayList<DocumentBookMark>();
+        if (user.getUserRole() == UserRole.Anonymous) {
+            return ret;
+        }
+
+        //get active legal research
+        LegalResearch legalResearch = user.getActiveLegalResearch();
+        for (DocumentBookMark documentBookMark : legalResearch.getBookMarks()) {
+            Law law = lawService.find(documentBookMark.getLawDocumentPart().getBelongsToLaw().getId());
+            if (law.getFsNumber().equals(lawKey)) {
                 ret.add(documentBookMark);
             }
         }

@@ -59,6 +59,8 @@ public class CaseLawServiceImpl implements CaseLawService {
 
     @Override
     public HTMLWrapper findCaseLawHTMLWrapped(Long id) {
-        return new HTMLWrapper(caseLawRenderer.renderToHtml(caseLawRepository.findOne(id)));
+        CaseLaw caseLaw = caseLawRepository.findOne(id);
+        return new HTMLWrapper(caseLaw.getCaseIdentifier(), caseLaw.getCaseIdentifier(),
+                               caseLawRenderer.renderToHtml(caseLaw));
     }
 }

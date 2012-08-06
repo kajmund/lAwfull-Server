@@ -17,6 +17,7 @@ public interface LawService {
     List<Law> findAll();
 
     HTMLWrapper findLawHTMLWrapped(Long id);
+    HTMLWrapper findLawHTMLWrappedByLawKey(String lawKey);
 
     List<Law> findLawByQuery(String query);
 

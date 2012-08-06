@@ -8,12 +8,16 @@ package lawscraper.server.service;
  */
 public class HTMLWrapper {
     private String html;
+    private String name;
+    private String lawKey;
 
     public HTMLWrapper() {
     }
 
-    public HTMLWrapper(String html) {
+    public HTMLWrapper(String name, String lawKey, String html) {
+        this.name = name;
         this.html = html;
+        this.lawKey = lawKey;
     }
 
     public String getHtml() {
@@ -22,5 +26,21 @@ public class HTMLWrapper {
 
     public void setHtml(String html) {
         this.html = html;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLawKey() {
+        return lawKey;
+    }
+
+    public void setLawKey(String lawKey) {
+        this.lawKey = lawKey;
     }
 }

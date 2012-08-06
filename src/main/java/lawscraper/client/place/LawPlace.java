@@ -10,38 +10,31 @@ import com.google.gwt.place.shared.PlaceTokenizer;
  * Time: 9:34 PM
  */
 public class LawPlace extends Place {
-    private String lawId;
+
+    private String lawKey;
 
     public LawPlace(String token) {
-        this.lawId = token;
+        this.lawKey = token;
     }
 
-    public LawPlace(Long id) {
-        lawId = Long.toString(id);
-
+    public String getLawKey() {
+        return lawKey;
     }
 
-    public String getLawId() {
-        return lawId;
+    public void setLawKey(String lawKey) {
+        this.lawKey = lawKey;
     }
 
-    public void setLawId(String lawId) {
-        this.lawId = lawId;
-    }
-
-    public static class Tokenizer implements PlaceTokenizer<LawPlace>
-    {
+    public static class Tokenizer implements PlaceTokenizer<LawPlace> {
 
         @Override
-        public String getToken(LawPlace place)
-        {
-            return place.getLawId();
+        public String getToken(LawPlace place) {
+            return place.getLawKey();
         }
 
         @Override
-        public LawPlace getPlace(String lawId)
-        {
-            return new LawPlace(lawId);
+        public LawPlace getPlace(String lawKey) {
+            return new LawPlace(lawKey);
         }
     }
 

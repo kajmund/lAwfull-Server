@@ -1,0 +1,56 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <ui:style type='lawscraper.client.ui.panels.verticaltabpanel.VerticalTabPanel.Style'>
+
+        .register {
+            height: 100%;
+
+            float: left;
+            position: relative;
+            margin-left: 2%;
+        }
+
+        .flerp {
+            width: 10%;
+            float: left;
+            border: 1px solid;
+            position: relative;
+            cursor: pointer;
+            text-align: center;
+
+        }
+
+        .flerpSelected {
+            width: 10%;
+            float: left;
+            position: relative;
+            text-align: center;
+
+            padding-bottom: 5px;
+            padding-top: 5px;
+            border-bottom: 1px solid;
+            border-top: 1px solid;
+            border-right: 2px solid;
+            border-left: none;
+
+            -moz-box-shadow: 5px 3px 5px #000;
+            -webkit-box-shadow: 5px 3px 5px #000;
+            box-shadow: 5px 3px 5px #000;
+            word-wrap: break-word;
+
+        }
+
+        .mainContainer {
+
+        }
+
+    </ui:style>
+
+    <g:FlowPanel ui:field="mainContainer" addStyleNames="{style.mainContainer}">
+        <g:FlowPanel addStyleNames="{style.register}">
+            <g:DeckPanel ui:field="tabContentDeckPanel"/>
+        </g:FlowPanel>
+        <g:FlowPanel ui:field="flerpContainer"/>
+    </g:FlowPanel>
+</ui:UiBinder>

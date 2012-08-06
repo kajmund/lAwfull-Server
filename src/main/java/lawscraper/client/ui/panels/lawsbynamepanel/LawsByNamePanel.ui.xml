@@ -1,22 +1,12 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-             xmlns:g="urn:import:com.google.gwt.user.client.ui">
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:verticaltabpanel="urn:import:lawscraper.client.ui.panels.verticaltabpanel">
     <ui:style>
         .lawTable {
             margin-left: 8px;
             margin-bottom: 32px;
 
-        }
-
-        .controlBar {
-            background-image: url("http://gwt-cx.com/serendipity/serendipity/gwtcx/skins/aqua/images/navigation_pane_header.png");
-            background-repeat: repeat-x;
-            height: 26px;
-            border: 1px solid;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            bottom: -32px;
         }
 
         .topControlBar {
@@ -34,6 +24,7 @@
             border-left: 1px solid;
             border-right: 1px solid;
             border-bottom: 1px solid;
+            height: 100%;
         }
 
         .bottomControlPanel {
@@ -70,16 +61,15 @@
     <g:FlowPanel addStyleNames="{style.container}">
         <g:FlowPanel addStyleNames="{style.topControlBar}">
             <g:FlowPanel addStyleNames="{style.bottomControlPanel}">
-                <g:HTML addStyleNames="{style.headerFont}">Sök lag</g:HTML>
+                <g:HTML addStyleNames="{style.headerFont}">Lagar efter namn</g:HTML>
             </g:FlowPanel>
         </g:FlowPanel>
         <g:FlowPanel addStyleNames="{style.bodyContainer}">
             <g:FlowPanel addStyleNames="{style.searchBoxContainer}">
-                <g:TextBox ui:field="searchTextBox" addStyleNames="{style.searchBox}"/>
+                <g:TextBox addStyleNames="{style.searchBox}"/>
             </g:FlowPanel>
-            <g:ScrollPanel height="700px">
-                <g:FlowPanel ui:field="lawTableContainer" addStyleNames="{style.lawTable}"/>
-            </g:ScrollPanel>
+            <verticaltabpanel:VerticalTabPanel ui:field="verticalpanel"/>
+            <g:FlowPanel ui:field="lawTableContainer" addStyleNames="{style.lawTable}"/>
         </g:FlowPanel>
     </g:FlowPanel>
 </ui:UiBinder>

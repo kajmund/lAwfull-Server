@@ -25,6 +25,8 @@ public interface DocumentBookMarkRequestFactory extends RequestFactory {
         Request<Void> removeBookMark(Long lawDocumentPartId);
 
         Request<List<DocumentBookMarkProxy>> findBookMarksByLawId(Long lawId);
+
+        Request<List<DocumentBookMarkProxy>> findBookMarksByLawKey(String lawKey);
     }
 
     DocumentBookMarkRequest documentBookMarkRequest();

@@ -2,6 +2,7 @@ package lawscraper.server.entities.law;
 
 import lawscraper.shared.DocumentPartType;
 import org.springframework.data.neo4j.annotation.Indexed;
+import org.springframework.data.neo4j.support.index.IndexType;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,9 +15,12 @@ import java.util.Set;
  */
 
 public class Law extends LawDocumentPart {
-    @Indexed
+    @Indexed(indexType = IndexType.FULLTEXT, indexName = "searchByTitle")
     String title = "";
+
+    @Indexed(indexType = IndexType.SIMPLE, indexName = "searchByLawKey")
     String fsNumber = "";
+
     String latestFetchFromGov = "";
     String releaseDate = "";
     String publisher = "";

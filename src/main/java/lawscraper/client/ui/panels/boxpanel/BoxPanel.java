@@ -1,12 +1,10 @@
 package lawscraper.client.ui.panels.boxpanel;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
@@ -18,6 +16,13 @@ public class BoxPanel extends Composite {
     private static BoxPanelUiBinder uiBinder = GWT.create(BoxPanelUiBinder.class);
     @UiField FlowPanel boxPanelContainer;
     @UiField Label title;
+    @UiField ScrollPanel scrollPanel;
+
+    public void setHeight(double height, Style.Unit px) {
+        boxPanelContainer.getElement().getStyle().setHeight(height, px);
+        scrollPanel.getElement().getStyle().setHeight(height-30, px);
+        this.getElement().getStyle().setHeight(height, px);
+    }
 
     interface BoxPanelUiBinder extends UiBinder<FlowPanel, BoxPanel> {
     }
@@ -26,10 +31,10 @@ public class BoxPanel extends Composite {
         initWidget(uiBinder.createAndBindUi(this));
     }
 
-    public void setHeaderTitle(String headerTitle){
+    public void setHeaderTitle(String headerTitle) {
         this.title.setText(headerTitle);
     }
-    
+
     public void setContainerWidget(Widget widget) {
         clearView();
         boxPanelContainer.add(widget);
@@ -37,5 +42,9 @@ public class BoxPanel extends Composite {
 
     public void clearView() {
         boxPanelContainer.clear();
+    }
+
+    public void updateScrollPanelHeight(double height) {
+        scrollPanel.setHeight(height + "px");
     }
 }

@@ -2,19 +2,19 @@ package lawscraper.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.web.bindery.requestfactory.shared.Receiver;
+import com.google.web.bindery.requestfactory.shared.ServerFailure;
 import lawscraper.client.ClientFactory;
 import lawscraper.client.place.LawPlace;
 import lawscraper.client.ui.LawView;
 import lawscraper.client.ui.LawViewImpl;
 import lawscraper.client.ui.StartView;
-import lawscraper.client.ui.events.SetCurrentLegalResearchEvent;
-import lawscraper.client.ui.events.SetCurrentLegalResearchEventHandler;
-import lawscraper.client.ui.events.SetCurrentUserEvent;
-import lawscraper.client.ui.events.SetCurrentUserEventHandler;
+import lawscraper.client.ui.events.*;
 import lawscraper.client.ui.panels.rolebasedwidgets.RoleBasedFlowPanel;
 import lawscraper.shared.DocumentBookMarkRequestFactory;
 import lawscraper.shared.LawRequestFactory;
@@ -37,6 +37,7 @@ public class LawViewActivity extends AbstractActivity implements LawView.Present
     private ClientFactory clientFactory;
     private LawView lawView;
     private LawPlace place;
+    private EventBus eventBus;
 
     public LawViewActivity(LawPlace place, final ClientFactory clientFactory) {
         this.clientFactory = clientFactory;
@@ -54,6 +55,7 @@ public class LawViewActivity extends AbstractActivity implements LawView.Present
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        this.eventBus = eventBus;
         requests.initialize(eventBus);
         bookMarkRequests.initialize(eventBus);
         userRequestFactory.initialize(eventBus);
@@ -79,7 +81,8 @@ public class LawViewActivity extends AbstractActivity implements LawView.Present
             @Override
             public void onSetCurrentUser(SetCurrentUserEvent event) {
                 clientFactory.getRoleBasedWidgetHandler().handleRoleBasedViews(LawViewImpl.class);
-                getLaw();
+
+                //getLaw();
             }
         });
     }
@@ -103,19 +106,34 @@ public class LawViewActivity extends AbstractActivity implements LawView.Present
     @Override
     public void getLaw() {
         LawRequestFactory.LawRequest context = requests.lawRequest();
+        RootPanel.get().getElement().getStyle().setCursor(Style.Cursor.WAIT);
 
-        context.findLawHTMLWrapped(Long.valueOf(place.getLawId())).fire(new Receiver<HTMLProxy>() {
+        //select the tab if it exists instead of getting it from the server
+        if (lawView.selectLawIfExists(place.getLawKey())) {
+            RootPanel.get().getElement().getStyle().setCursor(Style.Cursor.DEFAULT);
+            return;
+        }
+
+        context.findLawHTMLWrappedByLawKey(place.getLawKey()).fire(new Receiver<HTMLProxy>() {
             @Override
             public void onSuccess(HTMLProxy result) {
                 lawView.setLaw(result);
-                showBookMarks(place.getLawId());
+                eventBus.fireEvent(new SetCurrentLawEvent(lawView.getDynamicFlerpContainer()));
+                RootPanel.get().getElement().getStyle().setCursor(Style.Cursor.DEFAULT);
+            }
+
+            @Override
+            public void onFailure(ServerFailure error) {
+                RootPanel.get().getElement().getStyle().setCursor(Style.Cursor.DEFAULT);
+                System.out.println("LawViewActivity::getLaw()" + error.getMessage());
             }
         });
     }
 
-    private void showBookMarks(String lawId) {
+
+    private void showBookMarks(String lawKey) {
         DocumentBookMarkRequestFactory.DocumentBookMarkRequest context = bookMarkRequests.documentBookMarkRequest();
-        context.findBookMarksByLawId(Long.decode(lawId)).fire(new Receiver<List<DocumentBookMarkProxy>>() {
+        context.findBookMarksByLawKey(lawKey).fire(new Receiver<List<DocumentBookMarkProxy>>() {
             @Override
             public void onSuccess(List<DocumentBookMarkProxy> response) {
                 lawView.getBookMarkPanel().setBookMarks(response);
@@ -146,7 +164,7 @@ public class LawViewActivity extends AbstractActivity implements LawView.Present
 
     private void updateBookMarkPanel() {
         DocumentBookMarkRequestFactory.DocumentBookMarkRequest context = bookMarkRequests.documentBookMarkRequest();
-        context.findBookMarksByLawId(Long.decode(place.getLawId())).fire(new Receiver<List<DocumentBookMarkProxy>>() {
+        context.findBookMarksByLawKey(place.getLawKey()).fire(new Receiver<List<DocumentBookMarkProxy>>() {
             @Override
             public void onSuccess(List<DocumentBookMarkProxy> response) {
                 lawView.getBookMarkPanel().setBookMarks(response);

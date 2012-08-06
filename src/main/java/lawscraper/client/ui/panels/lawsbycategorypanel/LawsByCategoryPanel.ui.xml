@@ -1,0 +1,246 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:lawTreeItem="urn:import:lawscraper.client.ui.panels.lawtreeitem">
+    <ui:style>
+        .lawTable {
+            margin-left: 8px;
+            margin-bottom: 32px;
+
+        }
+
+        .controlBar {
+            background-image: url("http://gwt-cx.com/serendipity/serendipity/gwtcx/skins/aqua/images/navigation_pane_header.png");
+            background-repeat: repeat-x;
+            height: 26px;
+            border: 1px solid;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            bottom: -32px;
+        }
+
+        .topControlBar {
+            background-image: url("http://gwt-cx.com/serendipity/serendipity/gwtcx/skins/aqua/images/navigation_pane_header.png");
+            background-repeat: repeat-x;
+            height: 26px;
+            border: 1px solid;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .container {
+            position: relative;
+            border-left: 1px solid;
+            border-right: 1px solid;
+            border-bottom: 1px solid;
+            height: 100%;
+        }
+
+        .bottomControlPanel {
+            float: right;
+        }
+
+        .headerFont {
+            color: #15428B;
+            cursor: default;
+            font-family: Tahoma, Verdana, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            position: absolute;
+            left: 4px;
+        }
+
+        .searchBoxContainer {
+            margin-top: 4px;
+            margin-bottom: 4px;
+            margin-left: 3%;
+            width: 100%;
+        }
+
+        .searchBox {
+            width: 90%;
+        }
+
+        .bodyContainer {
+
+        }
+
+        .alphabetButtons {
+            margin-left: 8px;
+            float: left;
+            position: relative;
+        }
+    </ui:style>
+
+
+    <g:FlowPanel addStyleNames="{style.container}">
+        <g:FlowPanel addStyleNames="{style.topControlBar}">
+            <g:FlowPanel addStyleNames="{style.bottomControlPanel}">
+                <g:HTML addStyleNames="{style.headerFont}">Lagar efter kategorier</g:HTML>
+            </g:FlowPanel>
+        </g:FlowPanel>
+        <g:FlowPanel addStyleNames="{style.bodyContainer}">
+            <g:FlowPanel addStyleNames="{style.searchBoxContainer}">
+                <g:TextBox addStyleNames="{style.searchBox}"/>
+            </g:FlowPanel>
+            <g:FlowPanel>
+                <g:ScrollPanel height="700px">
+                    <g:Tree ui:field="lawGroups">
+                        <g:TreeItem text='Familjerätt'>
+                            <lawTreeItem:LawTreeItem text='Föräldrabalk (FB)' lawKey="1949:381"/>
+                            <lawTreeItem:LawTreeItem text='Ärvdabalk (ÄB)' lawKey="1958:637"/>
+                            <lawTreeItem:LawTreeItem text='Äktenskapsbalk (ÄktB)' lawKey="1987:230"/>
+                            <lawTreeItem:LawTreeItem text='Namnlag' lawKey="1982:670"/>
+                            <lawTreeItem:LawTreeItem text='Sambolag' lawKey="2003:376"/>
+                        </g:TreeItem>
+                        <g:TreeItem text='Arbetsrätt'>
+                            <lawTreeItem:LawTreeItem text='Medbestämmandelag (MBL)' lawKey="1976:580"/>
+                            <lawTreeItem:LawTreeItem text='Lag om anställningsskydd (LAS)'
+                                                     lawKey="1982:80"/>
+                            <lawTreeItem:LawTreeItem text='Lagen om rättegången i arbetstvister (LRA)'
+                                                     lawKey="1974:371"/>
+                            <lawTreeItem:LawTreeItem text='Semesterlag' lawKey="1977:480"/>
+                            <lawTreeItem:LawTreeItem text='Arbetstidslag' lawKey="1982:673"/>
+                            <lawTreeItem:LawTreeItem text='Lag om offentlig anställning (LOA)'
+                                                     lawKey="1994:260"/>
+                        </g:TreeItem>
+                        <g:TreeItem text='Allmän avtalsrätt'>
+                            <lawTreeItem:LawTreeItem text='Avtalslag (AvtL)' lawKey="1915:218"/>
+                            <lawTreeItem:LawTreeItem text='Prokuralag' lawKey="1974:158"/>
+                            <lawTreeItem:LawTreeItem text='Avtalsvillkor mellan näringsidkare (AVLN)'
+                                                     lawKey="1984:292"/>
+                            <lawTreeItem:LawTreeItem text='Avtalsvillkor i konsumentförhållanden (AVLK)'
+                                                     lawKey="1994:1512"/>
+                            <lawTreeItem:LawTreeItem text='Kommissionslag' lawKey="2009:865"/>
+                        </g:TreeItem>
+                        <g:TreeItem text='Speciell avtalsrätt'>
+                            <lawTreeItem:LawTreeItem text='Köplag (KöpL)' lawKey="1990:931"/>
+                            <lawTreeItem:LawTreeItem text='Konsumentköplag (KKöpL)' lawKey="1990:932"/>
+                            <lawTreeItem:LawTreeItem text='Gåvolag' lawKey="1936:83"/>
+                            <lawTreeItem:LawTreeItem text='Konsumenttjänstlag (KTjL)' lawKey="1985:716"/>
+                            <lawTreeItem:LawTreeItem text='Lag om internationella köp (CISC)'
+                                                     lawKey="1987:822"/>
+                            <lawTreeItem:LawTreeItem text='Distans- och hemförsäljningslag'
+                                                     lawKey="2005:59"/>
+                        </g:TreeItem>
+                        <g:TreeItem text='Fordringsrätt'>
+                            <lawTreeItem:LawTreeItem text='Skuldebrevslag (SkbrL)' lawKey="1936:81"/>
+                            <lawTreeItem:LawTreeItem text='Räntelag' lawKey="1975:635"/>
+                            <lawTreeItem:LawTreeItem text='Preskriptionslag' lawKey="1981:130"/>
+                        </g:TreeItem>
+                        <g:TreeItem text='Sakrätt'>
+                            <lawTreeItem:LawTreeItem text='Lösöresköpslag' lawKey="1845:50_s.1"/>
+                            <lawTreeItem:LawTreeItem text='Samäganderättslag' lawKey="1904:48_s.1"/>
+                            <lawTreeItem:LawTreeItem text='Förmånsrättslag' lawKey="1970:979"/>
+                            <lawTreeItem:LawTreeItem text='Lag om godtrosförvärv av lösöre'
+                                                     lawKey="1986:796"/>
+                        </g:TreeItem>
+                        <g:TreeItem text='Skadeståndsrätt'>
+                            <lawTreeItem:LawTreeItem text='Skadeståndslag' lawKey="1972:207"/>
+                            <lawTreeItem:LawTreeItem text='Trafikskadelag' lawKey="1975:1410"/>
+                            <lawTreeItem:LawTreeItem text='Brottsskadelag' lawKey="1978:413"/>
+                            <lawTreeItem:LawTreeItem text='Produktansvarslag' lawKey="1992:18"/>
+                            <lawTreeItem:LawTreeItem text='Patientskadelag' lawKey="1996:799"/>
+                        </g:TreeItem>
+                        <g:TreeItem text='IT-rätt'>
+                            <lawTreeItem:LawTreeItem text='Personuppgiftslag (PUL)' lawKey="1998:204"/>
+                            <lawTreeItem:LawTreeItem text='BBS-lag' lawKey="1998:112"/>
+                            <lawTreeItem:LawTreeItem text='E-handelslag' lawKey="2002:562"/>
+                            <lawTreeItem:LawTreeItem text='Lag om elektronisk kommunikation (LEK)'
+                                                     lawKey="2003:389"/>
+                        </g:TreeItem>
+                        <g:TreeItem text='Immaterialrätt'>
+                            <lawTreeItem:LawTreeItem text='Varumärkeslag (VML)' lawKey="1960:644"/>
+                            <lawTreeItem:LawTreeItem text='Upphovsrättslag (URL)' lawKey="1960:279"/>
+                            <lawTreeItem:LawTreeItem text='Patentlag (PL)' lawKey="1967:837"/>
+                            <lawTreeItem:LawTreeItem text='Mönsterskyddslag' lawKey="1970:485"/>
+                            <lawTreeItem:LawTreeItem text='Firmalag' lawKey="1974:156"/>
+                        </g:TreeItem>
+                        <g:TreeItem text='Fastighetsrätt'>
+                            <lawTreeItem:LawTreeItem text='Jordabalk (JB)' lawKey="1970:994"/>
+                            <lawTreeItem:LawTreeItem text='Fastighetsbildningslag (FBL)' lawKey="1970:988"/>
+                            <lawTreeItem:LawTreeItem text='Expropriationslag (ExprL)' lawKey="1972:719"/>
+                            <lawTreeItem:LawTreeItem text='Plan- och bygglag (PBL)' lawKey="2010:900"/>
+                            <lawTreeItem:LawTreeItem text='Bostadsrättslag' lawKey="1991:614"/>
+                            <lawTreeItem:LawTreeItem text='Miljöbalken (MB)' lawKey="1998:808"/>
+                        </g:TreeItem>
+                        <g:TreeItem text='Associationsrätt'>
+                            <lawTreeItem:LawTreeItem text='Lag om handelsbolag och enkla bolag'
+                                                     lawKey="1980:1102"/>
+                            <lawTreeItem:LawTreeItem text='Lag om ekonomiska föreningar' lawKey="1987:667"/>
+                            <lawTreeItem:LawTreeItem text='Stiftelselag' lawKey="1994:1220"/>
+                            <lawTreeItem:LawTreeItem text='Årsredovisningslag (ÅRL)' lawKey="1995:1554"/>
+                            <lawTreeItem:LawTreeItem text='Bokföringslag (BFL)' lawKey="1999:1078"/>
+                            <lawTreeItem:LawTreeItem text='Aktiebolagslag (ABL)' lawKey="2005:551"/>
+                        </g:TreeItem>
+                        <g:TreeItem text='Straffrätt'>
+                            <lawTreeItem:LawTreeItem text='Brottsbalk (BrB)' lawKey="1962:700"/>
+                            <lawTreeItem:LawTreeItem text='Trafikbrottslag' lawKey="1951:649"/>
+                            <lawTreeItem:LawTreeItem text='Narkotikastrafflag (NSL)' lawKey="1968:64"/>
+                            <lawTreeItem:LawTreeItem text='Skattebrottslag (SBL)' lawKey="1971:69"/>
+                            <lawTreeItem:LawTreeItem text='Smugglingslag' lawKey="2000:1225"/>
+                        </g:TreeItem>
+                        <g:TreeItem text='Processrätt'>
+                            <lawTreeItem:LawTreeItem text='Rättegångsbalk (RB)' lawKey="1942:740"/>
+                            <lawTreeItem:LawTreeItem text='Utsökningsbalk' lawKey="1981:774"/>
+                            <lawTreeItem:LawTreeItem text='Konkurslag' lawKey="1987:672"/>
+                            <lawTreeItem:LawTreeItem text='Lag om domstolsärenden (ärendelagen)'
+                                                     lawKey="1996:242"/>
+                            <lawTreeItem:LawTreeItem text='Lag om skiljeförfarande' lawKey="1999:116"/>
+                        </g:TreeItem>
+                        <g:TreeItem text='Statsrätt'>
+                            <lawTreeItem:LawTreeItem text='Tryckfrihetsförordningen (TF)'
+                                                     lawKey="1949:105"/>
+                            <lawTreeItem:LawTreeItem text='Successionsordningen' lawKey="1810:0926"/>
+                            <lawTreeItem:LawTreeItem text='Regeringsformen (RF)' lawKey="1974:152"/>
+                            <lawTreeItem:LawTreeItem text='Riksdagsordningen (RO)' lawKey="1974:153"/>
+                            <lawTreeItem:LawTreeItem text='Yttrandefrihetsgrundlag (YGL)'
+                                                     lawKey="1991:1469"/>
+                            <lawTreeItem:LawTreeItem text='Europakonventionen' lawKey="1994:1219"/>
+                            <lawTreeItem:LawTreeItem text='Utlänningslag' lawKey="2005:716"/>
+                        </g:TreeItem>
+                        <g:TreeItem text='Skatterätt'>
+                            <lawTreeItem:LawTreeItem text='Inkomstskattelag (IL)' lawKey="1999:1229"/>
+                            <lawTreeItem:LawTreeItem text='Fastighetstaxeringslag (FTL)'
+                                                     lawKey="1979:1152"/>
+                            <lawTreeItem:LawTreeItem text='Särskild inkomstskatt... (SINK)'
+                                                     lawKey="1991:586"/>
+                            <lawTreeItem:LawTreeItem text='Mervärdesskattelag (ML)' lawKey="1994:200"/>
+                            <lawTreeItem:LawTreeItem text='Lag mot skatteflykt' lawKey="1995:575"/>
+                        </g:TreeItem>
+                        <g:TreeItem text='Allmän förvaltningsrätt'>
+                            <lawTreeItem:LawTreeItem text='Förvaltningslag (FL)' lawKey="1986:223"/>
+                            <lawTreeItem:LawTreeItem text='Offentlighets- och sekretesslag (OSL)'
+                                                     lawKey="2009:400"/>
+                            <lawTreeItem:LawTreeItem text='Förvaltningsprocesslag (FPL)' lawKey="1971:291"/>
+                            <lawTreeItem:LawTreeItem text='Avgiftsförordning' lawKey="1992:191"/>
+                            <lawTreeItem:LawTreeItem text='Lag om offentlig upphandling (LOU)'
+                                                     lawKey="2007:1091"/>
+                        </g:TreeItem>
+                        <g:TreeItem text='Speciell förvaltningsrätt'>
+                            <lawTreeItem:LawTreeItem text='Socialförsäkringsbalk (SFB)' lawKey="2010:110"/>
+                            <lawTreeItem:LawTreeItem text='Fängelselag' lawKey="2010:610"/>
+                            <lawTreeItem:LawTreeItem text='Hälso- och sjukvårdslag (HSL)'
+                                                     lawKey="1982:763"/>
+                            <lawTreeItem:LawTreeItem text='Polislag (PL)' lawKey="1984:387"/>
+                            <lawTreeItem:LawTreeItem text='Ordningslag (OL)' lawKey="1993:1617"/>
+                            <lawTreeItem:LawTreeItem text='Socialtjänstlag (SoL)' lawKey="2001:453"/>
+                            <lawTreeItem:LawTreeItem
+                                    text='Lag om signalspaning (FRA-lagen)' lawKey="2008:717"/>
+                        </g:TreeItem>
+                        <g:TreeItem text='Kommunalrätt' ui:field="kommunalratt">
+                            <lawTreeItem:LawTreeItem text='Kommunallag' lawKey="1991:900"/>
+                        </g:TreeItem>
+                        <g:TreeItem text='Marknadsrätt' ui:field="marknadsratt">
+                            <lawTreeItem:LawTreeItem text='Marknadsföringslag (MFL)' lawKey="2008:486"/>
+                            <lawTreeItem:LawTreeItem text='Konkurrenslag' lawKey="2008:579"/>
+                        </g:TreeItem>
+                    </g:Tree>
+                </g:ScrollPanel>
+            </g:FlowPanel>
+            <g:FlowPanel ui:field="lawTableContainer" addStyleNames="{style.lawTable}"/>
+        </g:FlowPanel>
+    </g:FlowPanel>
+</ui:UiBinder>

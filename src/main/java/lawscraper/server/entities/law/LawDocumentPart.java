@@ -54,7 +54,6 @@ public class LawDocumentPart extends DocumentPart {
         this.replacesLaw = replacesLaw;
     }
 
-    @Fetch
     public TextElement getTextElement() {
         return textElement;
     }

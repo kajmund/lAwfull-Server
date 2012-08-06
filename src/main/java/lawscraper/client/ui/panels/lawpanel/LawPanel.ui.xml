@@ -1,29 +1,11 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
-             xmlns:bookMark="urn:import:lawscraper.client.ui.panels.bookmarkpanel"
              xmlns:shortCut="urn:import:lawscraper.client.ui.panels.shortcutpanel"
              xmlns:boxPanel="urn:import:lawscraper.client.ui.panels.boxpanel"
              xmlns:roleBased="urn:import:lawscraper.client.ui.panels.rolebasedwidgets">
 
     <ui:style>
-        .rightWingPanel {
-            float: left;
-            position: absolute;
-            right: 0;
-            top: 108px;
-            border-top: solid 1px;
-            border-bottom: solid 1px;
-            width: 20%;
-        }
-
-        .lawTable {
-            float: left;
-            min-height: 600px;
-            width: 70%;
-            margin-left: 8px;
-        }
-
         .part_paragraph {
             font-size: 18px;
             font-style: normal;
@@ -84,6 +66,7 @@
             right: 30%;
             position: fixed;
             top: 0;
+            color: blue;
         }
 
         .TOCElement_SUB_HEADING {
@@ -101,21 +84,92 @@
         @external .TOCElement_HEADING;
 
         .tocBoxPanel {
+            text-decoration: underline;
+        }
+
+        .rightMenu {
+            position: absolute;
+            right: 15px;
+            height: 768px;
+            top: 6px;
 
         }
 
+        .verticalText {
+            -moz-transform: rotate(90deg);
+            -moz-transform-origin: center right;
+            -webkit-transform: rotate(90deg);
+            -webkit-transform-origin: center right;
+            -o-transform: rotate(90deg);
+            -o-transform-origin: center right;
+            filter: progid:DXImageTransform.Microsoft.BasicImage(rotation = 1);
+        }
+
+        .rightMenuButtons {
+            margin-top: 60px;
+            width: 65px;
+            text-align: center;
+        }
+
+        .rightWingPanel {
+            border-top: solid 1px;
+            border-bottom: solid 1px;
+            width: 100%;
+            position: relative;
+
+        }
+
+        .lawTable {
+            float: left;
+            position: relative;
+            min-height: 600px;
+            margin-left: 8px;
+            border: 1px black;
+        }
     </ui:style>
 
 
     <g:FlowPanel ui:field="lawPanelContainer">
         <shortCut:ShortCutPanel ui:field="shortCutPanel" visible="false" addStyleNames="{style.shortCutPanel}"/>
-        <g:HTMLPanel ui:field="lawContainer" addStyleNames="{style.lawTable}"/>
-        <g:FlowPanel ui:field="rightWingPanel" addStyleNames="{style.rightWingPanel}">
-            <boxPanel:BoxPanel ui:field="MetaBoxPanel" headerTitle="Information"/>
-            <boxPanel:BoxPanel ui:field="TOCBoxPanel" headerTitle="Innehåll" addStyleNames="{style.tocBoxPanel}"/>
-            <roleBased:RoleBasedFlowPanel ui:field="bookMarkBoxPanelContainer" requiresUserRole="ROLE_USER">
-                <boxPanel:BoxPanel ui:field="bookMarkBoxPanel" headerTitle="Bokmärken"/>
-            </roleBased:RoleBasedFlowPanel>
-        </g:FlowPanel>
+        <g:SplitLayoutPanel ui:field="splitLayoutPanel" width="400" height="400">
+            <g:east size="210">
+                <g:FlowPanel>
+                    <g:FlowPanel ui:field="rightWingPanel" addStyleNames="{style.rightWingPanel}">
+                        <boxPanel:BoxPanel ui:field="informationBoxPanel" headerTitle="Information"
+                                />
+                        <boxPanel:BoxPanel ui:field="tocBoxPanel" headerTitle="Innehåll"
+                                           addStyleNames="{style.tocBoxPanel}"/>
+                        <roleBased:RoleBasedFlowPanel ui:field="bookMarkBoxPanelContainer" requiresUserRole="ROLE_USER">
+                            <boxPanel:BoxPanel ui:field="bookMarkBoxPanel" headerTitle="Bokmärken"/>
+                        </roleBased:RoleBasedFlowPanel>
+                    </g:FlowPanel>
+
+                    <g:FlowPanel ui:field="rightMenu" addStyleNames="{style.rightMenu}">
+                        <g:HTMLPanel>
+                            <g:ToggleButton ui:field="informationButton" down="true"
+                                            addStyleNames="{style.verticalText} {style.rightMenuButtons}">Information
+                            </g:ToggleButton>
+                            <g:ToggleButton ui:field="tocButton" down="true"
+                                            addStyleNames="{style.verticalText} {style.rightMenuButtons}">Innehåll
+                            </g:ToggleButton>
+                            <roleBased:RoleBasedFlowPanel requiresUserRole="ROLE_USER">
+                                <g:ToggleButton addStyleNames="{style.verticalText} {style.rightMenuButtons}"
+                                                ui:field="bookMarkButton">Bokmärken
+                                </g:ToggleButton>
+                            </roleBased:RoleBasedFlowPanel>
+                        </g:HTMLPanel>
+                    </g:FlowPanel>
+                </g:FlowPanel>
+            </g:east>
+            <g:center>
+                <g:FlowPanel>
+                    <g:ScrollPanel ui:field="scrollPanel" height="750px">
+                        <g:HTMLPanel ui:field="lawContainer" addStyleNames="{style.lawTable}"/>
+                    </g:ScrollPanel>
+                </g:FlowPanel>
+            </g:center>
+        </g:SplitLayoutPanel>
+
+
     </g:FlowPanel>
 </ui:UiBinder>
