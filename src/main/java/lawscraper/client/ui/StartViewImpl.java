@@ -29,6 +29,7 @@ import lawscraper.client.ui.panels.lawsbycategorypanel.LawsByCategoryPanel;
 import lawscraper.client.ui.panels.lawsbynamepanel.LawsByNamePanel;
 import lawscraper.client.ui.panels.rolebasedwidgets.RoleBasedFlowPanel;
 import lawscraper.client.ui.panels.shortsearchresultpanel.SearchChangeEvent;
+import lawscraper.client.ui.panels.shortsearchresultpanel.SearchLawClickEvent;
 import lawscraper.client.ui.panels.shortsearchresultpanel.ShortSearchResultPanel;
 import lawscraper.shared.proxies.LawProxy;
 import lawscraper.shared.proxies.LegalResearchProxy;
@@ -159,7 +160,6 @@ public class StartViewImpl extends Composite implements StartView {
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
-        this.searchResultPanel.setPresenter(presenter);
         lawsByNamePanel.setPresenter(presenter);
         presenter.checkCurrentUser();
     }
@@ -241,6 +241,11 @@ public class StartViewImpl extends Composite implements StartView {
     @UiHandler("searchResultPanel")
     public void searchResultChange(SearchChangeEvent searchChangeEvent) {
         presenter.searchLaws(searchChangeEvent.getQuery());
+    }
+
+    @UiHandler("searchResultPanel")
+    public void searchResultChange(SearchLawClickEvent searchLawClickEvent) {
+        presenter.goTo(new LawPlace(searchLawClickEvent.getLawKey()));
     }
 
     @UiHandler("lawCasesMenuButton")

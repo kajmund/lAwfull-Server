@@ -1,12 +1,13 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
-             xmlns:verticaltabpanel="urn:import:lawscraper.client.ui.panels.verticaltabpanel">
+             xmlns:verticaltabpanel="urn:import:lawscraper.client.ui.panels.verticaltabpanel"
+             xmlns:resulttable="urn:import:lawscraper.client.ui.panels.resulttable">
     <ui:style>
         .lawTable {
             margin-left: 8px;
             margin-bottom: 32px;
-
+            float: left;
         }
 
         .topControlBar {
@@ -25,6 +26,7 @@
             border-right: 1px solid;
             border-bottom: 1px solid;
             height: 100%;
+            min-width: 300px;
         }
 
         .bottomControlPanel {
@@ -55,6 +57,11 @@
         .bodyContainer {
 
         }
+
+        .flerpContainer {
+            float: left;
+            margin-left: 3%;
+        }
     </ui:style>
 
 
@@ -68,8 +75,7 @@
             <g:FlowPanel addStyleNames="{style.searchBoxContainer}">
                 <g:TextBox addStyleNames="{style.searchBox}"/>
             </g:FlowPanel>
-            <verticaltabpanel:VerticalTabPanel ui:field="verticalpanel"/>
-            <g:FlowPanel ui:field="lawTableContainer" addStyleNames="{style.lawTable}"/>
+            <verticaltabpanel:VerticalTabPanel ui:field="verticalpanel" addStyleNames="{style.flerpContainer}"/>
         </g:FlowPanel>
     </g:FlowPanel>
 </ui:UiBinder>

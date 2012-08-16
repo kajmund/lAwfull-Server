@@ -4,6 +4,9 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.place.shared.PlaceController;
 import lawscraper.client.ui.*;
+import lawscraper.client.ui.clientcache.ClientCache;
+import lawscraper.client.ui.clientcache.ClientCacheImpl;
+import lawscraper.client.ui.panels.rolebasedwidgets.RoleBasedWidgetHandler;
 import lawscraper.client.ui.panels.rolebasedwidgets.RoleBasedWidgetHandlerImpl;
 
 public class ClientFactoryImpl implements ClientFactory {
@@ -16,8 +19,9 @@ public class ClientFactoryImpl implements ClientFactory {
     private final StartView startView = new StartViewImpl(this);
     private final CaseLawView caseLawView = new CaseLawViewImpl(this);
 
-    private static final RoleBasedWidgetHandlerImpl roleBasedWidgetHandler = new RoleBasedWidgetHandlerImpl();
+    private static final RoleBasedWidgetHandler roleBasedWidgetHandler = new RoleBasedWidgetHandlerImpl();
 
+    private static final ClientCache clientCache = new ClientCacheImpl();
 
     @Override
     public EventBus getEventBus() {
@@ -56,8 +60,13 @@ public class ClientFactoryImpl implements ClientFactory {
     }
 
     @Override
-    public RoleBasedWidgetHandlerImpl getRoleBasedWidgetHandler() {
+    public RoleBasedWidgetHandler getRoleBasedWidgetHandler() {
         return roleBasedWidgetHandler;
+    }
+
+    @Override
+    public ClientCache getClientCache() {
+        return clientCache;
     }
 
 }

@@ -11,7 +11,7 @@ import java.util.List;
  * Time: 6:42 PM
  */
 
-public class CaseLaw extends CaseLawDocumentPart {
+public class    CaseLaw extends CaseLawDocumentPart {
     private String publicationYear;
     private String publisher;
     private String creator;

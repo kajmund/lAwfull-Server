@@ -59,6 +59,7 @@ public class LawViewActivity extends AbstractActivity implements LawView.Present
         requests.initialize(eventBus);
         bookMarkRequests.initialize(eventBus);
         userRequestFactory.initialize(eventBus);
+        clientFactory.getClientCache().setRequestFactory(requests);
 
         StartView startView = clientFactory.getStartView();
         panel.setWidget(startView.asWidget());
@@ -114,20 +115,32 @@ public class LawViewActivity extends AbstractActivity implements LawView.Present
             return;
         }
 
-        context.findLawHTMLWrappedByLawKey(place.getLawKey()).fire(new Receiver<HTMLProxy>() {
-            @Override
-            public void onSuccess(HTMLProxy result) {
-                lawView.setLaw(result);
-                eventBus.fireEvent(new SetCurrentLawEvent(lawView.getDynamicFlerpContainer()));
-                RootPanel.get().getElement().getStyle().setCursor(Style.Cursor.DEFAULT);
-            }
+        //fetch from storage
+        final HTMLProxy result = clientFactory.getClientCache().get(place.getLawKey());
+        if (result != null) {
+            lawView.setLaw(result);
+            System.out.println("Got the cached law");
+        } else {
+            //fetch from server
+            context.findLawHTMLWrappedByLawKey(place.getLawKey()).fire(new Receiver<HTMLProxy>() {
+                @Override
+                public void onSuccess(HTMLProxy result) {
+                    lawView.setLaw(result);
+                    eventBus.fireEvent(new SetCurrentLawEvent(lawView.getDynamicFlerpContainer()));
+                    clientFactory.getClientCache().add(place.getLawKey(), result);
+                    RootPanel.get().getElement().getStyle().setCursor(Style.Cursor.DEFAULT);
+                    System.out.println("Got the law from the server");
+                }
 
-            @Override
-            public void onFailure(ServerFailure error) {
-                RootPanel.get().getElement().getStyle().setCursor(Style.Cursor.DEFAULT);
-                System.out.println("LawViewActivity::getLaw()" + error.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(ServerFailure error) {
+                    RootPanel.get().getElement().getStyle().setCursor(Style.Cursor.DEFAULT);
+                    System.out.println("LawViewActivity::getLaw()" + error.getMessage());
+                }
+            });
+        }
+        eventBus.fireEvent(new SetCurrentLawEvent(lawView.getDynamicFlerpContainer()));
+        RootPanel.get().getElement().getStyle().setCursor(Style.Cursor.DEFAULT);
     }
 
 

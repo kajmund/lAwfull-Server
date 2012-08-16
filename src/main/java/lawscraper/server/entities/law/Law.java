@@ -15,7 +15,7 @@ import java.util.Set;
  */
 
 public class Law extends LawDocumentPart {
-    @Indexed(indexType = IndexType.FULLTEXT, indexName = "searchByTitle")
+    @Indexed(indexType = IndexType.SIMPLE, indexName = "searchByTitle", fieldName = "title")
     String title = "";
 
     @Indexed(indexType = IndexType.SIMPLE, indexName = "searchByLawKey")

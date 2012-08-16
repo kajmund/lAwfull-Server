@@ -14,7 +14,7 @@
                   timeToLiveSeconds="600" memoryStoreEvictionPolicy="LRU"/>
 
     <cache name="lawCache" eternal="false"
-           maxElementsInMemory="1000" overflowToDisk="true" diskPersistent="true"
+           maxElementsInMemory="1000" overflowToDisk="true" diskPersistent="false"
            timeToIdleSeconds="0" timeToLiveSeconds="30000"
            memoryStoreEvictionPolicy="LRU"/>
 

@@ -9,11 +9,13 @@
             float: left;
             position: relative;
             margin-left: 2%;
+            width: 80%;
         }
 
         .flerp {
-            width: 10%;
+            width: 100%;
             float: left;
+            position: relative;
             border: 1px solid;
             position: relative;
             cursor: pointer;
@@ -22,7 +24,7 @@
         }
 
         .flerpSelected {
-            width: 10%;
+            width: 100%;
             float: left;
             position: relative;
             text-align: center;
@@ -31,12 +33,12 @@
             padding-top: 5px;
             border-bottom: 1px solid;
             border-top: 1px solid;
-            border-right: 2px solid;
-            border-left: none;
+            border-left: 2px solid;
+            border-right: none;
 
-            -moz-box-shadow: 5px 3px 5px #000;
-            -webkit-box-shadow: 5px 3px 5px #000;
-            box-shadow: 5px 3px 5px #000;
+            -moz-box-shadow: -5px -1px 6px #000;
+            -webkit-box-shadow: -5px -1px 6px #000;
+            box-shadow: -5px -1px 6px #000;
             word-wrap: break-word;
 
         }
@@ -45,12 +47,18 @@
 
         }
 
+        .flerpContainer {
+            position: relative;
+            float: left;
+            width: 10%;
+        }
+
     </ui:style>
 
     <g:FlowPanel ui:field="mainContainer" addStyleNames="{style.mainContainer}">
+        <g:FlowPanel ui:field="flerpContainer" addStyleNames="{style.flerpContainer}"/>
         <g:FlowPanel addStyleNames="{style.register}">
             <g:DeckPanel ui:field="tabContentDeckPanel"/>
         </g:FlowPanel>
-        <g:FlowPanel ui:field="flerpContainer"/>
     </g:FlowPanel>
 </ui:UiBinder>

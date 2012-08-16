@@ -125,15 +125,15 @@ public class StartViewActivity extends AbstractActivity implements StartView.Pre
     }
 
     @Override
-    public void getLawsByAlphabet(String query, final LawsByNamePanel lawsByNamePanel) {
-        query += "*";
+    public void getLawsByAlphabet(final String query, final LawsByNamePanel lawsByNamePanel) {
+        String queryWithWildCards = query + "*";
 
         LawRequestFactory.LawRequest context = requests.lawRequest();
-        context.findLawByQuery(query).fire(new Receiver<List<LawProxy>>() {
+        context.findLawByQuery(queryWithWildCards).fire(new Receiver<List<LawProxy>>() {
 
             @Override
             public void onSuccess(List<LawProxy> response) {
-                lawsByNamePanel.setLaws(response);
+                lawsByNamePanel.setLaws(response, query);
             }
         });
 
@@ -166,6 +166,7 @@ public class StartViewActivity extends AbstractActivity implements StartView.Pre
 
     @Override
     public void searchLaws(String query) {
+        query = "*" + query + "*";
         LawRequestFactory.LawRequest context = requests.lawRequest();
         context.findLawByQuery(query).fire(new Receiver<List<LawProxy>>() {
 

@@ -249,20 +249,19 @@
             </g:FlowPanel>
 
 
-            <g:FlowPanel addStyleNames="{style.menuContainer}">
-                <g:FlowPanel addStyleNames="{style.pageSection}, {style.borderRight}">
-                    <g:FlowPanel ui:field="flerpTabPanelContainer"/>
-                    <g:FlowPanel addStyleNames="{style.clearBoth}"/>
-                    <g:HTMLPanel>
-                        <div style="float:right;">
-                            <roleBased:RoleBasedFlowPanel ui:field="legalResearchListBoxContainer"
-                                                          requiresUserRole="ROLE_USER" visible="false">
-                                <g:ListBox ui:field="legalResearchListBox" addStyleNames="{style.legalResearchList}"/>
-                            </roleBased:RoleBasedFlowPanel>
-                        </div>
-                    </g:HTMLPanel>
-                </g:FlowPanel>
+            <g:FlowPanel addStyleNames="{style.pageSection}, {style.borderRight}">
+                <g:FlowPanel ui:field="flerpTabPanelContainer"/>
+                <g:FlowPanel addStyleNames="{style.clearBoth}"/>
+                <g:HTMLPanel>
+                    <div style="float:right;">
+                        <roleBased:RoleBasedFlowPanel ui:field="legalResearchListBoxContainer"
+                                                      requiresUserRole="ROLE_USER" visible="false">
+                            <g:ListBox ui:field="legalResearchListBox" addStyleNames="{style.legalResearchList}"/>
+                        </roleBased:RoleBasedFlowPanel>
+                    </div>
+                </g:HTMLPanel>
             </g:FlowPanel>
+
         </g:FlowPanel>
 
 
@@ -301,7 +300,7 @@
 
                 <g:SplitLayoutPanel ui:field="splitLayoutPanel" width="400" height="400"
                                     addStyleNames="{style.gwt-SplitLayoutPanel}">
-                    <g:west size="210">
+                    <g:west size="410">
                         <!-- todo: use deckpanel -->
                         <g:FlowPanel ui:field="leftContainer"
                                      addStyleNames="{style.leftContainer}, {style.lightblueGradient}">

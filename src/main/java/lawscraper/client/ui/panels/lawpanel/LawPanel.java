@@ -113,6 +113,7 @@ public class LawPanel extends Composite {
             return;
         }
 
+        //todo: add custom tag so you dont have to traverse all the divs
         final NodeList<com.google.gwt.dom.client.Element> elements =
                 htmlPanel.getElement().getElementsByTagName("div");
 

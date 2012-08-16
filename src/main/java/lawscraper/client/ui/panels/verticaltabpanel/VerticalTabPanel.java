@@ -30,6 +30,7 @@ public class VerticalTabPanel extends Composite {
 
         String flerpSelected();
 
+        String flerpContainer();
     }
 
     private static VerticalTabPanelUiBinder uiBinder = GWT.create(VerticalTabPanelUiBinder.class);
@@ -56,7 +57,7 @@ public class VerticalTabPanel extends Composite {
             FlowPanel flowPanel = (FlowPanel) flerpContainer.getWidget(i);
             final String str = flowPanel.getElement().getInnerText();
             if (str.equals(tabString)) {
-                return flerpContainer.getWidget(i);
+                return tabContentDeckPanel.getWidget(i);
             }
         }
         return null;
@@ -89,7 +90,10 @@ public class VerticalTabPanel extends Composite {
         flowPanel.addStyleName(style.flerp());
         flowPanel.add(new Label(tabName));
         flerpContainer.add(flowPanel);
-        tabContentDeckPanel.add(content);
+
+        FlowPanel tabContentFlowPanel = new FlowPanel();
+        tabContentFlowPanel.add(content);
+        tabContentDeckPanel.add(tabContentFlowPanel);
         addClickAction(flowPanel);
     }
 

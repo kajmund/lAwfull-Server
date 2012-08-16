@@ -73,9 +73,10 @@ public class LawServiceImpl implements LawService {
     @Cacheable(cacheName = "lawCache")
     public List<Law> findLawByQuery(String query) {
         List<Law> result = new ArrayList<Law>();
+
         /* todo: fix paging */
-        String queryString = "*" + query + "*";
-        Iterable<Law> foundLaws = lawRepository.findAllByQuery("title", queryString);
+        Iterable<Law> foundLaws = lawRepository.findAllByQuery("searchByTitle", "title", query);
+
         int i = 100;
         for (Law law : foundLaws) {
 
@@ -85,7 +86,7 @@ public class LawServiceImpl implements LawService {
             result.add(law);
         }
 
-        System.out.println(queryString);
+        System.out.println(query + ":" + result.size());
         return result;
     }
 

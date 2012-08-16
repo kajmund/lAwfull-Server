@@ -132,7 +132,7 @@
     <g:FlowPanel ui:field="lawPanelContainer">
         <shortCut:ShortCutPanel ui:field="shortCutPanel" visible="false" addStyleNames="{style.shortCutPanel}"/>
         <g:SplitLayoutPanel ui:field="splitLayoutPanel" width="400" height="400">
-            <g:east size="210">
+            <g:east size="310">
                 <g:FlowPanel>
                     <g:FlowPanel ui:field="rightWingPanel" addStyleNames="{style.rightWingPanel}">
                         <boxPanel:BoxPanel ui:field="informationBoxPanel" headerTitle="Information"

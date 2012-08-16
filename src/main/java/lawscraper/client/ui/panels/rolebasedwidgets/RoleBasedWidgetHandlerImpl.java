@@ -54,6 +54,7 @@ public class RoleBasedWidgetHandlerImpl implements RoleBasedWidgetHandler {
         }
     }
 
+    @Override
     public void setUserProxy(UserProxy userProxy) {
         this.userProxy = userProxy;
     }
