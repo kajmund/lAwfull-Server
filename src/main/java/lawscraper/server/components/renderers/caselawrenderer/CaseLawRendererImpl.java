@@ -56,20 +56,19 @@ public class CaseLawRendererImpl implements CaseLawRenderer {
     private String renderParts(List<CaseLawDocumentPart> children) {
         StringBuilder sb = new StringBuilder();
         for (CaseLawDocumentPart child : children) {
-            sb.append(renderPart(child));
+            if (child != null) {
+                sb.append(renderPart(child));
+            }
         }
         return sb.toString();
     }
 
     private String renderPart(CaseLawDocumentPart part) {
-        String deprecatedString = "";
-        /*
-        if (part.isDeprecated()) {
-            deprecatedString = "_deprecated";
+        if (part.getPartType() != null) {
+            return renderPart(part, "part_" + part.getPartType().name().toLowerCase());
+        } else {
+            return renderPart(part, "part_caselaw");
         }
-        */
-        //return renderPart(part, "part_" + part.getLawPartType().name().toLowerCase() + deprecatedString);
-        return renderPart(part, "part_" + part.getPartType().name().toLowerCase() + deprecatedString);
     }
 
     private String renderPart(CaseLawDocumentPart part, String cssClass) {
@@ -81,9 +80,11 @@ public class CaseLawRendererImpl implements CaseLawRenderer {
             idStr = Long.toString(part.getId());
         }
 
-        if (DocumentPartType.valueOf(part.getType()) == DocumentPartType.HEADING ||
-                DocumentPartType.valueOf(part.getType()) == DocumentPartType.CHAPTER) {
-            title = text;
+        if (part.getType() != null) {
+            if (DocumentPartType.valueOf(part.getType()) == DocumentPartType.HEADING ||
+                    DocumentPartType.valueOf(part.getType()) == DocumentPartType.CHAPTER) {
+                title = text;
+            }
         }
 
         part = caseLawPartRepository.findOne(part.getId());

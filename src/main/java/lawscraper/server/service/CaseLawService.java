@@ -19,4 +19,6 @@ public interface CaseLawService {
     HTMLWrapper findCaseLawHTMLWrapped(Long id);
 
     CaseLaw find(Long id);
+
+    HTMLWrapper findCaseLawHTMLWrapped(String key);
 }

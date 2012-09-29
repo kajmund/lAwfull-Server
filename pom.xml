@@ -64,16 +64,24 @@
             <artifactId>aspectjrt</artifactId>
             <version>${aspectj.version}</version>
         </dependency>
+        <!--
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-servlet</artifactId>
             <version>${gwtVersion}</version>
             <scope>runtime</scope>
         </dependency>
-
+         -->
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
+            <version>${gwtVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-codeserver</artifactId>
             <version>${gwtVersion}</version>
             <scope>provided</scope>
         </dependency>
@@ -278,6 +286,7 @@
                     <runTarget>law.html</runTarget>
                     <hostedWebapp>${webappDirectory}</hostedWebapp>
                     <i18nMessagesBundle>lawscraper.client.Messages</i18nMessagesBundle>
+                    <bindAddress>0.0.0.0</bindAddress>
                 </configuration>
             </plugin>
             <!-- Copy static web files before executing gwt:run -->

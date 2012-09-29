@@ -36,6 +36,9 @@ public class LawServiceImpl implements LawService {
     private LawRepository lawRepository;
 
     @Autowired
+    private CaseLawService caseLawService;
+
+    @Autowired
     public LawServiceImpl(LawStore lawStore) {
         this.lawStore = lawStore;
     }
@@ -65,9 +68,18 @@ public class LawServiceImpl implements LawService {
     @Override
     @Cacheable(cacheName = "lawCache")
     public HTMLWrapper findLawHTMLWrappedByLawKey(String lawKey) {
-        Law law = lawRepository.findAllByPropertyValue("fsNumber", lawKey).iterator().next();
-        return new HTMLWrapper(law.getTitle(), law.getFsNumber(), lawRenderer.renderToHtml(law));
+        if (!isInteger(lawKey.substring(0, 1))) {
+            return caseLawService.findCaseLawHTMLWrapped(lawKey);
+        } else {
+            Law law = lawRepository.findAllByPropertyValue("fsNumber", lawKey).iterator().next();
+            return new HTMLWrapper(law.getTitle(), law.getFsNumber(), lawRenderer.renderToHtml(law));
+        }
     }
+
+    private boolean isInteger(String str) {
+        return str.matches("^-?[0-9]+(\\.[0-9]+)?$");
+    }
+
 
     @Override
     @Cacheable(cacheName = "lawCache")

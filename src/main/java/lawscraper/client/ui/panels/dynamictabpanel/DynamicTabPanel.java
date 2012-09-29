@@ -35,6 +35,8 @@ public class DynamicTabPanel extends Composite {
         String flerpContainer();
 
         String contentDeckPanel();
+
+        String flerpUnSelected();
     }
 
     private static DynamicTabPanelUiBinder uiBinder = GWT.create(DynamicTabPanelUiBinder.class);
@@ -62,7 +64,6 @@ public class DynamicTabPanel extends Composite {
             public void onClick(ClickEvent event) {
                 FlowPanel source = (FlowPanel) event.getSource();
                 selectFlerp(source);
-
                 if (tabPanelChangeHandler != null) {
                     tabPanelChangeHandler.onVerticalTabPanelChange(new VerticalTabPanelChangeEvent(source));
                 }
@@ -136,13 +137,16 @@ public class DynamicTabPanel extends Composite {
     private void handleOnClickFlerp(ClickEvent event) {
         Label label = (Label) event.getSource();
         FlowPanel tabWidget = (FlowPanel) label.getParent().getParent();
-        removeTab(tabWidget);
+        removeTab(tabWidget, label);
     }
 
-    private void removeTab(Widget tabWidget) {
+    private void removeTab(Widget tabWidget, Label label) {
         int tabWidgetIndex = ((FlowPanel) tabWidget.getParent()).getWidgetIndex(tabWidget);
         tabContentDeckPanel.remove(tabWidgetIndex);
         tabWidget.removeFromParent();
+        if (tabPanelChangeHandler != null) {
+            tabPanelChangeHandler.onVerticalTabPanelChange(new VerticalTabPanelChangeEvent(label));
+        }
     }
 
     private void selectFlerp(FlowPanel source) {
@@ -150,6 +154,10 @@ public class DynamicTabPanel extends Composite {
         FlowPanel parent = (FlowPanel) source.getParent();
         int index = parent.getWidgetIndex(source);
 
+        source.addStyleName(style.flerpSelected());
+        source.removeStyleName(style.flerpUnSelected());
+        tabContentDeckPanel.showWidget(((FlowPanel) source.getParent()).getWidgetIndex(source));
+        /*
         flerpContainer.remove(source);
         flerpContainer.add(source);
         try {
@@ -159,14 +167,17 @@ public class DynamicTabPanel extends Composite {
             tabContentDeckPanel.showWidget(tabContentDeckPanel.getWidgetCount() - 1);
 
             source.addStyleName(style.flerpSelected());
+            source.removeStyleName(style.flerpUnSelected());
         } catch (Exception e) {
             System.out.println("selectFlerp::Couldn't get container-widget");
         }
+        */
     }
 
     private void unSelectAllFlerps() {
         for (int i = 0; i < flerpContainer.getWidgetCount(); i++) {
             flerpContainer.getWidget(i).removeStyleName(style.flerpSelected());
+            flerpContainer.getWidget(i).addStyleName(style.flerpUnSelected());
         }
     }
 }

@@ -33,7 +33,6 @@ public class StartViewActivity extends AbstractActivity implements StartView.Pre
     final LegalResearchRequestFactory legalResearchRequests = GWT.create(LegalResearchRequestFactory.class);
 
     // Used to obtain views, eventBus, placeController
-    // Alternatively, could be injected via GIN
     private ClientFactory clientFactory;
     private EventBus eventBus;
     private FlowPanel flerpContainer;
@@ -85,10 +84,8 @@ public class StartViewActivity extends AbstractActivity implements StartView.Pre
         eventBus.addHandler(SetCurrentLawEvent.TYPE, new SetCurrentLawEventHandler() {
             @Override
             public void onSetCurrentLaw(SetCurrentLawEvent event) {
-                if (flerpContainer == null) {
-                    flerpContainer = event.getFlerpContainer();
-                    clientFactory.getStartView().addFlerpContainer(flerpContainer);
-                }
+                flerpContainer = event.getFlerpContainer();
+                clientFactory.getStartView().addFlerpContainer(flerpContainer);
             }
         });
     }

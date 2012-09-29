@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
@@ -45,24 +47,32 @@ public class CaseLawScraperServiceImpl implements CaseLawScraperService {
         }
     }
 
-    @Transactional(readOnly = false)
+
     private ScraperStatus scrapeLawsFromZipFile() {
         ScraperStatus scraperStatus = new ScraperStatus();
+        int i = 0;
+        Set<CaseLaw> caseLaws = new HashSet<CaseLaw>();
+        CaseLawScraper scraper;
         try {
             for (ZipDataUtil.CaseLawEntry caseLawEntry : ZipDataUtil.getAllCaseLaws()) {
-                CaseLawScraper scraper = new CaseLawScraper();
+                scraper = new CaseLawScraper();
                 try {
+                    System.out.println("--");
+                    System.out.println("Scraping...");
                     scraper.parse(caseLawEntry.getInputStream());
                     scraperStatus.increaseScrapedLaws();
-                    CaseLaw scrapedLaw = scraper.getCaseLaw();
-                    CaseLaw result = caseLawRepository.save(scrapedLaw);
 
-                    //Output caselaw info
-                    System.out.println("--");
-                    System.out.println(result.getRelation());
-                    System.out.println(result.getId());
+                    caseLaws.add(scraper.getCaseLaw());
+
+                    System.out.println("Done: Scraped laws: " + scraperStatus.getScrapedLaws());
                     System.out.println("--");
 
+                    if (i == 10) {
+                        saveCaseLaws(caseLaws);
+                        i = 0;
+                        caseLaws.clear();
+                    }
+                    i++;
                 } catch (Exception e) {
                     System.out.println("Failed to parse " + caseLawEntry.getName());
                     e.printStackTrace();
@@ -73,6 +83,13 @@ public class CaseLawScraperServiceImpl implements CaseLawScraperService {
         }
 
         return scraperStatus;
+    }
+
+    @Transactional(readOnly = false)
+    private void saveCaseLaws(Set<CaseLaw> caseLaws) {
+        for (CaseLaw caseLaw : caseLaws) {
+            caseLawRepository.save(caseLaw);
+        }
     }
 
     private ScraperStatus scrapeLawsFromInternet() {

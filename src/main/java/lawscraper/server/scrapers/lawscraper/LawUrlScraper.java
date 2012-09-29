@@ -56,7 +56,7 @@ public class LawUrlScraper {
             "https://lagen.nu/index/%E4.xht2",
             "https://lagen.nu/index/%F6.xht2");
 
-    private static final String URL_MATCH_PATTERN = "http://rinfo.lagrummet.se/publ/sfs/(.*)";
+    private static final String URL_MATCH_PATTERN = "http://rinfo.lagrummet.se/publ/sfs/(.*|.*_s.*)";
 
     public void fetchUrls() throws ParserConfigurationException, SAXException {
         DefaultHandler handler = new

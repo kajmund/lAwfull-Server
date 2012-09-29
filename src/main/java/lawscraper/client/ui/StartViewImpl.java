@@ -78,6 +78,8 @@ public class StartViewImpl extends Composite implements StartView {
     @UiField FlowPanel leftMenuContainer;
     @UiField SplitLayoutPanel splitLayoutPanel;
     @UiField FlowPanel flerpTabPanelContainer;
+    @UiField FlowPanel pageSection;
+    @UiField FlowPanel header;
 
     private Presenter presenter;
 
@@ -128,7 +130,9 @@ public class StartViewImpl extends Composite implements StartView {
 
     @Override
     public void addFlerpContainer(FlowPanel flerpContainer) {
-        flerpTabPanelContainer.add(flerpContainer);
+        if (flerpTabPanelContainer.getWidgetIndex(flerpContainer) == -1) {
+            flerpTabPanelContainer.add(flerpContainer);
+        }
     }
 
     @UiHandler("legalResearchListBox")

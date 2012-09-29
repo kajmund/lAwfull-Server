@@ -25,7 +25,6 @@ import java.util.Stack;
 public class CaseLawScraper {
     private ArrayList<String> currentDataType = new ArrayList<String>();
     private Stack<CaseLawDocumentPart> caseLawDocumentPartStack = new Stack<CaseLawDocumentPart>();
-    private boolean endParsing;
     private CaseLaw caseLaw = new CaseLaw();
 
     static final String ARSUTGAVA = "rinfo:arsutgava";
@@ -54,11 +53,7 @@ public class CaseLawScraper {
                     }
 
                     public void characters(char[] ch, int start, int length) throws SAXException {
-                        data = new String(ch, start, length);
-                        if (endParsing) {
-                            return;
-                        }
-                        data = Utilities.trimText(data);
+                        data = Utilities.trimText(new String(ch, start, length));
                         if (data.length() > 0) {
                             /* Dont't trim the a's, they need their space :-)
                         * */
@@ -91,49 +86,35 @@ public class CaseLawScraper {
 
     private void addData(String data) {
         String cdt = getCurrentDataType();
-
         if (cdt.equals(ARSUTGAVA)) {
             caseLaw.setPublicationYear(data);
-            System.out.println(ARSUTGAVA + " " + data);
         } else if (cdt.equals(PUBLISHER)) {
             caseLaw.setPublisher(data);
-            System.out.println(PUBLISHER + " " + data);
         } else if (cdt.equals(CREATOR)) {
             caseLaw.setCreator(data);
-            System.out.println(CREATOR + " " + data);
         } else if (cdt.equals(RELATION)) {
             caseLaw.setRelation(data);
-            System.out.println(RELATION + " " + data);
         } else if (cdt.equals(DOMSNUMMER)) {
             caseLaw.setCaseIdentifier(data);
-            System.out.println(DOMSNUMMER + " " + data);
         } else if (cdt.equals(SUBJECT)) {
             caseLaw.addSubject(data);
-            System.out.println(SUBJECT + " " + data);
         } else if (cdt.equals(RATTSFALLSPUBLIKATION)) {
             caseLaw.setCasePublication(data);
-            System.out.println(RATTSFALLSPUBLIKATION + " " + data);
         } else if (cdt.equals(MALNUMMER)) {
             caseLaw.setCaseNumber(data);
-            System.out.println(MALNUMMER + " " + data);
         } else if (cdt.equals(AVGORANDEDATUM)) {
-            System.out.println(AVGORANDEDATUM + " " + data);
             caseLaw.setDecisionDate(data);
         } else if (cdt.equals(DESCRIPTION)) {
-            System.out.println(DESCRIPTION + " " + data);
             caseLaw.setDescription(data);
         } else if (cdt.equals(IDENTIFIER)) {
-            System.out.println(IDENTIFIER + " " + data);
-            caseLaw.setIdentifier(data);
+            caseLaw.setKey(data.replace(" ", "_"));
         } else if (cdt.equals(LAGRUM)) {
-            System.out.println(LAGRUM + " " + data);
             caseLaw.addLawReference(data);
         } else if (cdt.equals(SIDNUMMER)) {
-            System.out.println(SIDNUMMER + " " + data);
             caseLaw.setPageNumber(data);
         } else if (cdt.equals("p")) {
             CaseLawDocumentPart caseLawDocumentPart = caseLawDocumentPartStack.peek();
-            caseLawDocumentPart.setTextElement(new TextElement(data));
+            caseLawDocumentPart.setTextElement(new TextElement(caseLawDocumentPart.getTextElement().getText() + data));
         }
     }
 
@@ -149,20 +130,10 @@ public class CaseLawScraper {
     }
 
     private void parseElement(String qname, Attributes attributes) {
-        if (qname.equals("meta")) {
-//            parseMetaElement(attributes);
-        } else if (qname.equals("link")) {
-//            parseLinkElement(attributes);
-        } else if (qname.equals("dd")) {
+        if (qname.equals("dd")) {
             parseDDElement(attributes);
-        } else if (qname.equals("section")) {
-//            parseSectionElement(attributes);
         } else if (qname.equals("p")) {
             parsePElement(attributes);
-        } else if (qname.equals("li")) {
-//            parseLiElement(attributes);
-        } else if (qname.equals("h")) {
-//            parseHElement(attribute s);
         } else {
             setCurrentDataType(qname);
         }

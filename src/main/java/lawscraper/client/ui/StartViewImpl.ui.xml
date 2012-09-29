@@ -40,9 +40,10 @@
         .pageSection {
             background-image: url("http://gwt-cx.com/serendipity/serendipity/gwtcx/skins/aqua/images/navigation_pane_header.png");
             background-repeat: repeat-x;
-            height: 26px;
             left: 0;
             right: 0;
+            background-size: 34px auto;
+            height: 34px;
 
         }
 
@@ -207,7 +208,7 @@
 
     <g:FlowPanel addStyleNames="{style.parentContainer}">
         <g:FlowPanel>
-            <g:FlowPanel addStyleNames="{style.headerContainer}" ui:field="header">
+            <g:FlowPanel  addStyleNames="{style.headerContainer}" ui:field="header">
                 <g:FlowPanel>
                     <g:Label>lAwfull</g:Label>
                 </g:FlowPanel>
@@ -249,7 +250,7 @@
             </g:FlowPanel>
 
 
-            <g:FlowPanel addStyleNames="{style.pageSection}, {style.borderRight}">
+            <g:FlowPanel ui:field="pageSection" addStyleNames="{style.pageSection}, {style.borderRight}">
                 <g:FlowPanel ui:field="flerpTabPanelContainer"/>
                 <g:FlowPanel addStyleNames="{style.clearBoth}"/>
                 <g:HTMLPanel>

@@ -1,7 +1,10 @@
 package lawscraper.client.ui.clientcache;
 
-import lawscraper.shared.LawRequestFactory;
 import lawscraper.shared.proxies.HTMLProxy;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
@@ -14,9 +17,9 @@ public interface ClientCache {
 
     int getLength();
 
-    int getSize();
-
     void add(String key, HTMLProxy htmlProxy);
 
-    void setRequestFactory(LawRequestFactory requestFactory);
+    Iterator<Map.Entry<String,String>> iterator();
+
+    Set<String> getTabs();
 }

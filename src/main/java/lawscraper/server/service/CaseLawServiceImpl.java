@@ -63,4 +63,11 @@ public class CaseLawServiceImpl implements CaseLawService {
         return new HTMLWrapper(caseLaw.getCaseIdentifier(), caseLaw.getCaseIdentifier(),
                                caseLawRenderer.renderToHtml(caseLaw));
     }
+
+    @Override
+    public HTMLWrapper findCaseLawHTMLWrapped(String key) {
+        CaseLaw caseLaw = caseLawRepository.findAllByPropertyValue("key", key).iterator().next();
+        return new HTMLWrapper(caseLaw.getCaseIdentifier(), caseLaw.getCaseIdentifier(),
+                               caseLawRenderer.renderToHtml(caseLaw));
+    }
 }

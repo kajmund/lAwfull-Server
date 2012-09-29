@@ -32,7 +32,7 @@ public interface LawView extends IsWidget {
     public interface Presenter {
         void goTo(Place place);
 
-        void getLaw();
+        void getLaw(String key);
 
         DocumentBookMarkProxy createBookMarkRequestProxy();
 

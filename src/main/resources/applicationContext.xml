@@ -19,13 +19,13 @@ http://www.springframework.org/schema/security/spring-security-3.1.xsd
 http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring
      http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd">
 
-    <ehcache:annotation-driven cache-manager="ehCacheManager" />
+    <ehcache:annotation-driven cache-manager="ehCacheManager"/>
 
     <bean id="ehCacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean"/>
 
 
     <neo4j:repositories base-package="lawscraper.server.repositories"/>
-    <neo4j:config storeDirectory="/tmp/graph.db"/>
+    <neo4j:config storeDirectory="target/config-test"/>
 
     <context:annotation-config/>
     <context:spring-configured/>

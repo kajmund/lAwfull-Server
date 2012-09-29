@@ -131,8 +131,8 @@
                             <lawTreeItem:LawTreeItem text='Preskriptionslag' lawKey="1981:130"/>
                         </g:TreeItem>
                         <g:TreeItem text='Sakrätt'>
-                            <lawTreeItem:LawTreeItem text='Lösöresköpslag' lawKey="1845:50_s.1"/>
-                            <lawTreeItem:LawTreeItem text='Samäganderättslag' lawKey="1904:48_s.1"/>
+                            <lawTreeItem:LawTreeItem text='Lösöresköpslag' lawKey="1845:50 s.1"/>
+                            <lawTreeItem:LawTreeItem text='Samäganderättslag' lawKey="1904:48 s.1"/>
                             <lawTreeItem:LawTreeItem text='Förmånsrättslag' lawKey="1970:979"/>
                             <lawTreeItem:LawTreeItem text='Lag om godtrosförvärv av lösöre'
                                                      lawKey="1986:796"/>

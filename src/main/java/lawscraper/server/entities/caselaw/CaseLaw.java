@@ -1,5 +1,8 @@
 package lawscraper.server.entities.caselaw;
 
+import org.springframework.data.neo4j.annotation.Indexed;
+import org.springframework.data.neo4j.support.index.IndexType;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -11,7 +14,7 @@ import java.util.List;
  * Time: 6:42 PM
  */
 
-public class    CaseLaw extends CaseLawDocumentPart {
+public class CaseLaw extends CaseLawDocumentPart {
     private String publicationYear;
     private String publisher;
     private String creator;
@@ -22,7 +25,9 @@ public class    CaseLaw extends CaseLawDocumentPart {
     private String caseNumber;
     private String decisionDate;
     private String description;
-    private String identifier;
+
+    @Indexed(indexType = IndexType.SIMPLE, indexName = "searchByLawKey")
+    private String key;
     private List<String> lawReferenceList = new ArrayList<String>();
     private String pageNumber;
 
@@ -62,12 +67,12 @@ public class    CaseLaw extends CaseLawDocumentPart {
         this.lawReferenceList = lawReferenceList;
     }
 
-    public String getIdentifier() {
-        return identifier;
+    public String getKey() {
+        return key;
     }
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getPageNumber() {

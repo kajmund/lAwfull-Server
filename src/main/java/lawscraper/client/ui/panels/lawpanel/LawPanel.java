@@ -186,10 +186,22 @@ public class LawPanel extends Composite {
         ClickHandler tocClickHandler = new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
+
+                //firefox and chrome differs with the ahref-string
                 String aHrefString = event.getSource().toString();
                 String[] matches = aHrefString.split("\"");
                 if (matches.length > 0) {
-                    Element el = DOM.getElementById(matches[3].substring(1));
+                    String elementId;
+
+                    if (matches[1].contains("#")) {
+                        //firefox
+                        elementId = matches[1].substring(1);
+                    } else {
+                        //chrome
+                        elementId = matches[3].substring(1);
+                    }
+
+                    Element el = DOM.getElementById(elementId);
                     int top = el.getOffsetTop();
                     scrollPanel.setVerticalScrollPosition(top);
                 }

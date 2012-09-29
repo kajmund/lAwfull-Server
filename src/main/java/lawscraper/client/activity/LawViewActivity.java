@@ -59,7 +59,6 @@ public class LawViewActivity extends AbstractActivity implements LawView.Present
         requests.initialize(eventBus);
         bookMarkRequests.initialize(eventBus);
         userRequestFactory.initialize(eventBus);
-        clientFactory.getClientCache().setRequestFactory(requests);
 
         StartView startView = clientFactory.getStartView();
         panel.setWidget(startView.asWidget());
@@ -69,7 +68,14 @@ public class LawViewActivity extends AbstractActivity implements LawView.Present
         clientFactory.getRoleBasedWidgetHandler().handleRoleBasedViews(LawViewImpl.class);
         subscribeToChangeUserEvent(eventBus);
         subscribeToChangeLegalResearchEvent(eventBus);
-        getLaw();
+
+        /*
+        for (String lawKey : clientFactory.getClientCache().getTabs()) {
+            getLaw(lawKey);
+        }
+        */
+
+        getLaw(place.getLawKey());
     }
 
     /**
@@ -82,8 +88,6 @@ public class LawViewActivity extends AbstractActivity implements LawView.Present
             @Override
             public void onSetCurrentUser(SetCurrentUserEvent event) {
                 clientFactory.getRoleBasedWidgetHandler().handleRoleBasedViews(LawViewImpl.class);
-
-                //getLaw();
             }
         });
     }
@@ -98,27 +102,29 @@ public class LawViewActivity extends AbstractActivity implements LawView.Present
 
             @Override
             public void onSetCurrentLegalResearch(SetCurrentLegalResearchEvent event) {
-                getLaw();
+                getLaw(place.getLawKey());
             }
         });
     }
 
 
     @Override
-    public void getLaw() {
+    public void getLaw(final String key) {
         LawRequestFactory.LawRequest context = requests.lawRequest();
         RootPanel.get().getElement().getStyle().setCursor(Style.Cursor.WAIT);
 
         //select the tab if it exists instead of getting it from the server
-        if (lawView.selectLawIfExists(place.getLawKey())) {
+        if (lawView.selectLawIfExists(key)) {
             RootPanel.get().getElement().getStyle().setCursor(Style.Cursor.DEFAULT);
             return;
         }
 
         //fetch from storage
-        final HTMLProxy result = clientFactory.getClientCache().get(place.getLawKey());
-        if (result != null) {
-            lawView.setLaw(result);
+        final HTMLProxy cachedResult = clientFactory.getClientCache().get(key);
+        if (cachedResult != null) {
+            String html = cachedResult.getHtml();
+
+            lawView.setLaw(cachedResult);
             System.out.println("Got the cached law");
         } else {
             //fetch from server
@@ -127,7 +133,7 @@ public class LawViewActivity extends AbstractActivity implements LawView.Present
                 public void onSuccess(HTMLProxy result) {
                     lawView.setLaw(result);
                     eventBus.fireEvent(new SetCurrentLawEvent(lawView.getDynamicFlerpContainer()));
-                    clientFactory.getClientCache().add(place.getLawKey(), result);
+                    clientFactory.getClientCache().add(key, result);
                     RootPanel.get().getElement().getStyle().setCursor(Style.Cursor.DEFAULT);
                     System.out.println("Got the law from the server");
                 }
