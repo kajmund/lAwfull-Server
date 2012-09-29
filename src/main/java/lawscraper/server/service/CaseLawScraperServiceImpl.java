@@ -62,6 +62,8 @@ public class CaseLawScraperServiceImpl implements CaseLawScraperService {
                     scraper.parse(caseLawEntry.getInputStream());
                     scraperStatus.increaseScrapedLaws();
 
+                    //hello
+
                     caseLaws.add(scraper.getCaseLaw());
 
                     System.out.println("Done: Scraped laws: " + scraperStatus.getScrapedLaws());
