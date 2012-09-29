@@ -62,7 +62,7 @@ public class CaseLawScraperServiceImpl implements CaseLawScraperService {
                     scraper.parse(caseLawEntry.getInputStream());
                     scraperStatus.increaseScrapedLaws();
 
-                    //will I ever learn?
+                    //will I ever learn? no never
 
                     caseLaws.add(scraper.getCaseLaw());
 
