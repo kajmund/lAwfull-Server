@@ -2,12 +2,13 @@ package lawscraper.server.service;
 
 import lawscraper.server.components.PartFactory;
 import lawscraper.server.entities.law.Law;
-import lawscraper.server.repositories.LawRepository;
-import lawscraper.server.scrapers.lawscraper.LawScraper;
+import lawscraper.server.repositories.RepositoryBase;
 import lawscraper.server.scrapers.ZipDataUtil;
+import lawscraper.server.scrapers.lawscraper.LawScraper;
 import lawscraper.shared.scraper.LawScraperSource;
 import lawscraper.shared.scraper.ScraperStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,14 +27,16 @@ public class LawScraperServiceImpl implements LawScraperService {
 
     @Autowired
     PartFactory partFactory;
+    @Qualifier("repositoryBaseImpl")
     @Autowired
-    LawRepository lawRepository;
+    private RepositoryBase<Law> lawRepository;
 
     public LawScraperServiceImpl() {
         System.out.println("ScraperService instantiated");
     }
 
     @Override
+    @Transactional(readOnly = false)
     public ScraperStatus scrapeLaws(LawScraperSource lawScraperSource) {
         switch (lawScraperSource) {
             case INTERNET:
@@ -48,6 +51,7 @@ public class LawScraperServiceImpl implements LawScraperService {
     @Transactional(readOnly = false)
     private ScraperStatus scrapeLawsFromZipFile() {
         ScraperStatus scraperStatus = new ScraperStatus();
+
         try {
             for (ZipDataUtil.LawEntry lawEntry : ZipDataUtil.getAllLaws()) {
                 LawScraper scraper = new LawScraper(partFactory);

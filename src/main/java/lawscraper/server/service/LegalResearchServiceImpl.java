@@ -4,9 +4,10 @@ import lawscraper.server.entities.documentbookmark.DocumentBookMark;
 import lawscraper.server.entities.law.LawDocumentPart;
 import lawscraper.server.entities.legalresearch.LegalResearch;
 import lawscraper.server.entities.user.User;
-import lawscraper.server.repositories.LawPartRepository;
-import lawscraper.server.repositories.LegalResearchRepository;
+
+import lawscraper.server.repositories.RepositoryBase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,19 +26,22 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class LegalResearchServiceImpl implements LegalResearchService {
 
-    private LegalResearchRepository legalResearchRepository = null;
-    private LawPartRepository lawPartRepository = null;
+    private RepositoryBase<LegalResearch> legalResearchRepository = null;
+    private RepositoryBase<LawDocumentPart> lawPartRepository = null;
     private UserService userService;
 
 
     @Autowired
-    public LegalResearchServiceImpl(LegalResearchRepository legalResearchRepository,
-                                    LawPartRepository lawPartRepository,
+    public LegalResearchServiceImpl(RepositoryBase<LegalResearch> legalResearchRepository,
+                                    @Qualifier("repositoryBaseImpl") RepositoryBase<LawDocumentPart> lawPartRepository,
                                     UserService userService
                                    ) {
         this.legalResearchRepository = legalResearchRepository;
         this.lawPartRepository = lawPartRepository;
         this.userService = userService;
+
+        this.legalResearchRepository.setEntityClass(LegalResearch.class);
+        this.lawPartRepository.setEntityClass(LawDocumentPart.class);
     }
 
     @Override

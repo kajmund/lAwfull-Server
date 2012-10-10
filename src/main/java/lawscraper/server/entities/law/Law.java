@@ -1,9 +1,11 @@
 package lawscraper.server.entities.law;
 
+import lawscraper.server.entities.caselaw.CaseLaw;
 import lawscraper.shared.DocumentPartType;
-import org.springframework.data.neo4j.annotation.Indexed;
-import org.springframework.data.neo4j.support.index.IndexType;
+import org.hibernate.annotations.Index;
 
+import javax.persistence.*;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,26 +15,24 @@ import java.util.Set;
  * Date: 10/10/11
  * Time: 7:47 PM
  */
-
+@Entity
+@Table(name = "law")
 public class Law extends LawDocumentPart {
-    @Indexed(indexType = IndexType.SIMPLE, indexName = "searchByTitle", fieldName = "title")
     String title = "";
-
-    @Indexed(indexType = IndexType.SIMPLE, indexName = "searchByLawKey")
-    String fsNumber = "";
-
     String latestFetchFromGov = "";
     String releaseDate = "";
     String publisher = "";
     String creator = "";
+    private Collection<CaseLaw> caseLaws;
 
-    Set<String> consolidations = new HashSet<String>();
-    Set<String> propositions = new HashSet<String>();
+    Set<Consolidation> consolidations = new HashSet<Consolidation>();
+    Set<Proposition> propositions = new HashSet<Proposition>();
 
     public Law() {
         this.setLawPartType(DocumentPartType.LAW);
     }
 
+    @Column(nullable = false, length = 255)
     public String getCreator() {
         return creator;
     }
@@ -41,6 +41,8 @@ public class Law extends LawDocumentPart {
         this.creator = creator;
     }
 
+    @Index(name = "titleIndex")
+    @Column(nullable = false, length = 2048)
     public String getTitle() {
         return title;
     }
@@ -49,14 +51,7 @@ public class Law extends LawDocumentPart {
         this.title = title;
     }
 
-    public String getFsNumber() {
-        return fsNumber;
-    }
-
-    public void setFsNumber(String fsNumber) {
-        this.fsNumber = fsNumber;
-    }
-
+    @Column(unique = false, nullable = false, length = 20)
     public String getLatestFetchFromGov() {
         return latestFetchFromGov;
     }
@@ -65,6 +60,7 @@ public class Law extends LawDocumentPart {
         this.latestFetchFromGov = latestFetchFromGov;
     }
 
+    @Column(nullable = false, length = 20)
     public String getReleaseDate() {
         return releaseDate;
     }
@@ -73,6 +69,7 @@ public class Law extends LawDocumentPart {
         this.releaseDate = releaseDate;
     }
 
+    @Column(nullable = false, length = 255)
     public String getPublisher() {
         return publisher;
     }
@@ -81,19 +78,30 @@ public class Law extends LawDocumentPart {
         this.publisher = publisher;
     }
 
-    public Set<String> getConsolidations() {
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    public Set<Consolidation> getConsolidations() {
         return consolidations;
     }
 
-    public void setConsolidations(Set<String> consolidations) {
+    public void setConsolidations(Set<Consolidation> consolidations) {
         this.consolidations = consolidations;
     }
 
-    public Set<String> getPropositions() {
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    public Set<Proposition> getPropositions() {
         return propositions;
     }
 
-    public void setPropositions(Set<String> propositions) {
+    public void setPropositions(Set<Proposition> propositions) {
         this.propositions = propositions;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "lawReferenceList")
+    public Collection<CaseLaw> getCaseLaws() {
+        return caseLaws;
+    }
+
+    public void setCaseLaws(Collection<CaseLaw> caseLaws) {
+        this.caseLaws = caseLaws;
     }
 }

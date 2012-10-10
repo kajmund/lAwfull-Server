@@ -3,7 +3,7 @@ package lawscraper.server.service;
 import lawscraper.server.components.renderers.caselawrenderer.CaseLawRenderer;
 import lawscraper.server.entities.caselaw.CaseLaw;
 import lawscraper.server.entities.caselaw.CaseLawDocumentPart;
-import lawscraper.server.repositories.CaseLawRepository;
+import lawscraper.server.repositories.RepositoryBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,13 +21,15 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class CaseLawServiceImpl implements CaseLawService {
 
-    @Autowired
-    CaseLawRepository caseLawRepository;
 
-    @Autowired
+    RepositoryBase<CaseLaw> caseLawRepository;
     CaseLawRenderer caseLawRenderer;
 
-    public CaseLawServiceImpl() {
+    @Autowired
+    public CaseLawServiceImpl(RepositoryBase<CaseLaw> caseLawRepository, CaseLawRenderer caseLawRenderer) {
+        this.caseLawRepository = caseLawRepository;
+        this.caseLawRenderer = caseLawRenderer;
+        this.caseLawRepository.setEntityClass(CaseLaw.class);
     }
 
     @Override
@@ -66,7 +68,7 @@ public class CaseLawServiceImpl implements CaseLawService {
 
     @Override
     public HTMLWrapper findCaseLawHTMLWrapped(String key) {
-        CaseLaw caseLaw = caseLawRepository.findAllByPropertyValue("key", key).iterator().next();
+        CaseLaw caseLaw = caseLawRepository.findByPropertyValue("documentKey", key).iterator().next();
         return new HTMLWrapper(caseLaw.getCaseIdentifier(), caseLaw.getCaseIdentifier(),
                                caseLawRenderer.renderToHtml(caseLaw));
     }

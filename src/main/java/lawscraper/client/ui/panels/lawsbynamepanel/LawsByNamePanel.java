@@ -6,7 +6,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import lawscraper.client.place.LawPlace;
+import lawscraper.client.place.DocumentPlace;
 import lawscraper.client.ui.StartView;
 import lawscraper.client.ui.panels.resulttable.ResultCellTable;
 import lawscraper.client.ui.panels.resulttable.ResultCellTableClickEvent;
@@ -48,7 +48,7 @@ public class LawsByNamePanel extends Composite {
         resultTable.addChangeHandler(new ResultCellTableClickHandler() {
             @Override
             public void onResultClick(ResultCellTableClickEvent event) {
-                listener.goTo(new LawPlace(event.getLawKey()));
+                listener.goTo(new DocumentPlace(event.getLawKey()));
             }
         });
 

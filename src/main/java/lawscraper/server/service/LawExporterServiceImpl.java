@@ -41,7 +41,7 @@ public class LawExporterServiceImpl implements LawExporterService {
         String buffer = lawRenderer.renderToHtml(law);
         try {
             // Create file
-            FileWriter fstream = new FileWriter(FILEPATH + law.getFsNumber() + ".html");
+            FileWriter fstream = new FileWriter(FILEPATH + law.getDocumentKey() + ".html");
             BufferedWriter out = new BufferedWriter(fstream);
             out.write(buffer);
             //Close the output stream

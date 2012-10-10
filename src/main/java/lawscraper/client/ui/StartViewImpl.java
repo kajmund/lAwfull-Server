@@ -19,7 +19,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import lawscraper.client.ClientFactory;
 import lawscraper.client.ClientFactoryImpl;
-import lawscraper.client.place.LawPlace;
+import lawscraper.client.place.DocumentPlace;
 import lawscraper.client.place.UserPlace;
 import lawscraper.client.ui.loginrequest.LoginRequest;
 import lawscraper.client.ui.panels.addlegalresearchdialog.AddLegalResearchDialog;
@@ -249,7 +249,7 @@ public class StartViewImpl extends Composite implements StartView {
 
     @UiHandler("searchResultPanel")
     public void searchResultChange(SearchLawClickEvent searchLawClickEvent) {
-        presenter.goTo(new LawPlace(searchLawClickEvent.getLawKey()));
+        presenter.goTo(new DocumentPlace(searchLawClickEvent.getLawKey()));
     }
 
     @UiHandler("lawCasesMenuButton")
@@ -261,7 +261,7 @@ public class StartViewImpl extends Composite implements StartView {
 
     @UiHandler("lawsByCategoryPanel")
     public void onLawCategoryChange(LawCategoryChangeEvent changeEvent) {
-        presenter.goTo(new LawPlace(changeEvent.getLawKey()));
+        presenter.goTo(new DocumentPlace(changeEvent.getLawKey()));
     }
 
     private void handleLeftMenu() {

@@ -6,8 +6,7 @@ import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
 import lawscraper.server.entities.legalresearch.LegalResearch;
 import lawscraper.server.entities.user.User;
-import lawscraper.server.repositories.DocumentBookMarkRepository;
-import lawscraper.server.repositories.LegalResearchRepository;
+import lawscraper.server.repositories.RepositoryBase;
 import lawscraper.shared.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,25 +26,21 @@ import java.util.List;
 @Service("documentBookMarkServiceImpl")
 @Transactional(readOnly = true)
 public class DocumentBookMarkServiceImpl implements DocumentBookMarkService {
-    private DocumentBookMarkRepository documentBookMarkRepository;
+    private RepositoryBase<DocumentBookMark> documentBookMarkRepository;
 
     private LawService lawService;
 
     private UserService userService;
 
-    private LegalResearchService legalResearchService;
-
-    private LegalResearchRepository legalResearchRepository;
+    private RepositoryBase<LegalResearch> legalResearchRepository;
 
 
     @Autowired
-    public DocumentBookMarkServiceImpl(DocumentBookMarkRepository documentBookMarkRepository, UserService userService,
-                                       LawService lawService, LegalResearchService legalResearchService,
-                                       LegalResearchRepository legalResearchRepository) {
+    public DocumentBookMarkServiceImpl(RepositoryBase<DocumentBookMark> documentBookMarkRepository, UserService userService,
+                                       LawService lawService, RepositoryBase<LegalResearch> legalResearchRepository) {
         this.documentBookMarkRepository = documentBookMarkRepository;
         this.userService = userService;
         this.lawService = lawService;
-        this.legalResearchService = legalResearchService;
         this.legalResearchRepository = legalResearchRepository;
     }
 
@@ -71,8 +66,8 @@ public class DocumentBookMarkServiceImpl implements DocumentBookMarkService {
 
             //create bookmark
             DocumentBookMark documentBookMark = new DocumentBookMark();
-            documentBookMark.setDescription(documentLawPart.getKey());
-            documentBookMark.setTitle(documentLawPart.getKey());
+            documentBookMark.setDescription(documentLawPart.getDocumentKey());
+            documentBookMark.setTitle(documentLawPart.getDocumentKey());
 
             documentBookMark.setLawDocumentPart(documentLawPart);
 
@@ -137,7 +132,7 @@ public class DocumentBookMarkServiceImpl implements DocumentBookMarkService {
         LegalResearch legalResearch = user.getActiveLegalResearch();
         for (DocumentBookMark documentBookMark : legalResearch.getBookMarks()) {
             Law law = lawService.find(documentBookMark.getLawDocumentPart().getBelongsToLaw().getId());
-            if (law.getFsNumber().equals(lawKey)) {
+            if (law.getDocumentKey().equals(lawKey)) {
                 ret.add(documentBookMark);
             }
         }

@@ -3,10 +3,10 @@ package lawscraper.server.entities.law;
 import lawscraper.server.entities.superclasses.Document.DocumentPart;
 import lawscraper.server.entities.superclasses.Document.TextElement;
 import lawscraper.shared.DocumentPartType;
-import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.Fetch;
-import org.springframework.data.neo4j.annotation.RelatedTo;
+import org.hibernate.annotations.Index;
 
+import javax.persistence.*;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 /**
@@ -15,45 +15,28 @@ import java.util.*;
  * Date: 2/21/12
  * Time: 9:58 AM
  */
+@Entity
+@Table(name = "lawDocumentPart")
+@org.hibernate.annotations.Table(appliesTo = "lawDocumentPart", indexes = {@Index(name="lawDocIndex", columnNames = {"documentKey"})})
 public class LawDocumentPart extends DocumentPart {
-    @RelatedTo
-    Law deprecatedByLaw;
-    @RelatedTo
-    Law replacesLaw;
-    String key;
-
-    @RelatedTo
     Law belongsToLaw;
-
-    @Fetch
-    @RelatedTo(direction = Direction.INCOMING, type = "TEXT_ELEMENT")
     TextElement textElement = new TextElement();
-
-    @Fetch
-    @RelatedTo(elementClass = LawDocumentPart.class, type = "HAS_SUB_PART")
-    Set<LawDocumentPart> parts;
-
-    @RelatedTo(direction = Direction.INCOMING, type = "HAS_SUB_PART")
+    Set<LawDocumentPart> childParts;
     LawDocumentPart parent;
 
-    @RelatedTo(direction = Direction.INCOMING, type = "PREVIOUS_VERSION")
-    LawDocumentPart nextVersion;
-
-    @RelatedTo(type = "PREVIOUS_VERSION")
-    LawDocumentPart previousVersion;
-
-    @RelatedTo
     LawDocumentPart transitionalProvision;
     private boolean deprecated;
 
-    public Law getReplacesLaw() {
-        return replacesLaw;
+    public void setChildParts(Set<LawDocumentPart> parts) {
+        this.childParts = parts;
     }
 
-    public void setReplacesLaw(Law replacesLaw) {
-        this.replacesLaw = replacesLaw;
+    public void setParent(LawDocumentPart parent) {
+        this.parent = parent;
     }
 
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     public TextElement getTextElement() {
         return textElement;
     }
@@ -62,59 +45,29 @@ public class LawDocumentPart extends DocumentPart {
         this.textElement = textElement;
     }
 
-    public Law getDeprecatedByLaw() {
-        return deprecatedByLaw;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    public Set<LawDocumentPart> getChildParts() {
+        return childParts;
     }
 
-    public void setDeprecatedByLaw(Law deprecatedByLaw) {
-        this.deprecatedByLaw = deprecatedByLaw;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    @Fetch
-    public Set<LawDocumentPart> getParts() {
-        return parts;
-    }
-
+    @Transient
     public List<LawDocumentPart> getSortedParts() {
-        ArrayList<LawDocumentPart> lawDocumentParts = new ArrayList<LawDocumentPart>(getParts());
+        ArrayList<LawDocumentPart> lawDocumentParts = new ArrayList<LawDocumentPart>(getChildParts());
         Collections.sort(lawDocumentParts, new Comparator<LawDocumentPart>() {
             @Override
             public int compare(LawDocumentPart o, LawDocumentPart o1) {
-                return o.getOrder() - o1.getOrder();
+                return o.getListOrder() - o1.getListOrder();
             }
         });
         return lawDocumentParts;
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
     public LawDocumentPart getParent() {
-        //return parentRel.getParent();
-        return null;
+        return parent;
     }
 
-    public LawDocumentPart getNextVersion() {
-        return nextVersion;
-    }
-
-    public void setNextVersion(LawDocumentPart nextVersion) {
-        this.nextVersion = nextVersion;
-    }
-
-    public LawDocumentPart getPreviousVersion() {
-        return previousVersion;
-    }
-
-    public void setPreviousVersion(LawDocumentPart previousVersion) {
-        this.previousVersion = previousVersion;
-    }
-
+    @OneToOne(fetch = FetchType.LAZY)
     public LawDocumentPart getTransitionalProvision() {
         return transitionalProvision;
     }
@@ -124,7 +77,13 @@ public class LawDocumentPart extends DocumentPart {
     }
 
     public void addText(String string) {
-        textElement.setText(string);
+        String encodedString = "";
+        try {
+            encodedString = new String(string.getBytes(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+
+        }
+        textElement.setText(encodedString);
     }
 
     public void setDeprecated(boolean b) {
@@ -139,19 +98,21 @@ public class LawDocumentPart extends DocumentPart {
         setType(type.name());
     }
 
+    @Transient
     public DocumentPartType getLawPartType() {
         return DocumentPartType.valueOf(getType());
     }
 
     public void addDocumentPartChild(LawDocumentPart subPart) {
-        if (parts == null) {
-            parts = new HashSet<LawDocumentPart>();
+        if (childParts == null) {
+            childParts = new HashSet<LawDocumentPart>();
         }
-
-        subPart.setOrder(parts.size());
-        parts.add(subPart);
+        subPart.setParent(this);
+        subPart.setListOrder(childParts.size());
+        childParts.add(subPart);
     }
 
+    @ManyToOne(fetch = FetchType.LAZY)
     public Law getBelongsToLaw() {
         return belongsToLaw;
     }
@@ -159,5 +120,4 @@ public class LawDocumentPart extends DocumentPart {
     public void setBelongsToLaw(Law belongsToLaw) {
         this.belongsToLaw = belongsToLaw;
     }
-
 }

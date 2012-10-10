@@ -11,7 +11,7 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import lawscraper.client.place.LawPlace;
+import lawscraper.client.place.DocumentPlace;
 import lawscraper.client.ui.StartView;
 import lawscraper.shared.proxies.LawProxy;
 
@@ -77,7 +77,7 @@ public class LawResultPanel extends Composite {
         column.setFieldUpdater(new FieldUpdater<LawProxy, String>() {
             @Override
             public void update(int index, LawProxy object, String value) {
-                listener.goTo(new LawPlace(object.getFsNumber()));
+                listener.goTo(new DocumentPlace(object.getDocumentKey()));
             }
         });
 

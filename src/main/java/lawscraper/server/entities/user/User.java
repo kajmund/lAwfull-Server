@@ -3,10 +3,11 @@ package lawscraper.server.entities.user;
 import lawscraper.server.entities.legalresearch.LegalResearch;
 import lawscraper.server.entities.superclasses.EntityBase;
 import lawscraper.shared.UserRole;
-import org.springframework.data.neo4j.annotation.Fetch;
-import org.springframework.data.neo4j.annotation.Indexed;
-import org.springframework.data.neo4j.annotation.RelatedTo;
 
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,17 +17,15 @@ import java.util.Set;
  * Date: 4/16/12
  * Time: 6:43 PM
  */
+
+@Entity
+@Table(name = "user")
 public class User extends EntityBase {
-    @Indexed
     String userName;
     String password;
     String eMail;
-    @Fetch
-    @RelatedTo(type = "LAW_CASES")
     Set<LegalResearch> legalResearchList = new HashSet<LegalResearch>();
     private UserRole userRole;
-
-    @Fetch
     private LegalResearch activeLegalResearch;
 
     public User() {
@@ -63,6 +62,7 @@ public class User extends EntityBase {
         this.userName = userName;
     }
 
+    @OneToMany(mappedBy = "user")
     public Set<LegalResearch> getLegalResearch() {
         return legalResearchList;
     }
@@ -111,6 +111,7 @@ public class User extends EntityBase {
         this.legalResearchList = legalResearchList;
     }
 
+    @OneToOne
     public LegalResearch getActiveLegalResearch() {
         return activeLegalResearch;
     }

@@ -1,8 +1,9 @@
 package lawscraper.server.entities.caselaw;
 
-import org.springframework.data.neo4j.annotation.Indexed;
-import org.springframework.data.neo4j.support.index.IndexType;
+import lawscraper.server.entities.law.Law;
+import lawscraper.shared.DocumentPartType;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -13,68 +14,71 @@ import java.util.List;
  * Date: 6/13/12
  * Time: 6:42 PM
  */
-
+@Entity
+@Table(name = "caseLaw")
 public class CaseLaw extends CaseLawDocumentPart {
     private String publicationYear;
     private String publisher;
     private String creator;
     private String relation;
     private String caseIdentifier;
-    private List<String> subjectList = new ArrayList<String>();
+    private List<CaseLawSubject> subjectList = new ArrayList<CaseLawSubject>();
     private String casePublication;
     private String caseNumber;
     private String decisionDate;
     private String description;
 
-    @Indexed(indexType = IndexType.SIMPLE, indexName = "searchByLawKey")
-    private String key;
-    private List<String> lawReferenceList = new ArrayList<String>();
+    private List<Law> lawReferenceList = new ArrayList<Law>();
     private String pageNumber;
 
     public String getPublicationYear() {
         return publicationYear;
     }
 
+    public CaseLaw() {
+        this.setPartType(DocumentPartType.CASELAW);
+    }
+
+    @Column(length = 20)
     public String getCreator() {
         return creator;
     }
 
+    @Column(length = 20)
     public String getRelation() {
         return relation;
     }
 
+    @Column(length = 20)
     public String getCaseIdentifier() {
         return caseIdentifier;
     }
 
+    @Column(length = 20)
     public String getCasePublication() {
         return casePublication;
     }
 
+    @Column(length = 20)
     public String getDecisionDate() {
         return decisionDate;
     }
 
+    @Lob
     public String getDescription() {
         return description;
     }
 
-    public void setSubjectList(List<String> subjectList) {
+    public void setSubjectList(List<CaseLawSubject> subjectList) {
         this.subjectList = subjectList;
     }
 
-    public void setLawReferenceList(List<String> lawReferenceList) {
+    public void setLawReferenceList(List<Law> lawReferenceList) {
         this.lawReferenceList = lawReferenceList;
     }
 
-    public String getKey() {
-        return key;
-    }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
+    @Column(length = 20)
     public String getPageNumber() {
         return pageNumber;
     }
@@ -83,11 +87,12 @@ public class CaseLaw extends CaseLawDocumentPart {
         this.pageNumber = pageNumber;
     }
 
-
+    @Column(length = 20)
     public String getPublisher() {
         return publisher;
     }
 
+    @Column(length = 20)
     public String getCaseNumber() {
         return caseNumber;
     }
@@ -117,10 +122,11 @@ public class CaseLaw extends CaseLawDocumentPart {
     }
 
     public void addSubject(String data) {
-        this.getSubjectList().add(data);
+        //this.getSubjectList().add(data);
     }
 
-    public List<String> getSubjectList() {
+    @OneToMany(mappedBy = "caseLaw", cascade = CascadeType.ALL)
+    public List<CaseLawSubject> getSubjectList() {
         return subjectList;
     }
 
@@ -137,10 +143,11 @@ public class CaseLaw extends CaseLawDocumentPart {
     }
 
     public void addLawReference(String data) {
-        this.getLawReferenceList().add(data);
+        //this.getLawReferenceList().add(data);
     }
 
-    public List<String> getLawReferenceList() {
+    @ManyToMany
+    public List<Law> getLawReferenceList() {
         return lawReferenceList;
     }
 
@@ -149,7 +156,7 @@ public class CaseLaw extends CaseLawDocumentPart {
             parts = new HashSet<CaseLawDocumentPart>();
         }
 
-        part.setOrder(parts.size());
+        part.setListOrder(parts.size());
         parts.add(part);
     }
 

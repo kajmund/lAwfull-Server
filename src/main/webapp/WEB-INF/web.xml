@@ -12,6 +12,7 @@
         <param-value>
             classpath:applicationContext.xml
             classpath:applicationContext-security.xml
+            classpath:dataSource.xml
         </param-value>
     </context-param>
 

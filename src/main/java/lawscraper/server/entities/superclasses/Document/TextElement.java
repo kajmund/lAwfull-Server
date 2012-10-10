@@ -2,8 +2,11 @@ package lawscraper.server.entities.superclasses.Document;
 
 import lawscraper.server.entities.superclasses.EntityBase;
 import lawscraper.server.scrapers.Utilities;
-import org.springframework.data.neo4j.annotation.Indexed;
-import org.springframework.data.neo4j.support.index.IndexType;
+import org.hibernate.annotations.Index;
+
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+import javax.persistence.Table;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
@@ -11,12 +14,10 @@ import org.springframework.data.neo4j.support.index.IndexType;
  * Date: 2/21/12
  * Time: 11:05 AM
  */
-
+@Entity
+@Table(name = "textElement")
 public class TextElement extends EntityBase {
-    @Indexed(indexType = IndexType.FULLTEXT, indexName = "search")
     String text = "";
-
-    @Indexed
     String hash = "";
 
     public TextElement(String text) {
@@ -24,10 +25,9 @@ public class TextElement extends EntityBase {
     }
 
     public TextElement() {
-
     }
 
-
+    @Lob
     public String getText() {
         return text;
     }
@@ -43,6 +43,7 @@ public class TextElement extends EntityBase {
         this.setHash(tmpHash);
     }
 
+    @Index(name = "hashTextElementIndex")
     public String getHash() {
         return hash;
     }

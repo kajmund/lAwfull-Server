@@ -1,11 +1,12 @@
 package lawscraper.server.service;
 
+import lawscraper.server.entities.law.LawDocumentPart;
 import lawscraper.server.entities.user.User;
-import lawscraper.server.repositories.LawPartRepository;
-import lawscraper.server.repositories.UserRepository;
+import lawscraper.server.repositories.RepositoryBase;
 import lawscraper.shared.UserRole;
 import lawscraper.shared.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
@@ -32,16 +33,19 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class UserServiceImpl implements UserDetailsService, UserService {
 
-    private UserRepository userRepository = null;
-    private LawPartRepository lawPartRepository = null;
+    private RepositoryBase<User>userRepository = null;
+    private RepositoryBase<LawDocumentPart> lawPartRepository = null;
     private PasswordEncoder passwordEncoder = null;
 
     @Autowired
-    public UserServiceImpl(PasswordEncoder passwordEncoder, UserRepository userRepository,
-                           LawPartRepository lawPartRepository) {
+    public UserServiceImpl(PasswordEncoder passwordEncoder, RepositoryBase<User> userRepository,
+                           @Qualifier("repositoryBaseImpl") RepositoryBase<LawDocumentPart> lawPartRepository) {
         this.userRepository = userRepository;
         this.lawPartRepository = lawPartRepository;
         this.passwordEncoder = passwordEncoder;
+
+        this.userRepository.setEntityClass(User.class);
+        this.lawPartRepository.setEntityClass(LawDocumentPart.class);
     }
 
     @Override
@@ -95,7 +99,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             if (username.equals("root")) {
                 user = new User("root", passwordEncoder.encodePassword("root", null), UserRole.Administrator);
             } else {
-                user = userRepository.findByPropertyValue("userName", username);
+                user = getUserByUserName(username);
             }
             SecurityUser securityUser = new SecurityUser(user);
 
@@ -105,13 +109,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
     }
 
+    private User getUserByUserName(String username) throws NoResultException {
+        return userRepository.findByPropertyValue("userName", username).iterator().next();
+    }
+
     @Override
     public User getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = null;
         try {
             if (principal instanceof UserDetails) {
-                user = userRepository.findByPropertyValue("userName", ((UserDetails) principal).getUsername());
+                user = getUserByUserName(((UserDetails) principal).getUsername());
             } else {
                 userRepository.findByPropertyValue("userName", principal.toString());
             }

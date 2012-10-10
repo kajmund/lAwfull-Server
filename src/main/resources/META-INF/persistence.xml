@@ -1,0 +1,25 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+
+    <persistence-unit name="lawPersistence">
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+            <property name="hibernate.show_sql" value="false"></property>
+            <property name="hibernate.format_sql" value="false"></property>
+            <property name="hibernate.use_sql_comments" value="false"></property>
+
+            <property name="hibernate.cache.region.factory_class"
+                      value="net.sf.ehcache.hibernate.EhCacheRegionFactory"/>
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <property name="hibernate.cache.use_query_cache" value="true"/>
+
+            <property name="hibernate.c3p0.max_size" value="100"/>
+            <property name="hibernate.c3p0.min_size" value="5"/>
+            <property name="hibernate.c3p0.max_statements" value="50"/>
+            <property name="hibernate.c3p0.timeout" value="1800"/>
+            <property name="hibernate.c3p0.idle_test_period" value="3600"/>
+        </properties>
+    </persistence-unit>
+</persistence>

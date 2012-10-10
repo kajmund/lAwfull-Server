@@ -2,11 +2,12 @@ package lawscraper.server.scrapers;
 
 import lawscraper.server.components.PartFactory;
 import lawscraper.server.entities.law.Law;
-import lawscraper.server.repositories.LawRepository;
+import lawscraper.server.repositories.RepositoryBase;
 import lawscraper.server.scrapers.lawscraper.LawScraper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -23,8 +24,9 @@ import static org.junit.Assert.assertNotNull;
 @TransactionConfiguration(defaultRollback = true)
 public class TransactionParserMassTest {
 
+    @Qualifier("repositoryBaseImpl")
     @Autowired
-    LawRepository lawService;
+    private RepositoryBase<Law> lawService;
     @Autowired
     PartFactory partFactory;
 

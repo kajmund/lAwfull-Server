@@ -105,7 +105,7 @@ public class UsersPanel extends Composite {
         column.setFieldUpdater(new FieldUpdater<LawProxy, String>() {
             @Override
             public void update(int index, LawProxy object, String value) {
-                listener.goTo(new LawPlace(object.getId()));
+                listener.goTo(new DocumentPlace(object.getId()));
             }
         });
 */
@@ -125,7 +125,7 @@ public class UsersPanel extends Composite {
         column.setFieldUpdater(new FieldUpdater<LawProxy, String>() {
             @Override
             public void update(int index, LawProxy object, String value) {
-                listener.goTo(new LawPlace(object.getId()));
+                listener.goTo(new DocumentPlace(object.getId()));
             }
         });
 */
@@ -143,7 +143,7 @@ public class UsersPanel extends Composite {
         column.setFieldUpdater(new FieldUpdater<UserProxy, String>() {
             @Override
             public void update(int index, UserProxy object, String value) {
-                //listener.goTo(new LawPlace(object.getId()));
+                //listener.goTo(new DocumentPlace(object.getId()));
             }
         });
 
@@ -161,7 +161,7 @@ public class UsersPanel extends Composite {
         column.setFieldUpdater(new FieldUpdater<UserProxy, String>() {
             @Override
             public void update(int index, UserProxy object, String value) {
-                //listener.goTo(new LawPlace(object.getId()));
+                //listener.goTo(new DocumentPlace(object.getId()));
             }
         });
 

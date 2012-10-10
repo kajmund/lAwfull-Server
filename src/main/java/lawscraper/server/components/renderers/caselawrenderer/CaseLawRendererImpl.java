@@ -2,9 +2,8 @@ package lawscraper.server.components.renderers.caselawrenderer;
 
 import lawscraper.server.entities.caselaw.CaseLaw;
 import lawscraper.server.entities.caselaw.CaseLawDocumentPart;
-import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
-import lawscraper.server.repositories.CaseLawPartRepository;
+import lawscraper.server.repositories.RepositoryBase;
 import lawscraper.shared.DocumentPartType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,8 +17,15 @@ import java.util.List;
 @Component
 public class CaseLawRendererImpl implements CaseLawRenderer {
 
+
+    private RepositoryBase<CaseLawDocumentPart> caseLawPartRepository;
+
     @Autowired
-    private CaseLawPartRepository caseLawPartRepository;
+    public CaseLawRendererImpl(RepositoryBase<CaseLawDocumentPart> caseLawPartRepository) {
+        this.caseLawPartRepository = caseLawPartRepository;
+        this.caseLawPartRepository.setEntityClass(CaseLawDocumentPart.class);
+    }
+
 
     @Override
     public String renderToHtml(CaseLaw caseLaw) {
@@ -28,11 +34,13 @@ public class CaseLawRendererImpl implements CaseLawRenderer {
                        "class", "law");
     }
 
+    /*
     private String renderTableOfContents(Law law) {
         return element("div", renderTableOfContentsLawPart(law.getSortedParts()),
                        "class", "lawTableOfContents"
                       );
     }
+    */
 
     private String renderTableOfContentsLawPart(List<LawDocumentPart> parts) {
         String html = "";
@@ -64,11 +72,14 @@ public class CaseLawRendererImpl implements CaseLawRenderer {
     }
 
     private String renderPart(CaseLawDocumentPart part) {
+        /*
         if (part.getPartType() != null) {
             return renderPart(part, "part_" + part.getPartType().name().toLowerCase());
         } else {
             return renderPart(part, "part_caselaw");
         }
+        */
+        return renderPart(part, "part_section");
     }
 
     private String renderPart(CaseLawDocumentPart part, String cssClass) {

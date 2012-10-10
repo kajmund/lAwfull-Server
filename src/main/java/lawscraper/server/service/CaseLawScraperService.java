@@ -11,4 +11,6 @@ import lawscraper.shared.scraper.ScraperStatus;
  */
 public interface CaseLawScraperService {
     ScraperStatus scrapeCaseLaws(LawScraperSource lawScraperSource);
+
+    ScraperStatus scrapeLawsFromZipFile();
 }

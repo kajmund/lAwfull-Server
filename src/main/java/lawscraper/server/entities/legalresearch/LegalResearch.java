@@ -2,10 +2,14 @@ package lawscraper.server.entities.legalresearch;
 
 import lawscraper.server.entities.documentbookmark.DocumentBookMark;
 import lawscraper.server.entities.superclasses.EntityBase;
-import org.springframework.data.neo4j.annotation.Fetch;
-import org.springframework.data.neo4j.annotation.RelatedTo;
+import lawscraper.server.entities.user.User;
 
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
@@ -13,13 +17,14 @@ import java.util.HashSet;
  * Date: 4/16/12
  * Time: 6:43 PM
  */
+@Entity
+@Table(name = "legalResearch")
 public class LegalResearch extends EntityBase {
-    @RelatedTo(elementClass = DocumentBookMark.class, type = "LAWPART_BOOKMARK")
-    @Fetch
-    HashSet<DocumentBookMark> bookMarks = new HashSet<DocumentBookMark>();
+    Set<DocumentBookMark> bookMarks = new HashSet<DocumentBookMark>();
 
     private String title;
     private String description;
+    private User user;
 
     public LegalResearch() {
     }
@@ -29,11 +34,12 @@ public class LegalResearch extends EntityBase {
         this.setDescription(description);
     }
 
-    public HashSet<DocumentBookMark> getBookMarks() {
+    @OneToMany
+    public Set<DocumentBookMark> getBookMarks() {
         return bookMarks;
     }
 
-    public void setBookMarks(HashSet<DocumentBookMark> bookMarks) {
+    public void setBookMarks(Set<DocumentBookMark> bookMarks) {
         this.bookMarks = bookMarks;
     }
 
@@ -72,5 +78,14 @@ public class LegalResearch extends EntityBase {
         }
 
         return false;
+    }
+
+    @ManyToOne(optional = false)
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

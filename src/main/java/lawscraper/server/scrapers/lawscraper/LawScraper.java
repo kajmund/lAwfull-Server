@@ -1,10 +1,10 @@
 package lawscraper.server.scrapers.lawscraper;
 
-import lawscraper.server.components.PartFactory;
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
-import lawscraper.shared.DocumentPartType;
+import lawscraper.server.entities.law.Proposition;
 import lawscraper.server.scrapers.Utilities;
+import lawscraper.shared.DocumentPartType;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -15,6 +15,8 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -26,14 +28,13 @@ import java.util.Stack;
 
 public class LawScraper {
 
-    private final PartFactory partFactory;
-    private Law law = new Law();
+    private final Law law = new Law();
     private boolean endParsing;
-    private ArrayList<String> currentDataType = new ArrayList<String>();
-    private Stack<LawDocumentPart> lawDocumentPartStack = new Stack<LawDocumentPart>();
+    private final ArrayList<String> currentDataType = new ArrayList<String>();
+    private final Stack<LawDocumentPart> lawDocumentPartStack = new Stack<LawDocumentPart>();
+    private final Set<String> documentKeys = new HashSet<String>();
 
-    public LawScraper(PartFactory partFactory) {
-        this.partFactory = partFactory;
+    public LawScraper() {
         this.lawDocumentPartStack.add(law);
     }
 
@@ -83,14 +84,13 @@ public class LawScraper {
     }
 
     private void addData(String data) {
-        LawDocumentPart currentDocumentPart = lawDocumentPartStack.peek();
+        LawDocumentPart currentDocumentPart = getCurrentLawDocumentPart();
         String cdt = getCurrentDataType();
         if (cdt.equals("title")) {
             law.setTitle(data);
         } else if (cdt.equals("section") || cdt.equals("a")) {
             if (currentDocumentPart != null) {
                 currentDocumentPart.addText(currentDocumentPart.getTextElement().getText() + data);
-
                 //the lagen.nu parser sometimes misses deprecated paragraphs. let's check that our selfs.
                 if (currentDocumentPart.getTextElement().getText().contains("upphävd genom")) {
                     currentDocumentPart.setLawPartType(DocumentPartType.PARAGRAPH_DEPRECATED);
@@ -160,11 +160,34 @@ public class LawScraper {
                 attributes.getValue(2).equals("rinfo:Stycke") &&
                 !attributes.getValue(0).startsWith("L")) {
             LawDocumentPart section = createPart(DocumentPartType.SECTION);
-            section.setKey(attributes.getValue(0));
-            setCurrentLawDocumentPart(section);
+            setCurrentLawDocumentPart(section, attributes.getValue(0));
             setCurrentDataType("section");
         } else {
             setCurrentDataType("p");
+        }
+    }
+
+    private void setDocumentKey(LawDocumentPart lawDocumentPart, String key) {
+
+        if (lawDocumentPart.getParent() != null && lawDocumentPart.getParent().getDocumentKey() != null) {
+            String finalKey = lawDocumentPart.getParent().getDocumentKey() + "_" + key;
+
+            if (documentKeys.contains(finalKey)) {
+                boolean done = false;
+                int version = 1;
+                while (!done) {
+                    version++;
+                    if (!documentKeys.contains(finalKey + "_" + version)) {
+                        finalKey += "_" + version;
+                        done = true;
+                    }
+                }
+            }
+
+            lawDocumentPart.setDocumentKey(finalKey);
+            documentKeys.add(finalKey);
+        } else {
+            lawDocumentPart.setDocumentKey(key);
         }
     }
 
@@ -193,10 +216,11 @@ public class LawScraper {
         //checks if value starts with P because we want the LI's that is connected to a paragraph
         if (attributes.getValue(0).startsWith("P") || attributes.getValue(0).startsWith("K")) {
             LawDocumentPart sectionListItem = createPart(DocumentPartType.SECTION_LIST_ITEM);
-            sectionListItem.setKey(attributes.getValue(1));
+
             //sectionListItem.addText(attributes.getValue(0));
             setCurrentDataType("sectionListItem");
-            setCurrentLawDocumentPart(sectionListItem);
+            setCurrentLawDocumentPart(sectionListItem, attributes.getValue(1));
+
         }
     }
 
@@ -208,12 +232,12 @@ public class LawScraper {
             setCurrentDataType("dividerHeadLine");
         } else if (attributes.getValue(1) != null && attributes.getValue(1).equals("underrubrik")) {
             LawDocumentPart subHeadLine = createPart(DocumentPartType.SUB_HEADING);
-            setCurrentLawDocumentPart(subHeadLine);
+            setCurrentLawDocumentPart(subHeadLine, attributes.getValue(0));
             setCurrentDataType("subHeadLine");
 
         } else if (attributes.getValue(0) != null && attributes.getValue(0).contains("R")) {
             LawDocumentPart headLine = createPart(DocumentPartType.HEADING);
-            setCurrentLawDocumentPart(headLine);
+            setCurrentLawDocumentPart(headLine, attributes.getValue(0));
             setCurrentDataType("headLine");
 
         } else {
@@ -235,23 +259,19 @@ public class LawScraper {
 
         if (attributes.getValue(1) != null && attributes.getValue(1).equals("rinfo:Kapitel")) {
             LawDocumentPart chapter = createPart(DocumentPartType.CHAPTER);
-            chapter.setKey(attributes.getValue(2));
-            setCurrentLawDocumentPart(chapter);
+
+            setCurrentLawDocumentPart(chapter, attributes.getValue(2));
             setCurrentDataType("chapter");
         } else if (attributes.getValue(1) != null && attributes.getValue(1).equals("rinfo:Paragraf")) {
             LawDocumentPart paragraph = createPart(DocumentPartType.PARAGRAPH);
             if (attributes.getValue(4) != null) {
                 paragraph.addText(attributes.getValue(4) + " &sect; ");
             }
-            if (attributes.getValue(2) != null) {
-                paragraph.setKey(attributes.getValue(2));
-            }
-            setCurrentLawDocumentPart(paragraph);
+            setCurrentLawDocumentPart(paragraph, attributes.getValue(0));
             setCurrentDataType("paragraph");
         } else if (attributes.getValue(0) != null && attributes.getValue(0).equals("rinfo:Avdelning")) {
             LawDocumentPart divider = createPart(DocumentPartType.DIVIDER);
-            divider.setKey(attributes.getValue(1));
-            setCurrentLawDocumentPart(divider);
+            setCurrentLawDocumentPart(divider, attributes.getValue(0));
             setCurrentDataType("divider");
         } else if (attributes.getValue(0) != null && attributes.getValue(0).equals("upphavd")) {
             LawDocumentPart deprecatedElement = createPart(DocumentPartType.SECTION);
@@ -274,7 +294,8 @@ public class LawScraper {
         }
         if (attributes.getValue(0).equals("rinfo:forarbete") && !law.getPropositions()
                                                                     .contains(attributes.getValue(1))) {
-            law.getPropositions().add(attributes.getValue(1));
+
+            law.getPropositions().add(new Proposition(attributes.getValue(1)));
         }
     }
 
@@ -284,7 +305,7 @@ public class LawScraper {
             return;
         }
         if (attributes.getValue(0).equals("rinfo:fsNummer")) {
-            law.setFsNumber(attributes.getValue(1));
+            setDocumentKey(law, attributes.getValue(1));
         } else if (attributes.getValue(0).equals("rinfoex:senastHamtad")) {
             law.setLatestFetchFromGov(attributes.getValue(1));
         } else if (attributes.getValue(0).equals("rinfo:utfardandedatum")) {
@@ -292,7 +313,7 @@ public class LawScraper {
         }
     }
 
-    public String getCurrentDataType() {
+    private String getCurrentDataType() {
         if (!currentDataType.isEmpty()) {
             return currentDataType.get(0);
         }
@@ -303,9 +324,15 @@ public class LawScraper {
         return law;
     }
 
-    private void setCurrentLawDocumentPart(LawDocumentPart lawDocumentPart) {
+    private void setCurrentLawDocumentPart(LawDocumentPart lawDocumentPart, String key) {
         addDocumentPart(lawDocumentPart);
+
         this.lawDocumentPartStack.add(lawDocumentPart);
+        setDocumentKey(lawDocumentPart, key);
+    }
+
+    private LawDocumentPart getCurrentLawDocumentPart() {
+        return lawDocumentPartStack.peek();
     }
 
     private void addDocumentPart(LawDocumentPart documentPart) {
@@ -317,8 +344,9 @@ public class LawScraper {
         }
     }
 
+
     private LawDocumentPart getAllowedParent(LawDocumentPart documentPart) {
-        LawDocumentPart stackTop = lawDocumentPartStack.peek();
+        LawDocumentPart stackTop = getCurrentLawDocumentPart();
         if (stackTop == null) {
             return null;
         }

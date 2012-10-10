@@ -2,8 +2,7 @@ package lawscraper.client.mvp;
 
 import com.google.gwt.place.shared.PlaceHistoryMapper;
 import com.google.gwt.place.shared.WithTokenizers;
-import lawscraper.client.place.GoodbyePlace;
-import lawscraper.client.place.LawPlace;
+import lawscraper.client.place.DocumentPlace;
 import lawscraper.client.place.StartViewPlace;
 
 /**
@@ -12,6 +11,6 @@ import lawscraper.client.place.StartViewPlace;
  * annotation or by extending PlaceHistoryMapperWithFactory and creating a
  * separate TokenizerFactory.
  */
-@WithTokenizers( {LawPlace.Tokenizer.class, StartViewPlace.Tokenizer.class, GoodbyePlace.Tokenizer.class })
+@WithTokenizers( {DocumentPlace.Tokenizer.class, StartViewPlace.Tokenizer.class})
 public interface AppPlaceHistoryMapper extends PlaceHistoryMapper {
 }

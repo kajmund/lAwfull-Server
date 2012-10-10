@@ -1,8 +1,9 @@
 package lawscraper.server.service;
 
 import lawscraper.server.entities.superclasses.Document.TextElement;
-import lawscraper.server.repositories.TextRepository;
+import lawscraper.server.repositories.RepositoryBase;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service("textService")
 public class TextServiceImpl implements TextService {
-    TextRepository repository = null;
+    RepositoryBase<TextElement> repository = null;
 
     @Autowired
-    public TextServiceImpl(TextRepository repository) {
+    public TextServiceImpl(@Qualifier("repositoryBaseImpl") RepositoryBase<TextElement> repository) {
         this.repository = repository;
     }
 
@@ -29,7 +30,7 @@ public class TextServiceImpl implements TextService {
         //Discontinued - findbypropertyvalue always returns null and the method is very slow
         //TextElement textElement = repository.findByPropertyValue("hash", te.getHash());
         TextElement textElement = null;
-        if (textElement == null) {
+        if (te == null) {
             textElement = repository.save(te);
         }
         return textElement;

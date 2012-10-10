@@ -84,6 +84,19 @@ public class CaseLawScraper {
 
     }
 
+    public CaseLaw getCaseLaw() {
+        return caseLaw;
+    }
+
+
+    private String getCurrentDataType() {
+        if (!currentDataType.isEmpty()) {
+            return currentDataType.get(0);
+        }
+        return "";
+    }
+
+
     private void addData(String data) {
         String cdt = getCurrentDataType();
         if (cdt.equals(ARSUTGAVA)) {
@@ -107,7 +120,7 @@ public class CaseLawScraper {
         } else if (cdt.equals(DESCRIPTION)) {
             caseLaw.setDescription(data);
         } else if (cdt.equals(IDENTIFIER)) {
-            caseLaw.setKey(data.replace(" ", "_"));
+            caseLaw.setDocumentKey(data.replace(" ", "_"));
         } else if (cdt.equals(LAGRUM)) {
             caseLaw.addLawReference(data);
         } else if (cdt.equals(SIDNUMMER)) {
@@ -122,12 +135,6 @@ public class CaseLawScraper {
         this.currentDataType.add(0, currentDataType);
     }
 
-    public String getCurrentDataType() {
-        if (!currentDataType.isEmpty()) {
-            return currentDataType.get(0);
-        }
-        return "";
-    }
 
     private void parseElement(String qname, Attributes attributes) {
         if (qname.equals("dd")) {
@@ -143,6 +150,7 @@ public class CaseLawScraper {
         CaseLawDocumentPart caseLawDocumentPart = createCaseLawDocumentPart();
         caseLawDocumentPartStack.add(caseLawDocumentPart);
         caseLaw.addCaseLawDocumentPart(caseLawDocumentPart);
+        caseLawDocumentPart.setDocumentKey(caseLaw.getDocumentKey() + "_" + caseLawDocumentPartStack.size());
         setCurrentDataType("p");
     }
 
@@ -150,10 +158,6 @@ public class CaseLawScraper {
         CaseLawDocumentPart caseLawDocumentPart = new CaseLawDocumentPart();
         caseLawDocumentPart.setBelongsToCaseLaw(caseLaw);
         return caseLawDocumentPart;
-    }
-
-    public CaseLaw getCaseLaw() {
-        return caseLaw;
     }
 
     private void parseDDElement(Attributes attributes) {

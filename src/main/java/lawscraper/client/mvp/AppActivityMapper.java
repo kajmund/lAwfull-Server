@@ -4,11 +4,9 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 import lawscraper.client.ClientFactory;
-import lawscraper.client.activity.GoodbyeActivity;
-import lawscraper.client.activity.LawViewActivity;
+import lawscraper.client.activity.DocumentViewActivity;
 import lawscraper.client.activity.UserViewActivity;
-import lawscraper.client.place.GoodbyePlace;
-import lawscraper.client.place.LawPlace;
+import lawscraper.client.place.DocumentPlace;
 import lawscraper.client.place.UserPlace;
 
 public class AppActivityMapper implements ActivityMapper {
@@ -40,14 +38,12 @@ public class AppActivityMapper implements ActivityMapper {
         } else
 
         */
-        if (place instanceof LawPlace) {
-            LawViewActivity lawViewActivity = new LawViewActivity((LawPlace) place, clientFactory);
+        if (place instanceof DocumentPlace) {
+            DocumentViewActivity lawViewActivity = new DocumentViewActivity((DocumentPlace) place, clientFactory);
             return lawViewActivity;
         } else if (place instanceof UserPlace) {
             UserViewActivity userViewActivity = new UserViewActivity((UserPlace) place, clientFactory);
             return userViewActivity;
-        } else if (place instanceof GoodbyePlace) {
-            return new GoodbyeActivity((GoodbyePlace) place, clientFactory);
         }
 
         return null;

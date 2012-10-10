@@ -2,9 +2,9 @@ package lawscraper.server.components.renderers.lawrenderer;
 
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
+import lawscraper.server.entities.superclasses.Document.TextElement;
+import lawscraper.server.repositories.RepositoryBase;
 import lawscraper.shared.DocumentPartType;
-import lawscraper.server.repositories.LawPartRepository;
-import lawscraper.server.repositories.TextRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,11 +17,23 @@ import java.util.List;
 @Component
 public class LawRendererImpl implements LawRenderer {
 
-    @Autowired
-    TextRepository textRepository;
+    RepositoryBase<TextElement> textRepository;
+    RepositoryBase<LawDocumentPart> lawPartRepository;
 
     @Autowired
-    LawPartRepository lawPartRepository;
+    public LawRendererImpl(RepositoryBase<TextElement> textRepository,
+                           RepositoryBase<LawDocumentPart> lawPartRepository
+                          ) {
+        this.textRepository = textRepository;
+        this.lawPartRepository = lawPartRepository;
+
+        this.lawPartRepository.setEntityClass(LawDocumentPart.class);
+        this.textRepository.setEntityClass(TextElement.class);
+    }
+
+    public LawRendererImpl() {
+
+    }
 
     @Override
     public String renderToHtml(Law law) {
@@ -110,7 +122,7 @@ public class LawRendererImpl implements LawRenderer {
     }
 
     private String getLawTitle(Law law) {
-        return law.getTitle() + " (" + law.getFsNumber() + ")";
+        return law.getTitle() + " (" + law.getDocumentKey() + ")";
     }
 
     private String element(String elementName, String content, String... attrKeysAndValues) {

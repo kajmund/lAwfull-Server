@@ -2,7 +2,7 @@ package lawscraper.server.service;
 
 import lawscraper.server.components.PartFactory;
 import lawscraper.server.entities.caselaw.CaseLaw;
-import lawscraper.server.repositories.CaseLawRepository;
+import lawscraper.server.repositories.RepositoryBase;
 import lawscraper.server.scrapers.ZipDataUtil;
 import lawscraper.server.scrapers.caselawscraper.CaseLawScraper;
 import lawscraper.shared.scraper.LawScraperSource;
@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
@@ -26,16 +24,19 @@ import java.util.Set;
 @Transactional(readOnly = true)
 public class CaseLawScraperServiceImpl implements CaseLawScraperService {
 
-    @Autowired
     PartFactory partFactory;
-    @Autowired
-    CaseLawRepository caseLawRepository;
+    RepositoryBase<CaseLaw> caseLawRepository;
 
-    public CaseLawScraperServiceImpl() {
+    @Autowired
+    public CaseLawScraperServiceImpl(RepositoryBase<CaseLaw> caseLawRepository, PartFactory partFactory) {
+        this.caseLawRepository = caseLawRepository;
+        this.partFactory = partFactory;
+        this.caseLawRepository.setEntityClass(CaseLaw.class);
         System.out.println("ScraperService instantiated");
     }
 
     @Override
+    @Transactional(readOnly = false)
     public ScraperStatus scrapeCaseLaws(LawScraperSource lawScraperSource) {
         switch (lawScraperSource) {
             case INTERNET:
@@ -48,12 +49,13 @@ public class CaseLawScraperServiceImpl implements CaseLawScraperService {
     }
 
 
-    private ScraperStatus scrapeLawsFromZipFile() {
+    @Override
+    @Transactional(readOnly = false)
+    public ScraperStatus scrapeLawsFromZipFile() {
         ScraperStatus scraperStatus = new ScraperStatus();
-        int i = 0;
-        Set<CaseLaw> caseLaws = new HashSet<CaseLaw>();
         CaseLawScraper scraper;
         try {
+            int scrapedCases = 10;
             for (ZipDataUtil.CaseLawEntry caseLawEntry : ZipDataUtil.getAllCaseLaws()) {
                 scraper = new CaseLawScraper();
                 try {
@@ -61,20 +63,19 @@ public class CaseLawScraperServiceImpl implements CaseLawScraperService {
                     System.out.println("Scraping...");
                     scraper.parse(caseLawEntry.getInputStream());
                     scraperStatus.increaseScrapedLaws();
-
-                    //so this is only master?
-
-                    caseLaws.add(scraper.getCaseLaw());
-
+                    CaseLaw savedCaseLaw;
                     System.out.println("Done: Scraped laws: " + scraperStatus.getScrapedLaws());
-                    System.out.println("--");
-
-                    if (i == 10) {
-                        saveCaseLaws(caseLaws);
-                        i = 0;
-                        caseLaws.clear();
+                    if (scraper.getCaseLaw().getDocumentKey() != null) {
+                        savedCaseLaw = caseLawRepository.save(scraper.getCaseLaw());
+                        System.out.println("-- ID: " + savedCaseLaw.getId());
+                    } else {
+                        System.out.println("Didnt have a key therefor the caselaw was expunged");
                     }
-                    i++;
+
+                    if (scrapedCases-- < 1) {
+                        break;
+                    }
+
                 } catch (Exception e) {
                     System.out.println("Failed to parse " + caseLawEntry.getName());
                     e.printStackTrace();
@@ -85,13 +86,6 @@ public class CaseLawScraperServiceImpl implements CaseLawScraperService {
         }
 
         return scraperStatus;
-    }
-
-    @Transactional(readOnly = false)
-    private void saveCaseLaws(Set<CaseLaw> caseLaws) {
-        for (CaseLaw caseLaw : caseLaws) {
-            caseLawRepository.save(caseLaw);
-        }
     }
 
     private ScraperStatus scrapeLawsFromInternet() {

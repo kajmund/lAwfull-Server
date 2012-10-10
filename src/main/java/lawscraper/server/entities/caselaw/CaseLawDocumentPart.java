@@ -3,10 +3,9 @@ package lawscraper.server.entities.caselaw;
 import lawscraper.server.entities.superclasses.Document.DocumentPart;
 import lawscraper.server.entities.superclasses.Document.TextElement;
 import lawscraper.shared.DocumentPartType;
-import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.Fetch;
-import org.springframework.data.neo4j.annotation.RelatedTo;
+import org.hibernate.annotations.Index;
 
+import javax.persistence.*;
 import java.util.*;
 
 /**
@@ -15,20 +14,21 @@ import java.util.*;
  * Date: 6/13/12
  * Time: 5:40 PM
  */
+@Entity
+@Table(name = "caseLawDocumentPart")
+@org.hibernate.annotations.Table(appliesTo = "caseLawDocumentPart", indexes = {@Index(name="caseLawDocIndex", columnNames = {"documentKey"})})
+
 public class CaseLawDocumentPart extends DocumentPart {
-    @RelatedTo
-    CaseLaw belongsToCaseLaw;
-
-    @Fetch
-    @RelatedTo(direction = Direction.INCOMING, type = "TEXT_ELEMENT")
-    TextElement textElement = new TextElement();
-
-    @Fetch
-    @RelatedTo(elementClass = CaseLawDocumentPart.class, type = "HAS_SUB_PART")
+    private CaseLaw belongsToCaseLaw;
+    private TextElement textElement = new TextElement();
     Set<CaseLawDocumentPart> parts = new HashSet<CaseLawDocumentPart>();
     private DocumentPartType partType;
 
+    public CaseLawDocumentPart() {
+        this.setPartType(DocumentPartType.CASELAW_SECTION);
+    }
 
+    @ManyToOne
     public CaseLaw getBelongsToCaseLaw() {
         return belongsToCaseLaw;
     }
@@ -37,6 +37,7 @@ public class CaseLawDocumentPart extends DocumentPart {
         this.belongsToCaseLaw = belongsToCaseLaw;
     }
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     public TextElement getTextElement() {
         return textElement;
     }
@@ -45,6 +46,7 @@ public class CaseLawDocumentPart extends DocumentPart {
         this.textElement = textElement;
     }
 
+    @OneToMany(mappedBy = "belongsToCaseLaw",cascade = CascadeType.ALL)
     public Set<CaseLawDocumentPart> getParts() {
         return parts;
     }
@@ -53,17 +55,19 @@ public class CaseLawDocumentPart extends DocumentPart {
         this.parts = parts;
     }
 
+    @Transient
     public List<CaseLawDocumentPart> getSortedParts() {
         ArrayList<CaseLawDocumentPart> caseLawDocumentParts = new ArrayList<CaseLawDocumentPart>(getParts());
         Collections.sort(caseLawDocumentParts, new Comparator<CaseLawDocumentPart>() {
             @Override
             public int compare(CaseLawDocumentPart o, CaseLawDocumentPart o1) {
-                return o.getOrder() - o1.getOrder();
+                return o.getListOrder() - o1.getListOrder();
             }
         });
         return caseLawDocumentParts;
     }
 
+    @Column(nullable = false, length = 20)
     public DocumentPartType getPartType() {
         return partType;
     }
@@ -71,6 +75,5 @@ public class CaseLawDocumentPart extends DocumentPart {
     public void setPartType(DocumentPartType partType) {
         this.partType = partType;
     }
-
 
 }

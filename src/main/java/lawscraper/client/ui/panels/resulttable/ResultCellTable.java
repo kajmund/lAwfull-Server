@@ -77,7 +77,7 @@ public class ResultCellTable extends Composite {
         column.setFieldUpdater(new FieldUpdater<LawProxy, String>() {
             @Override
             public void update(int index, LawProxy object, String value) {
-                handler.onResultClick(new ResultCellTableClickEvent(object.getFsNumber()));
+                handler.onResultClick(new ResultCellTableClickEvent(object.getDocumentKey()));
             }
         });
 
