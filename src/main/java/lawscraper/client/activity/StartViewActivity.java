@@ -6,31 +6,34 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.web.bindery.requestfactory.shared.Receiver;
 import com.google.web.bindery.requestfactory.shared.ServerFailure;
 import lawscraper.client.ClientFactory;
 import lawscraper.client.ui.StartView;
 import lawscraper.client.ui.StartViewImpl;
 import lawscraper.client.ui.events.*;
-import lawscraper.client.ui.panels.lawsbynamepanel.LawsByNamePanel;
+import lawscraper.client.ui.panels.documentsearchpanel.DocumentResultElement;
 import lawscraper.shared.*;
-import lawscraper.shared.proxies.LawProxy;
-import lawscraper.shared.proxies.LegalResearchProxy;
-import lawscraper.shared.proxies.ScraperStatusProxy;
-import lawscraper.shared.proxies.UserProxy;
+import lawscraper.shared.proxies.*;
 import lawscraper.shared.scraper.LawScraperSource;
 
 import java.util.List;
 
 
 public class StartViewActivity extends AbstractActivity implements StartView.Presenter {
-    final LawRequestFactory requests = GWT.create(LawRequestFactory.class);
-    final LawScraperRequestFactory lawScraperRequests = GWT.create(LawScraperRequestFactory.class);
-
-    final CaseLawScraperRequestFactory caseLawScraperRequests = GWT.create(CaseLawScraperRequestFactory.class);
+    final LawRequestFactory lawRequests = GWT.create(LawRequestFactory.class);
+    final CaseLawRequestFactory caseLawRequests = GWT.create(CaseLawRequestFactory.class);
 
     final UserRequestFactory userRequests = GWT.create(UserRequestFactory.class);
     final LegalResearchRequestFactory legalResearchRequests = GWT.create(LegalResearchRequestFactory.class);
+
+    final DocumentPartRequestFactory documentPartRequestFactory = GWT.create(DocumentPartRequestFactory.class);
+
+    //Scrapers request
+    final LawScraperRequestFactory lawScraperRequests = GWT.create(LawScraperRequestFactory.class);
+    final CaseLawScraperRequestFactory caseLawScraperRequests = GWT.create(CaseLawScraperRequestFactory.class);
+
 
     // Used to obtain views, eventBus, placeController
     private ClientFactory clientFactory;
@@ -51,18 +54,21 @@ public class StartViewActivity extends AbstractActivity implements StartView.Pre
         containerWidget.setWidget(startView.asWidget());
 
         //init with the eventbus - pls remember this.
-        requests.initialize(eventBus);
+        lawRequests.initialize(eventBus);
+        caseLawRequests.initialize(eventBus);
+
         lawScraperRequests.initialize(eventBus);
         caseLawScraperRequests.initialize(eventBus);
         userRequests.initialize(eventBus);
         legalResearchRequests.initialize(eventBus);
+        documentPartRequestFactory.initialize(eventBus);
 
         this.eventBus = eventBus;
         subscribeToChangeUserEvent(eventBus);
         subscribeToChangeLawEvent(eventBus);
         startView.setPresenter(this);
         getLegalResearchByLoggedInUser();
-        clientFactory.getRoleBasedWidgetHandler().handleRoleBasedViews(StartViewImpl.class);
+        checkCurrentUser();
     }
 
     /**
@@ -84,8 +90,7 @@ public class StartViewActivity extends AbstractActivity implements StartView.Pre
         eventBus.addHandler(SetCurrentLawEvent.TYPE, new SetCurrentLawEventHandler() {
             @Override
             public void onSetCurrentLaw(SetCurrentLawEvent event) {
-                flerpContainer = event.getFlerpContainer();
-                clientFactory.getStartView().addFlerpContainer(flerpContainer);
+                clientFactory.getStartView().addDocument(event.getResult());
             }
         });
     }
@@ -101,6 +106,7 @@ public class StartViewActivity extends AbstractActivity implements StartView.Pre
                 }
                 clientFactory.getRoleBasedWidgetHandler().setUserProxy(response);
                 eventBus.fireEvent(new SetCurrentUserEvent(response));
+                clientFactory.getRoleBasedWidgetHandler().handleRoleBasedViews(StartViewImpl.class);
             }
         });
     }
@@ -120,22 +126,6 @@ public class StartViewActivity extends AbstractActivity implements StartView.Pre
         });
 
     }
-
-    @Override
-    public void getLawsByAlphabet(final String query, final LawsByNamePanel lawsByNamePanel) {
-        String queryWithWildCards = query + "%";
-
-        LawRequestFactory.LawRequest context = requests.lawRequest();
-        context.findLawByQuery(queryWithWildCards).fire(new Receiver<List<LawProxy>>() {
-
-            @Override
-            public void onSuccess(List<LawProxy> response) {
-                lawsByNamePanel.setLaws(response, query);
-            }
-        });
-
-    }
-
 
     @Override
     public void scrapeLaw() {
@@ -162,15 +152,86 @@ public class StartViewActivity extends AbstractActivity implements StartView.Pre
     }
 
     @Override
-    public void searchLaws(String query) {
-        query = "%" + query + "%";
-        LawRequestFactory.LawRequest context = requests.lawRequest();
+    public void searchLaws(final String query) {
+        LawRequestFactory.LawRequest context = lawRequests.lawRequest();
         context.findLawByQuery(query).fire(new Receiver<List<LawProxy>>() {
 
             @Override
             public void onSuccess(List<LawProxy> response) {
                 StartView startView = clientFactory.getStartView();
-                startView.setLaws(response);
+                startView.setLaws(response, query);
+            }
+        });
+    }
+
+    @Override
+    public void searchCaseLaws(String query) {
+        query = "%" + query + "%";
+        CaseLawRequestFactory.CaseLawRequest context = caseLawRequests.caseLawRequest();
+
+        context.findCaseLawByQuery(query).fire(new Receiver<List<CaseLawProxy>>() {
+            @Override
+            public void onSuccess(List<CaseLawProxy> response) {
+                StartView startView = clientFactory.getStartView();
+                startView.setCaseLaws(response);
+            }
+        });
+    }
+
+    @Override
+    public void getCaseLawsByYearAndCourt(String year, String court) {
+        CaseLawRequestFactory.CaseLawRequest context = caseLawRequests.caseLawRequest();
+        /*
+        context.getCaseLawsByYearAndCourt(year, court).fire(new Receiver<List<DocumentListItem>>() {
+
+            @Override
+            public void onSuccess(List<DocumentListItem> response) {
+                StartView startView = clientFactory.getStartView();
+                startView.setCaseLaws(response);
+            }
+        });
+        */
+
+    }
+
+    @Override
+    public void searchLegalResearch(final String query) {
+        LegalResearchRequestFactory.LegalResearchRequest context = legalResearchRequests.legalResearchRequest();
+        context.findLegalResearchByLoggedInUser().fire(new Receiver<List<LegalResearchProxy>>() {
+            @Override
+            public void onSuccess(List<LegalResearchProxy> response) {
+                StartView startView = clientFactory.getStartView();
+                startView.setLegalResearch(response, query);
+            }
+        });
+    }
+
+    @Override
+    public void getLegalResearch(final String query) {
+        LegalResearchRequestFactory.LegalResearchRequest context = legalResearchRequests.legalResearchRequest();
+        context.findLegalResearchByLoggedInUser().fire(new Receiver<List<LegalResearchProxy>>() {
+            @Override
+            public void onSuccess(List<LegalResearchProxy> response) {
+                StartView startView = clientFactory.getStartView();
+                startView.setLegalResearch(response, query);
+            }
+        });
+    }
+
+    @Override
+    public void addWidgetToTabPanel(Widget widget, String flerpName, String flerpKey) {
+        StartView lawView = clientFactory.getStartView();
+        //lawView.getDynamicTabPanel().add(widget, flerpName, flerpKey);
+    }
+
+    @Override
+    public void getDocumentDescription(final DocumentResultElement resultElement) {
+        DocumentPartRequestFactory.DocumentRequest context = documentPartRequestFactory.documentRequest();
+
+        context.getDocumentCommentary(resultElement.getDocumentId()).fire(new Receiver<HTMLProxy>() {
+            @Override
+            public void onSuccess(HTMLProxy response) {
+                resultElement.setDescription(response.getHtml());
             }
         });
     }
@@ -182,7 +243,7 @@ public class StartViewActivity extends AbstractActivity implements StartView.Pre
             @Override
             public void onSuccess(List<LegalResearchProxy> response) {
                 StartView startView = clientFactory.getStartView();
-                startView.setLegalResearch(response);
+                //startView.setLegalResearch(response, query);
             }
         });
     }

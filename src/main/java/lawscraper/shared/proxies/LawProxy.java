@@ -6,7 +6,7 @@ import lawscraper.server.entities.law.Law;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+ * <p/>
  * Date: 12/26/11
  * Time: 10:22 AM
  */
@@ -19,5 +19,5 @@ public interface LawProxy extends ValueProxy {
 
     String getReleaseDate();
 
-    String getDocumentKey();
+    String getKey();
 }

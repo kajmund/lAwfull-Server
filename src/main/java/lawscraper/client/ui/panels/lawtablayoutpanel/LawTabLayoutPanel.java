@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.TabLayoutPanel;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 7/12/12
  * Time: 10:38 AM
  */

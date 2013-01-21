@@ -1,7 +1,6 @@
 package lawscraper.client.ui;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import lawscraper.client.ui.panels.bookmarkpanel.BookMarkPanel;
 import lawscraper.client.ui.panels.lawpanel.LawPanel;
@@ -25,10 +24,6 @@ public interface LawView extends IsWidget {
 
     void setLoading();
 
-    boolean selectLawIfExists(String lawTitle);
-
-    FlowPanel getDynamicFlerpContainer();
-
     public interface Presenter {
         void goTo(Place place);
 
@@ -39,5 +34,7 @@ public interface LawView extends IsWidget {
         void addBookMark(Long lawDocumentPartId);
 
         void removeBookMark(Long lawDocumentPartId);
+
+        void addLawDocument(LawPanel lawPanel, String name, String lawKey);
     }
 }

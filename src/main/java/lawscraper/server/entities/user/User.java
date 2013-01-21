@@ -4,16 +4,13 @@ import lawscraper.server.entities.legalresearch.LegalResearch;
 import lawscraper.server.entities.superclasses.EntityBase;
 import lawscraper.shared.UserRole;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 4/16/12
  * Time: 6:43 PM
  */
@@ -62,7 +59,7 @@ public class User extends EntityBase {
         this.userName = userName;
     }
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     public Set<LegalResearch> getLegalResearch() {
         return legalResearchList;
     }
@@ -103,7 +100,10 @@ public class User extends EntityBase {
                 return false;
             }
         }
+
         getLegalResearch().add(legalResearch);
+        legalResearch.setUser(this);
+
         return true;
     }
 

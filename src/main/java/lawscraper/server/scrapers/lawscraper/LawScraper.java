@@ -2,7 +2,8 @@ package lawscraper.server.scrapers.lawscraper;
 
 import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
-import lawscraper.server.entities.law.Proposition;
+import lawscraper.server.entities.superclasses.Document.DocumentPart;
+import lawscraper.server.repositories.RepositoryBase;
 import lawscraper.server.scrapers.Utilities;
 import lawscraper.shared.DocumentPartType;
 import org.xml.sax.Attributes;
@@ -21,7 +22,7 @@ import java.util.Stack;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+ * <p/>
  * Date: 10/9/11
  * Time: 7:37 PM
  */
@@ -33,10 +34,14 @@ public class LawScraper {
     private final ArrayList<String> currentDataType = new ArrayList<String>();
     private final Stack<LawDocumentPart> lawDocumentPartStack = new Stack<LawDocumentPart>();
     private final Set<String> documentKeys = new HashSet<String>();
+    private RepositoryBase<DocumentPart> documentPartRepository;
+    private Set<String> docKeys = new HashSet<String>();
 
-    public LawScraper() {
+    public LawScraper(RepositoryBase<DocumentPart> documentPartRepository) {
+        this.documentPartRepository = documentPartRepository;
         this.lawDocumentPartStack.add(law);
     }
+
 
     public void parse(InputStream in) throws ParserConfigurationException, SAXException, IOException {
         DefaultHandler handler = new
@@ -82,6 +87,7 @@ public class LawScraper {
         saxParser.parse(in, handler);
 
     }
+
 
     private void addData(String data) {
         LawDocumentPart currentDocumentPart = getCurrentLawDocumentPart();
@@ -168,9 +174,10 @@ public class LawScraper {
     }
 
     private void setDocumentKey(LawDocumentPart lawDocumentPart, String key) {
+        String finalKey = key;
 
-        if (lawDocumentPart.getParent() != null && lawDocumentPart.getParent().getDocumentKey() != null) {
-            String finalKey = lawDocumentPart.getParent().getDocumentKey() + "_" + key;
+        if (lawDocumentPart.getParent() != null && lawDocumentPart.getParent().getKey() != null) {
+            finalKey = lawDocumentPart.getParent().getKey() + "_" + key;
 
             if (documentKeys.contains(finalKey)) {
                 boolean done = false;
@@ -183,12 +190,11 @@ public class LawScraper {
                     }
                 }
             }
-
-            lawDocumentPart.setDocumentKey(finalKey);
             documentKeys.add(finalKey);
-        } else {
-            lawDocumentPart.setDocumentKey(key);
         }
+        lawDocumentPart.setKey(finalKey);
+
+        getOrCreateDocumentPart(finalKey);
     }
 
     private void parseDDElement(Attributes attributes) {
@@ -292,10 +298,13 @@ public class LawScraper {
         if (attributes.getValue(0) == null || attributes.getValue(0) == null) {
             return;
         }
-        if (attributes.getValue(0).equals("rinfo:forarbete") && !law.getPropositions()
+        if (attributes.getValue(0).equals("rinfo:forarbete") && !law.getDocumentReferenceList()
                                                                     .contains(attributes.getValue(1))) {
 
-            law.getPropositions().add(new Proposition(attributes.getValue(1)));
+            String propName = attributes.getValue(1);
+            law.addDocumentReference(
+                    new DocumentPart(propName, propName.replace(" ", "_"), DocumentPartType.PROPOSITION));
+
         }
     }
 
@@ -335,6 +344,25 @@ public class LawScraper {
         return lawDocumentPartStack.peek();
     }
 
+    private DocumentPart getOrCreateDocumentPart(String documentId) {
+        /** redundant shitty code */
+        if (docKeys.contains(documentId)) {
+            return null;
+        } else {
+            docKeys.add(documentId);
+        }
+
+        DocumentPart documentPart = documentPartRepository.findOne(documentId);
+        if (documentPart == null) {
+            documentPart = new DocumentPart();
+            documentPart.setKey(documentId);
+        } else {
+            System.out.println("Reference already persisted");
+        }
+
+        return documentPart;
+    }
+
     private void addDocumentPart(LawDocumentPart documentPart) {
         LawDocumentPart allowedParent = getAllowedParent(documentPart);
         if (allowedParent == null) {
@@ -343,7 +371,6 @@ public class LawScraper {
             allowedParent.addDocumentPartChild(documentPart);
         }
     }
-
 
     private LawDocumentPart getAllowedParent(LawDocumentPart documentPart) {
         LawDocumentPart stackTop = getCurrentLawDocumentPart();

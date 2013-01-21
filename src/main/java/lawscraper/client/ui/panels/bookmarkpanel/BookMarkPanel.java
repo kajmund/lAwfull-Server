@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+ * <p/>
  * Date: 2/24/12
  * Time: 2:31 PM
  */
@@ -48,7 +48,7 @@ public class BookMarkPanel extends Composite {
 
     }
 
-    public void initPanel() {
+    void initPanel() {
         table = new CellTable<DocumentBookMarkProxy>(0, resources);
         Column<DocumentBookMarkProxy, String> lawNameColumn = addLawNameColumn(table);
         table.setColumnWidth(lawNameColumn, 100, Style.Unit.PCT);
@@ -73,7 +73,7 @@ public class BookMarkPanel extends Composite {
         Column<DocumentBookMarkProxy, String> column = new Column<DocumentBookMarkProxy, String>(nameCell) {
             @Override
             public String getValue(DocumentBookMarkProxy object) {
-                return String.valueOf(object.getDocumentId());
+                return String.valueOf(object.getDocumentKey());
             }
         };
 

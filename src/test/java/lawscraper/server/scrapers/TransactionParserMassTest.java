@@ -2,6 +2,7 @@ package lawscraper.server.scrapers;
 
 import lawscraper.server.components.PartFactory;
 import lawscraper.server.entities.law.Law;
+import lawscraper.server.entities.superclasses.Document.DocumentPart;
 import lawscraper.server.repositories.RepositoryBase;
 import lawscraper.server.scrapers.lawscraper.LawScraper;
 import org.junit.Test;
@@ -27,17 +28,23 @@ public class TransactionParserMassTest {
     @Qualifier("repositoryBaseImpl")
     @Autowired
     private RepositoryBase<Law> lawService;
+
     @Autowired
     PartFactory partFactory;
 
+    @Autowired
+    private RepositoryBase<DocumentPart> documentPartRepository;
+
     @Test
     public void parseAllLaws() throws Exception {
+        this.documentPartRepository.setEntityClass(DocumentPart.class);
+
         int lawCount = 0;
         int successCount = 0;
         long start = System.currentTimeMillis();
         for (ZipDataUtil.LawEntry lawEntry : ZipDataUtil.getAllLaws()) {
             lawCount++;
-            LawScraper scraper = new LawScraper(partFactory);
+            LawScraper scraper = new LawScraper(documentPartRepository);
             try {
                 scraper.parse(lawEntry.getInputStream());
                 successCount++;

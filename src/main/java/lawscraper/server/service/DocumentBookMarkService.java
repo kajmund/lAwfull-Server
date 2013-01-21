@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 5/30/12
  * Time: 9:15 PM
  */

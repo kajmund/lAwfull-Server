@@ -8,7 +8,7 @@ import com.google.gwt.user.client.ui.*;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 3/15/12
  * Time: 10:20 PM
  */

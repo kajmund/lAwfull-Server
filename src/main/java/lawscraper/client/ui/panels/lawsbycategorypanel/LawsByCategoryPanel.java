@@ -14,7 +14,7 @@ import lawscraper.client.ui.panels.lawtreeitem.LawTreeItem;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 2/24/12
  * Time: 2:31 PM
  */

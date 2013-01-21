@@ -13,7 +13,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 1/21/12
  * Time: 12:01 AM
  */

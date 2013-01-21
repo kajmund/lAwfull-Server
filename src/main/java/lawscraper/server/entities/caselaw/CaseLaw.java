@@ -1,34 +1,33 @@
 package lawscraper.server.entities.caselaw;
 
-import lawscraper.server.entities.law.Law;
+import lawscraper.server.entities.superclasses.Document.DocumentPart;
+import lawscraper.shared.DocumentListItem;
 import lawscraper.shared.DocumentPartType;
 
-import javax.persistence.*;
-import java.util.ArrayList;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.HashSet;
-import java.util.List;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+ * <p/>
  * Date: 6/13/12
  * Time: 6:42 PM
  */
 @Entity
 @Table(name = "caseLaw")
-public class CaseLaw extends CaseLawDocumentPart {
+public class CaseLaw extends CaseLawDocumentPart implements DocumentListItem {
     private String publicationYear;
     private String publisher;
     private String creator;
     private String relation;
     private String caseIdentifier;
-    private List<CaseLawSubject> subjectList = new ArrayList<CaseLawSubject>();
     private String casePublication;
     private String caseNumber;
     private String decisionDate;
-    private String description;
 
-    private List<Law> lawReferenceList = new ArrayList<Law>();
+
     private String pageNumber;
 
     public String getPublicationYear() {
@@ -39,44 +38,30 @@ public class CaseLaw extends CaseLawDocumentPart {
         this.setPartType(DocumentPartType.CASELAW);
     }
 
-    @Column(length = 20)
+    @Column(length = 255)
     public String getCreator() {
         return creator;
     }
 
-    @Column(length = 20)
+    @Column(length = 1024)
     public String getRelation() {
         return relation;
     }
 
-    @Column(length = 20)
+    @Column(length = 255)
     public String getCaseIdentifier() {
         return caseIdentifier;
     }
 
-    @Column(length = 20)
+    @Column(length = 255)
     public String getCasePublication() {
         return casePublication;
     }
 
-    @Column(length = 20)
+    @Column(length = 255)
     public String getDecisionDate() {
         return decisionDate;
     }
-
-    @Lob
-    public String getDescription() {
-        return description;
-    }
-
-    public void setSubjectList(List<CaseLawSubject> subjectList) {
-        this.subjectList = subjectList;
-    }
-
-    public void setLawReferenceList(List<Law> lawReferenceList) {
-        this.lawReferenceList = lawReferenceList;
-    }
-
 
     @Column(length = 20)
     public String getPageNumber() {
@@ -87,12 +72,12 @@ public class CaseLaw extends CaseLawDocumentPart {
         this.pageNumber = pageNumber;
     }
 
-    @Column(length = 20)
+    @Column(length = 255)
     public String getPublisher() {
         return publisher;
     }
 
-    @Column(length = 20)
+    @Column(length = 255)
     public String getCaseNumber() {
         return caseNumber;
     }
@@ -121,13 +106,8 @@ public class CaseLaw extends CaseLawDocumentPart {
         this.caseIdentifier = caseIdentifier;
     }
 
-    public void addSubject(String data) {
-        //this.getSubjectList().add(data);
-    }
-
-    @OneToMany(mappedBy = "caseLaw", cascade = CascadeType.ALL)
-    public List<CaseLawSubject> getSubjectList() {
-        return subjectList;
+    public void addSubject(DocumentPart subject) {
+        subject.addDocumentReference(this);
     }
 
     public void setCasePublication(String casePublication) {
@@ -138,26 +118,12 @@ public class CaseLaw extends CaseLawDocumentPart {
         this.decisionDate = decisionDate;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void addLawReference(String data) {
-        //this.getLawReferenceList().add(data);
-    }
-
-    @ManyToMany
-    public List<Law> getLawReferenceList() {
-        return lawReferenceList;
-    }
-
     public void addCaseLawDocumentPart(CaseLawDocumentPart part) {
-        if (parts == null) {
-            parts = new HashSet<CaseLawDocumentPart>();
+        if (getParts() == null) {
+            setParts(new HashSet<CaseLawDocumentPart>());
         }
 
-        part.setListOrder(parts.size());
-        parts.add(part);
+        part.setListOrder(getParts().size());
+        getParts().add(part);
     }
-
 }

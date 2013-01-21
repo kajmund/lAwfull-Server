@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 2/21/12
  * Time: 11:05 AM
  */

@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+ * <p/>
  * Date: 11/13/11
  * Time: 8:44 AM
  */
@@ -60,16 +60,20 @@ public class LawServiceImpl implements LawService {
     @Override
     public HTMLWrapper findLawHTMLWrapped(Long id) {
         Law law = lawRepository.findOne(id);
-        return new HTMLWrapper(law.getTitle(), law.getDocumentKey(), lawRenderer.renderToHtml(law));
+        return new HTMLWrapper(law.getTitle(), law.getKey(), lawRenderer.renderToHtml(law));
     }
 
     @Override
     public HTMLWrapper findLawHTMLWrappedByLawKey(String lawKey) {
+        //todo: construct a new DocumentService, this looks ugly
         if (!isInteger(lawKey.substring(0, 1))) {
+            ////fetch the caselaw
             return caseLawService.findCaseLawHTMLWrapped(lawKey);
         } else {
-            Law law = lawRepository.findByPropertyValue("documentKey", lawKey).iterator().next();
-            return new HTMLWrapper(law.getTitle(), law.getDocumentKey(), lawRenderer.renderToHtml(law));
+            //fetch the law
+            //Law law = lawRepository.findByPropertyValue("documentKey", lawKey).iterator().next();
+            Law law = lawRepository.findOne(lawKey);
+            return new HTMLWrapper(law.getTitle(), law.getKey(), lawRenderer.renderToHtml(law));
         }
     }
 
@@ -85,13 +89,7 @@ public class LawServiceImpl implements LawService {
         /* todo: fix paging */
         //Iterable<Law> foundLaws = lawRepository.findByPropertyValue("title", query);
         Iterable<Law> foundLaws = lawRepository.findAllByQuery("title", query);
-
-        int i = 100;
         for (Law law : foundLaws) {
-
-            if (i-- == 0) {
-                break;
-            }
             result.add(law);
         }
 

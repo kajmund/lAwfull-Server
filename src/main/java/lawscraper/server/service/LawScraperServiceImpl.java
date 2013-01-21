@@ -1,7 +1,7 @@
 package lawscraper.server.service;
 
-import lawscraper.server.components.PartFactory;
 import lawscraper.server.entities.law.Law;
+import lawscraper.server.entities.superclasses.Document.DocumentPart;
 import lawscraper.server.repositories.RepositoryBase;
 import lawscraper.server.scrapers.ZipDataUtil;
 import lawscraper.server.scrapers.lawscraper.LawScraper;
@@ -16,7 +16,7 @@ import java.io.IOException;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 2/24/12
  * Time: 9:07 AM
  */
@@ -25,11 +25,12 @@ import java.io.IOException;
 @Transactional(readOnly = true)
 public class LawScraperServiceImpl implements LawScraperService {
 
-    @Autowired
-    PartFactory partFactory;
     @Qualifier("repositoryBaseImpl")
     @Autowired
     private RepositoryBase<Law> lawRepository;
+
+    @Autowired
+    private RepositoryBase<DocumentPart> documentPartRepository;
 
     public LawScraperServiceImpl() {
         System.out.println("ScraperService instantiated");
@@ -53,8 +54,14 @@ public class LawScraperServiceImpl implements LawScraperService {
         ScraperStatus scraperStatus = new ScraperStatus();
 
         try {
+            int scrapedLaws = 50;
             for (ZipDataUtil.LawEntry lawEntry : ZipDataUtil.getAllLaws()) {
-                LawScraper scraper = new LawScraper(partFactory);
+                /*
+                if (scrapedLaws-- < 1) {
+                    break;
+                }
+                */
+                LawScraper scraper = new LawScraper(documentPartRepository);
                 try {
                     scraper.parse(lawEntry.getInputStream());
                     scraperStatus.increaseScrapedLaws();
@@ -78,7 +85,6 @@ public class LawScraperServiceImpl implements LawScraperService {
     }
 
     private ScraperStatus scrapeLawsFromInternet() {
-        ScraperStatus scraperStatus = new ScraperStatus();
-        return scraperStatus;
+        return new ScraperStatus();
     }
 }

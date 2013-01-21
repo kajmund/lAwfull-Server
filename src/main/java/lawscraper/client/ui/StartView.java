@@ -3,10 +3,10 @@ package lawscraper.client.ui;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import lawscraper.client.ui.panels.lawsbynamepanel.LawsByNamePanel;
-import lawscraper.shared.proxies.LawProxy;
-import lawscraper.shared.proxies.LegalResearchProxy;
-import lawscraper.shared.proxies.UserProxy;
+import com.google.gwt.user.client.ui.Widget;
+import lawscraper.client.ui.panels.documentsearchpanel.DocumentResultElement;
+import lawscraper.shared.DocumentListItem;
+import lawscraper.shared.proxies.*;
 
 import java.util.List;
 
@@ -17,19 +17,22 @@ import java.util.List;
  * @author drfibonacci
  */
 public interface StartView extends IsWidget {
-    void setName(String helloName);
 
     void setPresenter(Presenter listener);
-
-    void setLaws(List<LawProxy> law);
 
     FlowPanel getMainContainer();
 
     void setUserLoggedIn(UserProxy user);
 
-    void setLegalResearch(List<LegalResearchProxy> response);
+    void setLegalResearch(List<LegalResearchProxy> response, String query);
 
-    void addFlerpContainer(FlowPanel flerpContainer);
+    void setLaws(List<LawProxy> laws, String searchQuery);
+
+    boolean selectDocumentTabIfExists(String key);
+
+    void addDocument(HTMLProxy result);
+
+    void setCaseLaws(List<DocumentListItem> response);
 
     public interface Presenter {
         void goTo(Place place);
@@ -48,6 +51,16 @@ public interface StartView extends IsWidget {
 
         void scrapeCaseLaw();
 
-        void getLawsByAlphabet(String character, LawsByNamePanel lawsByNamePanel);
+        void searchCaseLaws(String query);
+
+        void getCaseLawsByYearAndCourt(String year, String court);
+
+        void searchLegalResearch(String query);
+
+        void getLegalResearch(String query);
+
+        void addWidgetToTabPanel(Widget widget, String flerpName, String flerpKey);
+
+        void getDocumentDescription(DocumentResultElement resultElement);
     }
 }

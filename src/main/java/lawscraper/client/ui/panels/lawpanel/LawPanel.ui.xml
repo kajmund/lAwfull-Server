@@ -83,6 +83,15 @@
 
         @external .TOCElement_HEADING;
 
+        .caseLawIntroDescription {
+            font-size: 18px;
+            font-style: italic;
+            margin-bottom: 22px;
+            margin-top: 8px;
+        }
+
+        @external .caseLawIntroDescription;
+
         .tocBoxPanel {
             text-decoration: underline;
         }
@@ -91,7 +100,7 @@
             position: absolute;
             right: 15px;
             height: 768px;
-            top: 6px;
+            top: 5px;
 
         }
 
@@ -106,7 +115,7 @@
         }
 
         .rightMenuButtons {
-            margin-top: 60px;
+            margin-top: 58px;
             width: 65px;
             text-align: center;
         }
@@ -126,38 +135,43 @@
             margin-left: 8px;
             border: 1px black;
         }
+
+        .lawPanelContainer {
+            left:40px;
+        }
     </ui:style>
 
 
-    <g:FlowPanel ui:field="lawPanelContainer">
+    <g:FlowPanel ui:field="lawPanelContainer" addStyleNames="{style.lawPanelContainer}">
+
         <shortCut:ShortCutPanel ui:field="shortCutPanel" visible="false" addStyleNames="{style.shortCutPanel}"/>
         <g:SplitLayoutPanel ui:field="splitLayoutPanel" width="400" height="400">
             <g:east size="310">
                 <g:FlowPanel>
+
                     <g:FlowPanel ui:field="rightWingPanel" addStyleNames="{style.rightWingPanel}">
                         <boxPanel:BoxPanel ui:field="informationBoxPanel" headerTitle="Information"
                                 />
                         <boxPanel:BoxPanel ui:field="tocBoxPanel" headerTitle="Innehåll"
                                            addStyleNames="{style.tocBoxPanel}"/>
-                        <roleBased:RoleBasedFlowPanel ui:field="bookMarkBoxPanelContainer" requiresUserRole="ROLE_USER">
+                        <roleBased:RoleBasedFlowPanel ui:field="bookMarkBoxPanelContainer"
+                                                      visible="true"><!-- requiresUserRole="ROLE_USER"-->
                             <boxPanel:BoxPanel ui:field="bookMarkBoxPanel" headerTitle="Bokmärken"/>
                         </roleBased:RoleBasedFlowPanel>
                     </g:FlowPanel>
 
                     <g:FlowPanel ui:field="rightMenu" addStyleNames="{style.rightMenu}">
-                        <g:HTMLPanel>
-                            <g:ToggleButton ui:field="informationButton" down="true"
-                                            addStyleNames="{style.verticalText} {style.rightMenuButtons}">Information
+                        <g:ToggleButton ui:field="informationButton" down="true"
+                                        addStyleNames="{style.verticalText} {style.rightMenuButtons}">Information
+                        </g:ToggleButton>
+                        <g:ToggleButton ui:field="tocButton" down="true"
+                                        addStyleNames="{style.verticalText} {style.rightMenuButtons}">Innehåll
+                        </g:ToggleButton>
+                        <roleBased:RoleBasedFlowPanel requiresUserRole="ROLE_USER">
+                            <g:ToggleButton addStyleNames="{style.verticalText} {style.rightMenuButtons}"
+                                            ui:field="bookMarkButton">Bokmärken
                             </g:ToggleButton>
-                            <g:ToggleButton ui:field="tocButton" down="true"
-                                            addStyleNames="{style.verticalText} {style.rightMenuButtons}">Innehåll
-                            </g:ToggleButton>
-                            <roleBased:RoleBasedFlowPanel requiresUserRole="ROLE_USER">
-                                <g:ToggleButton addStyleNames="{style.verticalText} {style.rightMenuButtons}"
-                                                ui:field="bookMarkButton">Bokmärken
-                                </g:ToggleButton>
-                            </roleBased:RoleBasedFlowPanel>
-                        </g:HTMLPanel>
+                        </roleBased:RoleBasedFlowPanel>
                     </g:FlowPanel>
                 </g:FlowPanel>
             </g:east>

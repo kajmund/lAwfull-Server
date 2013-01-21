@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 1/2/12
  * Time: 10:41 PM
  */
@@ -16,7 +16,7 @@ public class EntityBase implements Serializable {
     protected Long id;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     public Long getId() {
         return id;

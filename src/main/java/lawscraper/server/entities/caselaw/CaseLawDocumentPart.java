@@ -3,25 +3,22 @@ package lawscraper.server.entities.caselaw;
 import lawscraper.server.entities.superclasses.Document.DocumentPart;
 import lawscraper.server.entities.superclasses.Document.TextElement;
 import lawscraper.shared.DocumentPartType;
-import org.hibernate.annotations.Index;
 
 import javax.persistence.*;
 import java.util.*;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+ * <p/>
  * Date: 6/13/12
  * Time: 5:40 PM
  */
 @Entity
 @Table(name = "caseLawDocumentPart")
-@org.hibernate.annotations.Table(appliesTo = "caseLawDocumentPart", indexes = {@Index(name="caseLawDocIndex", columnNames = {"documentKey"})})
-
 public class CaseLawDocumentPart extends DocumentPart {
     private CaseLaw belongsToCaseLaw;
     private TextElement textElement = new TextElement();
-    Set<CaseLawDocumentPart> parts = new HashSet<CaseLawDocumentPart>();
+    private Set<CaseLawDocumentPart> parts = new HashSet<CaseLawDocumentPart>();
     private DocumentPartType partType;
 
     public CaseLawDocumentPart() {
@@ -46,7 +43,7 @@ public class CaseLawDocumentPart extends DocumentPart {
         this.textElement = textElement;
     }
 
-    @OneToMany(mappedBy = "belongsToCaseLaw",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "belongsToCaseLaw", cascade = CascadeType.ALL)
     public Set<CaseLawDocumentPart> getParts() {
         return parts;
     }

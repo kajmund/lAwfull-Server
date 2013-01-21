@@ -43,6 +43,7 @@ public class ZipDataUtil {
     }
 
     public static Iterable<LawEntry> getAllLaws() throws IOException {
+        zipFile = null;
         final Enumeration<? extends ZipEntry> enumeration = getLawZipFile().entries();
         return new Iterable<LawEntry>() {
             @Override
@@ -53,6 +54,7 @@ public class ZipDataUtil {
     }
 
     public static Iterable<CaseLawEntry> getAllCaseLaws() throws IOException {
+        zipFile = null;
         final Enumeration<? extends ZipEntry> enumeration = getCaseLawZipFile().entries();
         enumeration.nextElement();
         return new Iterable<CaseLawEntry>() {

@@ -1,0 +1,112 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:l="urn:import:lawscraper.client.ui.panels.celltables">
+
+    <ui:style>
+        .marginAuto {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .resultElement {
+            width: 85%;
+        }
+
+        .evenResult {
+            border-left: 1px #add8e6 solid;
+            border-right: 1px #add8e6 solid;
+            border-bottom: 1px #add8e6 solid;
+        }
+
+        .oddResult {
+            border-left: 1px #add8e6 solid;
+            border-right: 1px #add8e6 solid;
+            border-bottom: 1px #add8e6 solid;
+        }
+
+        .upperList {
+            border-bottom: 1px #add8e6 solid;
+            height: 20px;
+        }
+
+        .title {
+            float: left;
+            margin-left: 8px;
+        }
+
+        .type {
+            float: right;
+            margin-right: 4px;
+        }
+
+        .content {
+            height: 100%;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .data {
+            width: 120px;
+            border-right: #ffffff solid 1px;
+            float: left;
+            margin-left: 8px;
+        }
+
+        .disclosurePanel {
+            clear: both;
+            padding: 4px;
+            width: 100%;
+        }
+
+        .references {
+            width: 100%;
+        }
+
+        .secondLine {
+            clear: both;
+            margin-left: 8px;
+        }
+
+        .description {
+            border-top: 1px #add8e6 solid;
+        }
+    </ui:style>
+    <g:FlowPanel addStyleNames="{style.resultElement}, {style.marginAuto}, {style.evenResult}">
+        <!-- Upper list -->
+        <g:FlowPanel addStyleNames="{style.upperList}">
+            <g:FlowPanel addStyleNames="{style.title}, {style.bold}">
+                <g:Label ui:field="title" text="NJA 2001:726"/>
+            </g:FlowPanel>
+            <g:FlowPanel addStyleNames="{style.type}">
+                <g:Label ui:field="type" text="Rättsfall" addStyleNames="{style.type}, {style.bold}"/>
+            </g:FlowPanel>
+        </g:FlowPanel>
+        <g:FlowPanel addStyleNames="{style.content}">
+            <!-- Content -->
+            <g:Label ui:field="court" addStyleNames="{style.data}">Högsta domstolen</g:Label>
+            <g:Label ui:field="date" addStyleNames="{style.bold}, {style.data}">2012-01-31</g:Label>
+            <g:Label ui:field="source" addStyleNames="{style.bold}, {style.data}">Domstolsverket</g:Label>
+            <g:Label ui:field="caseNumber" addStyleNames="{style.secondLine}">A-31-1992;A-125-1992</g:Label>
+
+            <g:DisclosurePanel ui:field="descriptionPanel" addStyleNames="{style.disclosurePanel}" animationEnabled="true">
+                <g:header>
+                    Beskrivning
+                </g:header>
+                <g:Label ui:field="description" addStyleNames="{style.description}"/>
+            </g:DisclosurePanel>
+            <g:DisclosurePanel ui:field="referencePanel" addStyleNames="{style.disclosurePanel}"
+                               animationEnabled="true">
+                <g:header>
+                    Referenser
+                </g:header>
+                <l:LawCellTable ui:field="lawCellTable" addStyleNames="{style.references}"/>
+            </g:DisclosurePanel>
+        </g:FlowPanel>
+
+
+    </g:FlowPanel>
+</ui:UiBinder>

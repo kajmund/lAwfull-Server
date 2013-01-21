@@ -13,7 +13,7 @@ import lawscraper.client.ui.UserView;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+ * <p/>
  * Date: 4/19/12
  * Time: 9:17 AM
  */
@@ -39,12 +39,12 @@ public class AddUserDialog extends PopupPanel {
     }
 
     @UiHandler("closeButton")
-    public void onClickCloseButton(ClickEvent e) {
+    void onClickCloseButton(ClickEvent e) {
         this.hide();
     }
 
     @UiHandler("saveButton")
-    public void onClickSaveButton(ClickEvent e) {
+    void onClickSaveButton(ClickEvent e) {
         if (eMail.getText().length() > 0 &&
                 userName.getText().length() > 0 &&
                 password.getText().length() > 0) {

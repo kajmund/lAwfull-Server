@@ -4,7 +4,7 @@ import lawscraper.shared.proxies.UserProxy;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 5/16/12
  * Time: 7:51 PM
  */

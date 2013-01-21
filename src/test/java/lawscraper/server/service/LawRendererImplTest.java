@@ -37,7 +37,7 @@ public class LawRendererImplTest {
         LawRendererImpl renderer = new LawRendererImpl();
         Law law = new Law();
         law.setTitle("Law");
-        law.setDocumentKey("FS");
+        law.setKey("FS");
         law.setCreator("Creator");
         law.setPublisher("Publisher");
         law.setReleaseDate("RelDate");

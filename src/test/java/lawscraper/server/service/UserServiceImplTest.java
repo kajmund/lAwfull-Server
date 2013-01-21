@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 4/16/12
  * Time: 9:33 PM
  */

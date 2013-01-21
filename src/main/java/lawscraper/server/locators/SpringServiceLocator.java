@@ -7,7 +7,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 12/26/11
  * Time: 4:11 PM
  */

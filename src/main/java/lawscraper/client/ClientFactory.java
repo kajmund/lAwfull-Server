@@ -6,17 +6,18 @@ import lawscraper.client.ui.*;
 import lawscraper.client.ui.clientcache.ClientCache;
 import lawscraper.client.ui.panels.rolebasedwidgets.RoleBasedWidgetHandler;
 
-public interface ClientFactory
-{
+public interface ClientFactory {
     ClientCache getClientCache();
 
     RoleBasedWidgetHandler getRoleBasedWidgetHandler();
 
     EventBus getEventBus();
-	PlaceController getPlaceController();
-	StartView getStartView();
-	GoodbyeView getGoodbyeView();
-    LawView getLawView();
+
+    PlaceController getPlaceController();
+
+    StartView getStartView();
+
     CaseLawView getCaseLawView();
+
     UserView getUserView();
 }

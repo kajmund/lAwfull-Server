@@ -4,16 +4,13 @@ import lawscraper.server.entities.documentbookmark.DocumentBookMark;
 import lawscraper.server.entities.superclasses.EntityBase;
 import lawscraper.server.entities.user.User;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 4/16/12
  * Time: 6:43 PM
  */
@@ -66,7 +63,7 @@ public class LegalResearch extends EntityBase {
     public boolean removeBookMark(Long documentPartId) {
         DocumentBookMark documentBookMarkToRemove = null;
         for (DocumentBookMark bookMark : bookMarks) {
-            if (bookMark.getLawDocumentPart().getId().equals(documentPartId)) {
+            if (bookMark.getDocumentPart().getId().equals(documentPartId)) {
                 documentBookMarkToRemove = bookMark;
                 break;
             }
@@ -80,7 +77,7 @@ public class LegalResearch extends EntityBase {
         return false;
     }
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     public User getUser() {
         return user;
     }

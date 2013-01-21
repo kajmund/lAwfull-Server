@@ -4,7 +4,7 @@ import com.google.gwt.user.client.ui.TreeItem;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 7/2/12
  * Time: 11:46 PM
  */

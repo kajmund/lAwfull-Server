@@ -2,17 +2,12 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:roleBased="urn:import:lawscraper.client.ui.panels.rolebasedwidgets"
-             xmlns:lawsbynamepanel="urn:import:lawscraper.client.ui.panels.lawsbynamepanel"
              xmlns:lawsbycategorypanel="urn:import:lawscraper.client.ui.panels.lawsbycategorypanel"
-             xmlns:lawcasesbyyearpanel="urn:import:lawscraper.client.ui.panels.lawcasesbyyearpanel"
-             xmlns:searchPanels="urn:import:lawscraper.client.ui.panels.shortsearchresultpanel">
+             xmlns:browsepanels="urn:import:lawscraper.client.ui.panels.browsepanels"
+             xmlns:customsplitlayoutpanel="urn:import:lawscraper.client.ui.panels.customsplitlayoutpanel"
+             xmlns:dynamictabpanel="urn:import:lawscraper.client.ui.panels.dynamictabpanel">
 
     <ui:style>
-        .stackHeader {
-            color: #15428B;
-            font-size: 2px;
-        }
-
         .lightblueGradient {
             /*
             background-image: literal("linear-gradient(bottom, rgb(255, 255, 255) 40%, rgb(101, 166, 245) 100%)");
@@ -23,28 +18,15 @@
             background-image: literal("-webkit-gradient(linear, left bottom, left top, color-stop(0.4, rgb(255, 255, 255)), color-stop(4, rgb(101, 166, 245)))");
             */
             border: none;
-
-        }
-
-        .headerFont {
-            color: #15428B;
-            cursor: default;
-            font-family: Tahoma, Verdana, sans-serif;
-            font-size: 16px;
-            font-weight: bold;
-            margin-left: 8px;
-            position: absolute;
-            top: 83px;
         }
 
         .pageSection {
             background-image: url("http://gwt-cx.com/serendipity/serendipity/gwtcx/skins/aqua/images/navigation_pane_header.png");
             background-repeat: repeat-x;
-            left: 0;
+            left: 12px;
             right: 0;
             background-size: 34px auto;
-            height: 34px;
-
+            height: 100%;
         }
 
         .headerContainer {
@@ -56,42 +38,14 @@
             background-repeat: repeat-x;
         }
 
-        .menuContainer {
-            border-top: 1px solid #15428B;
-            border-bottom: 1px solid #15428B;
-            left: 0;
-            right: 0;
-
-            height: 10%;
-        }
-
-        .titleContainer {
-            left: 0;
-            right: 0;
-
-            height: 100%;
-            border-bottom: 1px solid #15428B;
-        }
-
-        .mainContentTitleContainer {
-            float: left;
-            width: 80%;
-            height: 5%;
-        }
-
-        .mainContentTitle {
-            /* width: 100%; */
-            left: 0;
-            right: 0;
-            border-left: 1px solid #15428B;
-        }
-
         .mainContentContainer {
             height: 100%;
             right: 0;
+            left: 12px;
             width: 98%;
             position: relative;
             float: left;
+            margin-top: 7px;
         }
 
         .mainContainer {
@@ -102,8 +56,9 @@
 
         .leftContainer {
             float: left;
-            width: 100%;
+            width: 99%;
             height: 768px;
+            left: 12px;
         }
 
         .parentContainer {
@@ -115,50 +70,8 @@
             clear: both;
         }
 
-        .legalResearchList {
-            width: 20%;
-            position: absolute;
-            right: 0;
-            margin-right: 2px;
-            margin-top: 3px;
-        }
-
-        .searchTextBox {
-            left: 30%;
-            margin-right: 8px;
-            position: absolute;
-            top: 15px;
-            width: 20%;
-            padding: 4px 7px;
-            outline: 0;
-            border-color: #87cefa;
-            top: 82px;
-            height: 11px;
-        }
-
-        .searchTextBox:focus {
-
-            /* supported IE8+ and all other browsers tested.
-             * optional, but gives the input focues when selected.
-   	         * change to a color that suits your design.
-    	     */
-            border-color: #00008b;
-
-        }
-
         .searchResultPanel {
             height: 100%;
-        }
-
-        .borderRight {
-            border-right: solid 1px;
-        }
-
-        .addLegalResearch {
-            float: right;
-            font-size: 23px;
-            margin-right: 8px;
-            margin-top: -2px;
         }
 
         .loginDeckPanel {
@@ -202,17 +115,29 @@
 
         @external .gwt-SplitLayoutPanel;
 
+        .centerContainer {
+            float: left;
+            position: relative;
+            min-height: 600px;
+            margin-left: 8px;
+            border: 1px black;
+        }
 
     </ui:style>
 
 
     <g:FlowPanel addStyleNames="{style.parentContainer}">
         <g:FlowPanel>
-            <g:FlowPanel  addStyleNames="{style.headerContainer}" ui:field="header">
+            <g:FlowPanel addStyleNames="{style.headerContainer}" ui:field="header">
                 <g:FlowPanel>
                     <g:Label>lAwfull</g:Label>
                 </g:FlowPanel>
                 <g:FlowPanel ui:field="loginContainer">
+
+                    <g:Button text="Skrapa lagar" ui:field="scrapeLawButton"/>
+                    <g:Button text="Skrapa rättsfall" ui:field="scrapeCaseLawButton"/>
+                    <g:Button ui:field="searchButton">Sök</g:Button>
+
                     <g:DeckPanel ui:field="loginDeckPanel" addStyleNames="{style.loginDeckPanel}">
                         <g:FormPanel method="POST" action="/authenticate.do" ui:field="loginForm">
                             <g:HTMLPanel>
@@ -250,17 +175,9 @@
             </g:FlowPanel>
 
 
-            <g:FlowPanel ui:field="pageSection" addStyleNames="{style.pageSection}, {style.borderRight}">
-                <g:FlowPanel ui:field="flerpTabPanelContainer"/>
+            <g:FlowPanel ui:field="pageSection" addStyleNames="{style.pageSection}">
+                <g:FlowPanel ui:field="dynamicTabPanelContainer"/>
                 <g:FlowPanel addStyleNames="{style.clearBoth}"/>
-                <g:HTMLPanel>
-                    <div style="float:right;">
-                        <roleBased:RoleBasedFlowPanel ui:field="legalResearchListBoxContainer"
-                                                      requiresUserRole="ROLE_USER" visible="false">
-                            <g:ListBox ui:field="legalResearchListBox" addStyleNames="{style.legalResearchList}"/>
-                        </roleBased:RoleBasedFlowPanel>
-                    </div>
-                </g:HTMLPanel>
             </g:FlowPanel>
 
         </g:FlowPanel>
@@ -271,110 +188,45 @@
                             addStyleNames="{style.verticalText} {style.leftMenuButtons}">Kategorier
             </g:ToggleButton>
 
-            <g:ToggleButton ui:field="lawsByNameButton" down="false"
-                            addStyleNames="{style.verticalText} {style.leftMenuButtons}">Lagnamn
+            <g:ToggleButton ui:field="browseLawsMenuButton" down="false"
+                            addStyleNames="{style.verticalText} {style.leftMenuButtons}">Lagar
             </g:ToggleButton>
 
-            <g:ToggleButton ui:field="searchLawsMenuButton" down="false"
-                            addStyleNames="{style.verticalText} {style.leftMenuButtons}">Sök lag
-            </g:ToggleButton>
-
-            <g:ToggleButton ui:field="lawCasesMenuButton" down="false"
+            <g:ToggleButton ui:field="browseLawCasesMenuButton" down="false"
                             addStyleNames="{style.verticalText} {style.leftMenuButtons}">Rättsfall
             </g:ToggleButton>
 
-            <g:ToggleButton ui:field="searchLawCasesMenuButton" down="false"
-                            addStyleNames="{style.verticalText} {style.leftMenuButtons}">Sök rättsfall
-            </g:ToggleButton>
-
-            <g:ToggleButton ui:field="myLegalResearchMenuButton" down="false"
+            <g:ToggleButton ui:field="browseLegalResearchMenuButton" down="false"
                             addStyleNames="{style.verticalText} {style.leftMenuButtons}">Utredningar
             </g:ToggleButton>
 
-            <g:ToggleButton ui:field="searchLegalResearchMenuButton" down="false"
-                            addStyleNames="{style.verticalText} {style.leftMenuButtons}">Sök utredn.
-            </g:ToggleButton>
         </g:FlowPanel>
         <g:FlowPanel addStyleNames="{style.mainContentContainer}, {style.lightblueGradient}">
 
             <g:FlowPanel ui:field="mainContainer" addStyleNames="{style.mainContainer}, {style.lightblueGradient}">
-
-                <g:SplitLayoutPanel ui:field="splitLayoutPanel" width="400" height="400"
-                                    addStyleNames="{style.gwt-SplitLayoutPanel}">
-                    <g:west size="410">
+                <g:SplitLayoutPanel ui:field="splitLayoutPanel" width="800" height="600">
+                    <g:center>
+                        <g:FlowPanel ui:field="container">
+                            <dynamictabpanel:DynamicTabPanel ui:field="dynamicTabPanelDeckPanel"/>
+                        </g:FlowPanel>
+                    </g:center>
+                    <g:west size="300">
                         <!-- todo: use deckpanel -->
                         <g:FlowPanel ui:field="leftContainer"
                                      addStyleNames="{style.leftContainer}, {style.lightblueGradient}">
-                            <searchPanels:ShortSearchResultPanel ui:field="searchResultPanel"
-                                                                 addStyleNames="{style.searchResultPanel}"
-                                                                 visible="false"/>
+                            <g:DeckPanel ui:field="leftContainerDeckPanel">
+                                <lawsbycategorypanel:LawsByCategoryPanel ui:field="lawsByCategoryPanel"/>
+                                <browsepanels:LawsBrowsePanel ui:field="lawPanel"
+                                                              addStyleNames="{style.searchResultPanel}"/>
+                                <browsepanels:LawCasesBrowsePanel ui:field="lawCasesPanel"/>
+                                <browsepanels:LegalResearchBrowsePanel ui:field="legalResearchBrowsePanel"/>
+                            </g:DeckPanel>
 
-                            <lawsbynamepanel:LawsByNamePanel ui:field="lawsByNamePanel"/>
-                            <lawsbycategorypanel:LawsByCategoryPanel ui:field="lawsByCategoryPanel"/>
-                            <lawcasesbyyearpanel:LawCasesByYearPanel ui:field="lawCasesByYearPanel"/>
-
-                            <g:StackLayoutPanel ui:field="stackPanel" unit='PX' height="100%"
-                                                addStyleNames="{style.lightblueGradient}">
-                                <g:stack>
-                                    <g:customHeader size='35'>
-                                        <roleBased:RoleBasedFlowPanel ui:field="legalResearchContainer"
-                                                                      visible="false"
-                                                                      requiresUserRole="ROLE_USER">
-
-                                            <g:HTMLPanel>
-                                                <font size="2px" color="#15428B">Rättsutredningar</font>
-                                                <g:Anchor text="+" ui:field="addLegalResearch"
-                                                          addStyleNames="{style.addLegalResearch}"/>
-                                            </g:HTMLPanel>
-                                        </roleBased:RoleBasedFlowPanel>
-                                    </g:customHeader>
-                                    <g:Tree ui:field="legalResearchTree"/>
-                                </g:stack>
-                                <g:stack>
-                                    <g:customHeader size='35'>
-                                        <roleBased:RoleBasedFlowPanel ui:field="adminTreeContainer"
-                                                                      visible="false"
-                                                                      requiresUserRole="ROLE_ADMINISTRATOR">
-
-                                            <g:HTMLPanel>
-                                                <g:HTML>
-                                                    <font size="2px" color="#15428B">Administration</font>
-                                                </g:HTML>
-                                            </g:HTMLPanel>
-                                        </roleBased:RoleBasedFlowPanel>
-
-                                    </g:customHeader>
-                                    <g:FlowPanel>
-                                        <g:ScrollPanel height="100%">
-                                            <g:Tree ui:field="adminTree">
-                                                <g:TreeItem text='Användare'/>
-                                            </g:Tree>
-                                        </g:ScrollPanel>
-                                    </g:FlowPanel>
-                                </g:stack>
-                            </g:StackLayoutPanel>
                         </g:FlowPanel>
                     </g:west>
-                    <g:center>
-                        <g:FlowPanel ui:field="container">
-                            <g:HTMLPanel>
 
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <g:Button text="Skrapa lagar" ui:field="scrapeLawButton"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <g:Button text="Skrapa rättsfall" ui:field="scrapeCaseLawButton"/>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </g:HTMLPanel>
-                        </g:FlowPanel>
-                    </g:center>
                 </g:SplitLayoutPanel>
+
             </g:FlowPanel>
         </g:FlowPanel>
     </g:FlowPanel>

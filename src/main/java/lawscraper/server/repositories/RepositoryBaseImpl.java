@@ -8,11 +8,13 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.HashSet;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+ * <p/>
  * Date: 10/1/12
  * Time: 8:09 AM
  */
@@ -20,6 +22,7 @@ import java.util.Set;
 @Scope("prototype")
 @Repository
 public class RepositoryBaseImpl<T> implements RepositoryBase<T> {
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -40,6 +43,23 @@ public class RepositoryBaseImpl<T> implements RepositoryBase<T> {
     @Override
     public T findOne(Long id) {
         return entityManager.find(entityClass, id);
+    }
+
+    @Override
+    public T findOne(String value) {
+        String queryString = "select l from " + entityClass.getSimpleName() + " l where l." + "documentKey" + " = ?1";
+
+        Query query = entityManager.createQuery(queryString);
+        query.setParameter(1, value);
+
+        HashSet<T> result;
+        result = new HashSet<T>(query.getResultList());
+        try {
+            return result.iterator().next();
+
+        } catch (NoSuchElementException e) {
+            return null;
+        }
     }
 
     @Override
@@ -89,13 +109,45 @@ public class RepositoryBaseImpl<T> implements RepositoryBase<T> {
         System.out.println("Trying to get it!");
         result = new HashSet<T>(query.getResultList());
 
-        System.out.println("Got it!!");
+        System.out.println(result.size() + ":Got it!!");
         return result;
     }
 
     @Override
     public void setEntityClass(Class<T> entityClass) {
         this.entityClass = entityClass;
+    }
+
+    @Override
+    public Iterable<T> findByPropertyValues(List<String> properties, List<String> values) {
+        Set<T> result;
+
+        if (properties == null || values == null) {
+            return null;
+        }
+        String queryString =
+                "from " + entityClass.getSimpleName() + " l where";
+
+        int i = 0;
+        for (String property : properties) {
+            queryString += " l." + property + " = '" + values.get(i) + "'";
+            if (i < properties.size() - 1) {
+                queryString += " and ";
+            }
+            i++;
+        }
+
+        Query query = entityManager
+                .createQuery(
+                        queryString);
+
+        //query.setParameter(1, "'" + queryRequest + "'");
+
+        System.out.println("Trying to get it!");
+        result = new HashSet<T>(query.getResultList());
+
+        System.out.println(result.size() + ": Got it!!");
+        return result;
     }
 
     @Override

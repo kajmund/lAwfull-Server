@@ -12,7 +12,7 @@ import java.io.IOException;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 5/1/12
  * Time: 8:17 PM
  */

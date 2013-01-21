@@ -5,7 +5,7 @@ import lawscraper.client.ClientFactory;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 6/26/12
  * Time: 11:07 PM
  */

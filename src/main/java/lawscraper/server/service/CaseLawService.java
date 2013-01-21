@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 6/26/12
  * Time: 10:54 AM
  */
@@ -21,4 +21,6 @@ public interface CaseLawService {
     CaseLaw find(Long id);
 
     HTMLWrapper findCaseLawHTMLWrapped(String key);
+
+    List<CaseLaw> getCaseLawsByYearAndCourt(String year, String court);
 }

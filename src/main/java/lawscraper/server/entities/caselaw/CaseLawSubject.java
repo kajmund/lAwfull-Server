@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+ * <p/>
  * Date: 10/2/12
  * Time: 9:29 PM
  */
@@ -16,6 +16,13 @@ import javax.persistence.Table;
 @Table(name = "caseLawSubject")
 public class CaseLawSubject extends NameId {
     private CaseLaw caseLaw;
+
+    public CaseLawSubject(String subject) {
+        setName(subject);
+    }
+
+    public CaseLawSubject() {
+    }
 
     @ManyToOne(optional = false)
     public CaseLaw getCaseLaw() {

@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 4/16/12
  * Time: 8:33 PM
  */
@@ -70,19 +70,21 @@ public class LegalResearchServiceImpl implements LegalResearchService {
 
     @Override
     @Transactional(readOnly = false)
-    @PreAuthorize("isAuthenticated()")
+    //@PreAuthorize("isAuthenticated()")
     public void addLegalResearch(String title, String description) {
         LegalResearch legalResearch = new LegalResearch(title, description);
         User user = userService.getCurrentUser();
-        legalResearch = legalResearchRepository.save(legalResearch);
+        //legalResearch = legalResearchRepository.save(legalResearch);
 
+        /*
         if (user.getLegalResearch().size() == 0) {
             user.setActiveLegalResearch(legalResearch);
             userService.updateUser(user);
         }
+        */
 
-        user.getLegalResearch().add(legalResearch);
-        userService.updateUser(user);
+        user.addLegalResearch(legalResearch);
+        //userService.updateUser(user);
     }
 
     @Override

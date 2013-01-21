@@ -8,7 +8,7 @@ import java.util.Set;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 5/16/12
  * Time: 7:37 PM
  */
@@ -19,7 +19,9 @@ public class RoleBasedWidgetHandlerImpl implements RoleBasedWidgetHandler {
 
     @Override
     public void handleRoleBasedViews(Class<?> widgetClass) {
-
+        if (true) {
+            return;
+        }
         for (RoleBasedWidget roleBasedWidget : roleBasedWidgetMap.get(widgetClass)) {
             if (userProxy == null) {
                 roleBasedWidget.configureAsNoneVisisble(null);

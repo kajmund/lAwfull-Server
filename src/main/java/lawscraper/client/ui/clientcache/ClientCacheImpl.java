@@ -15,7 +15,7 @@ import java.util.Set;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 8/10/12
  * Time: 9:42 PM
  */

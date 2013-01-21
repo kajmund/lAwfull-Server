@@ -5,7 +5,7 @@ import lawscraper.shared.UserRole;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 5/17/12
  * Time: 10:46 AM
  */
@@ -33,7 +33,6 @@ public class RoleBasedFlowPanel extends FlowPanel implements RoleBasedWidget {
     @Override
     public void configureAsEditable(UserRole userRole) {
         this.setVisible(true);
-
     }
 
     @Override

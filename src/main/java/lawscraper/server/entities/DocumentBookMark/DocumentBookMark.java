@@ -1,46 +1,52 @@
 package lawscraper.server.entities.documentbookmark;
 
 import lawscraper.server.entities.law.LawDocumentPart;
+import lawscraper.server.entities.superclasses.Document.DocumentPart;
 import lawscraper.server.entities.superclasses.EntityBase;
-import org.neo4j.graphdb.Direction;
-import org.springframework.data.neo4j.annotation.Fetch;
-import org.springframework.data.neo4j.annotation.RelatedTo;
+
+import javax.persistence.*;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 4/17/12
  * Time: 9:55 AM
  */
+@Entity
+@Table(name = "documentBookMark")
 public class DocumentBookMark extends EntityBase {
-    @Fetch
-    @RelatedTo(direction = Direction.INCOMING, type = "BM_LAW_PART")
+    public void setDocumentPart(DocumentPart documentPart) {
+        this.documentPart = documentPart;
+    }
 
-    LawDocumentPart lawDocumentPart;
-    String description;
-    String title;
+    private DocumentPart documentPart;
+    private String description;
+    private String title;
 
     public DocumentBookMark() {
     }
 
-    public DocumentBookMark(LawDocumentPart lawDocumentPart, String title, String description) {
-        this.lawDocumentPart = lawDocumentPart;
+    public DocumentBookMark(DocumentPart documentPart, String title, String description) {
+        this.documentPart = documentPart;
         this.title = title;
         this.description = description;
     }
 
-    public Long getDocumentId() {
-        return this.lawDocumentPart.getId();
+    @Transient
+    public String getDocumentKey() {
+        return this.documentPart.getKey();
     }
 
-    public LawDocumentPart getLawDocumentPart() {
-        return lawDocumentPart;
+    @ManyToOne(fetch = FetchType.LAZY)
+    public DocumentPart getDocumentPart() {
+        return documentPart;
     }
 
-    public void setLawDocumentPart(LawDocumentPart lawDocumentPart) {
-        this.lawDocumentPart = lawDocumentPart;
+    public void setDocumentPart(LawDocumentPart documentPart) {
+        this.documentPart = documentPart;
     }
 
+    @Column(nullable = false, length = 1024)
     public String getDescription() {
         return description;
     }
@@ -49,6 +55,7 @@ public class DocumentBookMark extends EntityBase {
         this.description = description;
     }
 
+    @Column(nullable = false, length = 1024)
     public String getTitle() {
         return title;
     }

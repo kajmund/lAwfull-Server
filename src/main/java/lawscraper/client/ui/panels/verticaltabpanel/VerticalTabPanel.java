@@ -11,7 +11,7 @@ import com.google.gwt.user.client.ui.*;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 7/12/12
  * Time: 3:06 PM
  */

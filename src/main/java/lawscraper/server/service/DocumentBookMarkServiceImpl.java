@@ -2,7 +2,6 @@ package lawscraper.server.service;
 
 
 import lawscraper.server.entities.documentbookmark.DocumentBookMark;
-import lawscraper.server.entities.law.Law;
 import lawscraper.server.entities.law.LawDocumentPart;
 import lawscraper.server.entities.legalresearch.LegalResearch;
 import lawscraper.server.entities.user.User;
@@ -18,7 +17,7 @@ import java.util.List;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+ * <p/>
  * Date: 11/13/11
  * Time: 8:44 AM
  */
@@ -36,12 +35,14 @@ public class DocumentBookMarkServiceImpl implements DocumentBookMarkService {
 
 
     @Autowired
-    public DocumentBookMarkServiceImpl(RepositoryBase<DocumentBookMark> documentBookMarkRepository, UserService userService,
+    public DocumentBookMarkServiceImpl(RepositoryBase<DocumentBookMark> documentBookMarkRepository,
+                                       UserService userService,
                                        LawService lawService, RepositoryBase<LegalResearch> legalResearchRepository) {
         this.documentBookMarkRepository = documentBookMarkRepository;
         this.userService = userService;
         this.lawService = lawService;
         this.legalResearchRepository = legalResearchRepository;
+        this.legalResearchRepository.setEntityClass(LegalResearch.class);
     }
 
     @Override
@@ -66,10 +67,10 @@ public class DocumentBookMarkServiceImpl implements DocumentBookMarkService {
 
             //create bookmark
             DocumentBookMark documentBookMark = new DocumentBookMark();
-            documentBookMark.setDescription(documentLawPart.getDocumentKey());
-            documentBookMark.setTitle(documentLawPart.getDocumentKey());
+            documentBookMark.setDescription(documentLawPart.getKey());
+            documentBookMark.setTitle(documentLawPart.getKey());
 
-            documentBookMark.setLawDocumentPart(documentLawPart);
+            documentBookMark.setDocumentPart(documentLawPart);
 
             documentBookMark = documentBookMarkRepository.save(documentBookMark);
 
@@ -86,8 +87,10 @@ public class DocumentBookMarkServiceImpl implements DocumentBookMarkService {
 
         //get active legal research
         LegalResearch legalResearch = user.getActiveLegalResearch();
-        legalResearch.removeBookMark(documentPartId);
-        legalResearchRepository.save(legalResearch);
+        if (legalResearch != null) {
+            legalResearch.removeBookMark(documentPartId);
+            legalResearchRepository.save(legalResearch);
+        }
     }
 
     @Override
@@ -110,16 +113,18 @@ public class DocumentBookMarkServiceImpl implements DocumentBookMarkService {
         }
 
         //get active legal research
+        /*
         LegalResearch legalResearch = user.getActiveLegalResearch();
         for (DocumentBookMark documentBookMark : legalResearch.getBookMarks()) {
             if (documentBookMark.getLawDocumentPart().getBelongsToLaw().getId().equals(lawId)) {
                 ret.add(documentBookMark);
             }
         }
-
+        */
         return ret;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @Override
     public List<DocumentBookMark> findBookMarksByLawKey(String lawKey) {
         User user = userService.getCurrentUser();
@@ -128,15 +133,19 @@ public class DocumentBookMarkServiceImpl implements DocumentBookMarkService {
             return ret;
         }
 
+        /*
         //get active legal research
         LegalResearch legalResearch = user.getActiveLegalResearch();
-        for (DocumentBookMark documentBookMark : legalResearch.getBookMarks()) {
-            Law law = lawService.find(documentBookMark.getLawDocumentPart().getBelongsToLaw().getId());
-            if (law.getDocumentKey().equals(lawKey)) {
-                ret.add(documentBookMark);
+        if (legalResearch != null) {
+            for (DocumentBookMark documentBookMark : legalResearch.getBookMarks()) {
+                Law law = lawService.find(documentBookMark.getDocumentPart().getBelongsToLaw().getId());
+                if (law.getKey().equals(lawKey)) {
+                    ret.add(documentBookMark);
+                }
             }
         }
 
+        */
         return ret;
     }
 

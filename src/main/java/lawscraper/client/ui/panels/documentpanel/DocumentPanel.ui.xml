@@ -1,0 +1,74 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:shortCut="urn:import:lawscraper.client.ui.panels.shortcutpanel"
+             xmlns:boxPanel="urn:import:lawscraper.client.ui.panels.boxpanel"
+             xmlns:roleBased="urn:import:lawscraper.client.ui.panels.rolebasedwidgets">
+
+    <ui:style>
+        .rightMenu {
+            position: absolute;
+            right: 15px;
+            height: 768px;
+            top: 4px;
+
+        }
+
+        .verticalText {
+            -moz-transform: rotate(90deg);
+            -moz-transform-origin: center right;
+            -webkit-transform: rotate(90deg);
+            -webkit-transform-origin: center right;
+            -o-transform: rotate(90deg);
+            -o-transform-origin: center right;
+            filter: progid:DXImageTransform.Microsoft.BasicImage(rotation = 1);
+        }
+
+        .rightMenuButtons {
+            margin-top: 60px;
+            width: 65px;
+            text-align: center;
+        }
+
+        .rightWingPanel {
+            border-top: 1px #add8e6 solid;
+            border-bottom: 1px #add8e6 solid;
+            width: 80%;
+            position: relative;
+
+        }
+
+        .splitLayoutPanel {
+            right: 30px;
+        }
+    </ui:style>
+
+
+    <g:FlowPanel ui:field="documentPanelContainer">
+        <g:SplitLayoutPanel ui:field="splitLayoutPanel" width="400" height="400"
+                            addStyleNames="{style.splitLayoutPanel}">
+            <g:east size="310">
+                <g:FlowPanel>
+                    <g:FlowPanel ui:field="rightWingPanel" addStyleNames="{style.rightWingPanel}">
+                        <boxPanel:BoxPanel ui:field="informationBoxPanel" headerTitle="Information"/>
+                    </g:FlowPanel>
+                </g:FlowPanel>
+            </g:east>
+            <g:center>
+                <g:FlowPanel>
+                    <g:ScrollPanel ui:field="scrollPanel" height="750px">
+                        <g:FlowPanel ui:field="lawWidgetContainer"/>
+                    </g:ScrollPanel>
+                </g:FlowPanel>
+            </g:center>
+        </g:SplitLayoutPanel>
+        <g:FlowPanel ui:field="rightMenu" addStyleNames="{style.rightMenu}">
+            <g:HTMLPanel>
+                <g:ToggleButton ui:field="informationButton" down="true"
+                                addStyleNames="{style.verticalText} {style.rightMenuButtons}">Information
+                </g:ToggleButton>
+            </g:HTMLPanel>
+        </g:FlowPanel>
+
+    </g:FlowPanel>
+</ui:UiBinder>

@@ -5,7 +5,7 @@ import com.google.gwt.place.shared.PlaceTokenizer;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 2/26/12
  * Time: 9:34 PM
  */

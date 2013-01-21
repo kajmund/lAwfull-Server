@@ -30,7 +30,7 @@ public class CaseLawRendererImpl implements CaseLawRenderer {
     @Override
     public String renderToHtml(CaseLaw caseLaw) {
         return element("div", renderMeta(caseLaw)
-                + element("div", renderParts(caseLaw.getSortedParts()), "class", "lawBody"),
+                +  renderDescription(caseLaw) + element("div", renderParts(caseLaw.getSortedParts()), "class", "lawBody"),
                        "class", "law");
     }
 
@@ -101,6 +101,10 @@ public class CaseLawRendererImpl implements CaseLawRenderer {
         part = caseLawPartRepository.findOne(part.getId());
         return element("div", text + renderParts(part.getSortedParts()), "class", cssClass,
                        "id", idStr, "title", title);
+    }
+
+    private String renderDescription(CaseLaw caseLaw) {
+        return element("div", getCaseLawDescription(caseLaw), "class", "caseLawIntroDescription");
     }
 
     private String renderMeta(CaseLaw caseLaw) {

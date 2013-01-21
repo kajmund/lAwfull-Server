@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 1/20/12
  * Time: 11:47 PM
  */

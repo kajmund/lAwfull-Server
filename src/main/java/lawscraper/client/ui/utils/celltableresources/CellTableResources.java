@@ -7,7 +7,7 @@ import com.google.gwt.user.cellview.client.CellTable;
 
 /**
  * Created by johankarlsteen, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 2011-02-25
  * Time: 13.15
  */

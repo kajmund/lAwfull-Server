@@ -122,7 +122,7 @@ public class LawRendererImpl implements LawRenderer {
     }
 
     private String getLawTitle(Law law) {
-        return law.getTitle() + " (" + law.getDocumentKey() + ")";
+        return law.getTitle() + " (" + law.getKey() + ")";
     }
 
     private String element(String elementName, String content, String... attrKeysAndValues) {

@@ -3,7 +3,6 @@ package lawscraper.server.entities.law;
 import lawscraper.server.entities.superclasses.Document.DocumentPart;
 import lawscraper.server.entities.superclasses.Document.TextElement;
 import lawscraper.shared.DocumentPartType;
-import org.hibernate.annotations.Index;
 
 import javax.persistence.*;
 import java.io.UnsupportedEncodingException;
@@ -11,18 +10,17 @@ import java.util.*;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 2/21/12
  * Time: 9:58 AM
  */
 @Entity
 @Table(name = "lawDocumentPart")
-@org.hibernate.annotations.Table(appliesTo = "lawDocumentPart", indexes = {@Index(name="lawDocIndex", columnNames = {"documentKey"})})
 public class LawDocumentPart extends DocumentPart {
-    Law belongsToLaw;
-    TextElement textElement = new TextElement();
-    Set<LawDocumentPart> childParts;
-    LawDocumentPart parent;
+    private Law belongsToLaw;
+    private TextElement textElement = new TextElement();
+    private Set<LawDocumentPart> childParts;
+    private LawDocumentPart parent;
 
     LawDocumentPart transitionalProvision;
     private boolean deprecated;

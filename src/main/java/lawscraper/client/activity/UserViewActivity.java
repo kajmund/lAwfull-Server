@@ -20,7 +20,7 @@ import java.util.List;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 2/26/12
  * Time: 9:49 PM
  */

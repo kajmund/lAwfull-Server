@@ -7,8 +7,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
-import com.google.gwt.event.logical.shared.ResizeEvent;
-import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -32,11 +30,13 @@ import java.util.Set;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+ * <p/>
  * Date: 2/24/12
  * Time: 2:31 PM
  */
 public class LawPanel extends Composite {
+
+    //todo: implement events instead of presenter
     private LawView.Presenter presenter;
     private Set<RoleBasedFlowPanel> roleBasedWidgets = new HashSet<RoleBasedFlowPanel>();
     private Timer timer;
@@ -69,20 +69,14 @@ public class LawPanel extends Composite {
         roleBasedWidgets.add(bookMarkBoxPanelContainer);
         tocBoxPanel.setVisible(false);
         splitLayoutPanel.getElement().getStyle().setPosition(Style.Position.STATIC);
-        scrollPanel.ensureDebugId("lawScrollPanel");
-        splitLayoutPanel.addHandler(new ResizeHandler() {
-            @Override
-            public void onResize(ResizeEvent event) {
-                Window.alert("resize!");
-            }
-        }, ResizeEvent.getType());
+        initScrollHandler();
     }
 
     public Set<RoleBasedFlowPanel> getRoleBasedWidgets() {
         return roleBasedWidgets;
     }
 
-    public void initScrollHandler() {
+    void initScrollHandler() {
         scrollPanel.addScrollHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
@@ -101,158 +95,6 @@ public class LawPanel extends Composite {
                 timer.schedule(100);
             }
         });
-    }
-
-    private void handleOnScroll() {
-        int scrollTop = scrollPanel.getVerticalScrollPosition();
-
-        //The infopanel always on top of screen
-        if (scrollTop < lawPanelContainer.getElement().getAbsoluteTop()) {
-            shortCutPanel.setVisible(false);
-            shortCutPanel.setText("");
-            return;
-        }
-
-        //todo: add custom tag so you dont have to traverse all the divs
-        final NodeList<com.google.gwt.dom.client.Element> elements =
-                htmlPanel.getElement().getElementsByTagName("div");
-
-        for (int i = 0; i < elements.getLength(); i++) {
-            com.google.gwt.dom.client.Element el = elements.getItem(i);
-
-            int top = el.getOffsetTop();
-            int bottom = el.getOffsetHeight() + top;
-
-            if (el.getTitle().length() > 0) {
-                if (scrollTop >= top && scrollTop <= bottom) {
-                    shortCutPanel.setVisible(true);
-                    shortCutPanel.setText(el.getTitle());
-                    break;
-                }
-            }
-        }
-    }
-
-    public void setLawAsHTML(String html) {
-        htmlPanel = new HTMLPanel(html);
-        lawContainer.clear();
-        lawContainer.add(htmlPanel);
-        bookMarkBoxPanel.setContainerWidget(bookMarkPanel);
-        initElementClickHandlers();
-        rightWingPanel.setVisible(true);
-        handleRightMenuVisibility();
-    }
-
-    public void setBookMarkMarkings(List<DocumentBookMarkProxy> bookMarks) {
-        for (DocumentBookMarkProxy bookMark : bookMarks) {
-            Element el = htmlPanel.getElementById(bookMark.getDocumentId().toString());
-            el.getStyle().setBorderStyle(Style.BorderStyle.DOTTED);
-            el.getStyle().setBorderColor("red");
-
-        }
-
-    }
-
-    private void initElementClickHandlers() {
-        ClickHandler clickHandler = new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                event.stopPropagation();
-                Element lawElement = ((ElementWrapper) event.getSource()).getElement();
-
-                String id = lawElement.getId();
-
-                if (lawElement.getStyle().getBorderStyle().equals("dotted")) {
-                    lawElement.getStyle().setBorderStyle(Style.BorderStyle.NONE);
-                    if (!id.equals("")) {
-                        presenter.removeBookMark(Long.decode(id));
-                    }
-
-                } else {
-                    lawElement.getStyle().setBorderStyle(Style.BorderStyle.DOTTED);
-                    lawElement.getStyle().setBorderColor("red");
-
-                    if (!id.equals("")) {
-                        presenter.addBookMark(Long.decode(id));
-                    }
-                }
-
-                bookMarkPanel.updateBookMarkData();
-            }
-        };
-
-        NodeList<com.google.gwt.dom.client.Element> elements = htmlPanel.getElement().getElementsByTagName("div");
-
-        ClickHandler tocClickHandler = new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-
-                //firefox and chrome differs with the ahref-string
-                String aHrefString = event.getSource().toString();
-                String[] matches = aHrefString.split("\"");
-                if (matches.length > 0) {
-                    String elementId;
-
-                    if (matches[1].contains("#")) {
-                        //firefox
-                        elementId = matches[1].substring(1);
-                    } else {
-                        //chrome
-                        elementId = matches[3].substring(1);
-                    }
-
-                    Element el = DOM.getElementById(elementId);
-                    int top = el.getOffsetTop();
-                    scrollPanel.setVerticalScrollPosition(top);
-                }
-            }
-        };
-
-        //traverse the list to find meta div, then convert it to widget and add it to the boxpanel
-        for (int i = 0; i < elements.getLength(); i++) {
-            com.google.gwt.dom.client.Element el = elements.getItem(i);
-            if (el.getClassName().equals("lawMeta")) {
-                informationBoxPanel.setContainerWidget(wrapElementWithWidget(el));
-            } else if (el.getClassName().length() > 10 && el.getClassName().substring(0, 10).equals("TOCElement")) {
-                NodeList<com.google.gwt.dom.client.Element> tocLinks = el.getElementsByTagName("lawtocitem");
-                for (int x = 0; x < tocLinks.getLength(); x++) {
-                    com.google.gwt.dom.client.Element tocLinkItem = tocLinks.getItem(x);
-                    ElementWrapper tocLinkWidget = wrapElementWithWidget(tocLinkItem);
-                    tocLinkWidget.getElement().getStyle().setCursor(Style.Cursor.POINTER);
-                    tocLinkWidget.addClickHandler(tocClickHandler);
-
-                }
-            }
-        }
-
-        ElementWrapper tocWidget = null;
-
-        //traverse the list again to find the toc div, then convert it to widget and add it to the boxpanel
-        for (int i = 0; i < elements.getLength(); i++) {
-            com.google.gwt.dom.client.Element el = elements.getItem(i);
-            tocWidget = wrapElementWithWidget(el);
-            if (el.getClassName().equals("lawTableOfContents")) {
-                tocBoxPanel.setContainerWidget(tocWidget);
-                if (el.getChildCount() > 0) {
-                    tocBoxPanel.setVisible(true);
-                } else {
-                    tocBoxPanel.setVisible(false);
-                }
-            } else if (bookMarkBoxPanelContainer.isVisible()) {
-                addClickHandlerToElement(clickHandler, tocWidget);
-            }
-        }
-
-    }
-
-    private ElementWrapper wrapElementWithWidget(com.google.gwt.dom.client.Element element) {
-        ElementWrapper elementWrapper = new ElementWrapper(element);
-        elementWrapper.onAttach();
-        return elementWrapper;
-    }
-
-    private void addClickHandlerToElement(ClickHandler clickHandler, ElementWrapper elementWrapper) {
-        elementWrapper.addClickHandler(clickHandler);
     }
 
     @UiHandler("informationButton")
@@ -285,6 +127,179 @@ public class LawPanel extends Composite {
         handleRightMenuVisibility();
     }
 
+    public void setLawAsHTML(String html) {
+        htmlPanel = new HTMLPanel(html);
+        lawContainer.clear();
+        lawContainer.add(htmlPanel);
+        bookMarkBoxPanel.setContainerWidget(bookMarkPanel);
+        initializeElementClickHandlers();
+        rightWingPanel.setVisible(true);
+        handleRightMenuVisibility();
+    }
+
+    public void setBookMarkMarkings(List<DocumentBookMarkProxy> bookMarks) {
+        for (DocumentBookMarkProxy bookMark : bookMarks) {
+            Element el = htmlPanel.getElementById(bookMark.getDocumentKey().toString());
+            el.getStyle().setBorderStyle(Style.BorderStyle.DOTTED);
+            el.getStyle().setBorderColor("red");
+
+        }
+
+    }
+
+    public void setPresenter(LawView.Presenter presenter) {
+        this.presenter = presenter;
+        bookMarkPanel.setPresenter(presenter);
+    }
+
+    public BookMarkPanel getBookMarkPanel() {
+        return bookMarkPanel;
+    }
+
+    private void handleOnScroll() {
+        int scrollTop = scrollPanel.getVerticalScrollPosition();
+
+        //The infopanel always on top of screen
+        if (scrollTop < lawPanelContainer.getElement().getAbsoluteTop()) {
+            shortCutPanel.setVisible(false);
+            shortCutPanel.setText("");
+            return;
+        }
+
+        //todo: add custom tag so you dont have to traverse all the divs
+        final NodeList<com.google.gwt.dom.client.Element> elements =
+                htmlPanel.getElement().getElementsByTagName("div");
+
+        for (int i = 0; i < elements.getLength(); i++) {
+            com.google.gwt.dom.client.Element el = elements.getItem(i);
+
+            int top = el.getOffsetTop();
+            int bottom = el.getOffsetHeight() + top;
+
+            if (el.getTitle().length() > 0) {
+                if (scrollTop >= top && scrollTop <= bottom) {
+                    shortCutPanel.setVisible(true);
+                    shortCutPanel.setText(el.getTitle());
+                    break;
+                }
+            }
+        }
+    }
+
+    private void initializeElementClickHandlers() {
+        ClickHandler clickHandler = initializeBookMarkClickHandler();
+        ClickHandler tocClickHandler = initializeTocClickHandler();
+        NodeList<com.google.gwt.dom.client.Element> elements = htmlPanel.getElement().getElementsByTagName("div");
+
+        //traverse the list to find meta div, then convert it to widget and add it to the boxpanel
+        for (int i = 0; i < elements.getLength(); i++) {
+            com.google.gwt.dom.client.Element el = elements.getItem(i);
+            if (el.getClassName().equals("lawMeta")) {
+                informationBoxPanel.setContainerWidget(wrapElementWithWidget(el));
+            } else if (el.getClassName().length() > 10 && el.getClassName().substring(0, 10).equals("TOCElement")) {
+                addClickHandlerToTocElement(tocClickHandler, el);
+            }
+        }
+
+        ElementWrapper tocWidget;
+
+        //traverse the list again to find the toc div, then convert it to widget and add it to the boxpanel
+        for (int i = 0; i < elements.getLength(); i++) {
+            com.google.gwt.dom.client.Element el = elements.getItem(i);
+            tocWidget = wrapElementWithWidget(el);
+            if (el.getClassName().equals("lawTableOfContents")) {
+                tocBoxPanel.setContainerWidget(tocWidget);
+                if (el.getChildCount() > 0) {
+                    tocBoxPanel.setVisible(true);
+                } else {
+                    tocBoxPanel.setVisible(false);
+                }
+            } else if (bookMarkBoxPanelContainer.isVisible()) {
+                addClickHandlerToElement(clickHandler, tocWidget);
+            }
+        }
+
+    }
+
+    private void addClickHandlerToTocElement(ClickHandler tocClickHandler, com.google.gwt.dom.client.Element el) {
+        NodeList<com.google.gwt.dom.client.Element> tocLinks = el.getElementsByTagName("lawtocitem");
+        for (int x = 0; x < tocLinks.getLength(); x++) {
+            com.google.gwt.dom.client.Element tocLinkItem = tocLinks.getItem(x);
+            ElementWrapper tocLinkWidget = wrapElementWithWidget(tocLinkItem);
+            //on mouse over, set mouse to pointer. like links.
+            tocLinkWidget.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+            tocLinkWidget.addClickHandler(tocClickHandler);
+        }
+    }
+
+    private ClickHandler initializeTocClickHandler() {
+        return new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+
+                //firefox and chrome differs with the ahref-string
+                String aHrefString = event.getSource().toString();
+                String[] matches = aHrefString.split("\"");
+                if (matches.length > 0) {
+                    String elementId;
+
+                    if (matches[1].contains("#")) {
+                        //firefox
+                        elementId = matches[1].substring(1);
+                    } else {
+                        //chrome
+                        elementId = matches[3].substring(1);
+                    }
+
+                    Element el = DOM.getElementById(elementId);
+                    int top = el.getOffsetTop();
+
+                    //goto headline or whatever
+                    scrollPanel.setVerticalScrollPosition(top);
+                }
+            }
+        };
+    }
+
+    private ClickHandler initializeBookMarkClickHandler() {
+        return new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                event.stopPropagation();
+                Element lawElement = ((ElementWrapper) event.getSource()).getElement();
+
+                String id = lawElement.getId();
+
+                if (lawElement.getStyle().getBorderStyle().equals("dotted")) {
+                    lawElement.getStyle().setBorderStyle(Style.BorderStyle.NONE);
+                    if (!id.equals("")) {
+                        presenter.removeBookMark(Long.decode(id));
+                    }
+
+                } else {
+                    lawElement.getStyle().setBorderStyle(Style.BorderStyle.DOTTED);
+                    lawElement.getStyle().setBorderColor("red");
+
+                    if (!id.equals("")) {
+                        presenter.addBookMark(Long.decode(id));
+                    }
+                }
+
+                bookMarkPanel.updateBookMarkData();
+            }
+        };
+    }
+
+    private ElementWrapper wrapElementWithWidget(com.google.gwt.dom.client.Element element) {
+        ElementWrapper elementWrapper = new ElementWrapper(element);
+        elementWrapper.onAttach();
+        return elementWrapper;
+    }
+
+    private void addClickHandlerToElement(ClickHandler clickHandler, ElementWrapper elementWrapper) {
+        elementWrapper.addClickHandler(clickHandler);
+    }
+
     private void handleRightMenuVisibility() {
         double totalHeight = Window.getClientHeight() - 90;
         List<BoxPanel> boxPanelList = getBoxPanelsVisible();
@@ -306,20 +321,6 @@ public class LawPanel extends Composite {
 
             lawPanelContainer.getElement().getStyle().setWidth(100, Style.Unit.PCT);
         }
-    }
-
-    public void setPresenter(LawView.Presenter presenter) {
-        this.presenter = presenter;
-        bookMarkPanel.setPresenter(presenter);
-    }
-
-    public BookMarkPanel getBookMarkPanel() {
-        return bookMarkPanel;
-    }
-
-    public void setLoading() {
-        setLawAsHTML("<b>Hämtar information...</b>");
-        rightWingPanel.setVisible(false);
     }
 
     private List<BoxPanel> getBoxPanelsVisible() {

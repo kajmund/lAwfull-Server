@@ -10,7 +10,7 @@ import java.io.FileWriter;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 5/21/12
  * Time: 6:29 PM
  */
@@ -41,7 +41,7 @@ public class LawExporterServiceImpl implements LawExporterService {
         String buffer = lawRenderer.renderToHtml(law);
         try {
             // Create file
-            FileWriter fstream = new FileWriter(FILEPATH + law.getDocumentKey() + ".html");
+            FileWriter fstream = new FileWriter(FILEPATH + law.getKey() + ".html");
             BufferedWriter out = new BufferedWriter(fstream);
             out.write(buffer);
             //Close the output stream

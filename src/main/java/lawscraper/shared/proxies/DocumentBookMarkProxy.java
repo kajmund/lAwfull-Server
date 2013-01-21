@@ -6,7 +6,7 @@ import lawscraper.server.entities.documentbookmark.DocumentBookMark;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 3/10/12
  * Time: 5:26 PM
  */
@@ -14,7 +14,7 @@ import lawscraper.server.entities.documentbookmark.DocumentBookMark;
 public interface DocumentBookMarkProxy extends ValueProxy {
     Long getId();
 
-    Long getDocumentId();
+    String getDocumentKey();
 
     String getTitle();
 

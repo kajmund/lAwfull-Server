@@ -5,7 +5,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 7/13/12
  * Time: 6:19 PM
  */

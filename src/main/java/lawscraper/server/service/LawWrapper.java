@@ -5,7 +5,7 @@ import lawscraper.server.entities.law.Law;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 2/24/12
  * Time: 10:49 AM
  */

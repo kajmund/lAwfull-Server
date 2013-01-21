@@ -13,7 +13,7 @@ import lawscraper.client.ui.panels.verticaltabpanel.VerticalTabPanelChangeHandle
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+ * <p/>
  * Date: 7/12/12
  * Time: 3:06 PM
  */
@@ -51,7 +51,6 @@ public class DynamicTabPanel extends Composite {
         for (int i = 0; i < flerpContainer.getWidgetCount(); i++) {
             addClickAction(flerpContainer.getWidget(i));
         }
-
     }
 
     public FlowPanel getTabFlerpContainer() {
@@ -71,8 +70,8 @@ public class DynamicTabPanel extends Composite {
         }, ClickEvent.getType());
     }
 
-    public boolean selectFlerpIfExists(String flerpName) {
-        FlowPanel existingFlerp = getFlerp(flerpName);
+    public boolean selectFlerpIfExists(String key) {
+        FlowPanel existingFlerp = getFlerp(key);
         if (existingFlerp != null) {
             selectFlerp(existingFlerp);
             return true;
@@ -80,10 +79,30 @@ public class DynamicTabPanel extends Composite {
         return false;
     }
 
-    public void add(Widget content, String flerpName) {
+    public void add(Widget content, String flerpName, String flerpKey) {
+        //create the flerp
+        FlowPanel flerpFlowPanel = createFlerpFlowPanel(flerpName, flerpKey);
+
+        //deside what action if flerp is clicked
+        addClickAction(flerpFlowPanel);
+
+        //add it to the upper list
+        flerpContainer.add(flerpFlowPanel);
+
+        //add the content, show the widget and set the flerp as selected
+        tabContentDeckPanel.add(content);
+        tabContentDeckPanel.showWidget(tabContentDeckPanel.getWidgetCount() - 1);
+        selectFlerp(flerpFlowPanel);
+    }
+
+    private FlowPanel createFlerpFlowPanel(String flerpName, String flerpKey) {
+        if (flerpName.length() > 100) {
+            flerpName = flerpName.substring(0, 100) + "...";
+        }
 
         FlowPanel flerpFlowPanel = new FlowPanel();
         flerpFlowPanel.addStyleName(style.flerp());
+        flerpFlowPanel.getElement().setId(flerpKey);
 
         //todo: add style and set it programatically
         FlowPanel xContainer = new FlowPanel();
@@ -105,19 +124,15 @@ public class DynamicTabPanel extends Composite {
         flerpNameLabel.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
         flerpFlowPanel.add(flerpNameLabel);
         flerpFlowPanel.add(xContainer);
-
-        addClickAction(flerpFlowPanel);
-
-        flerpContainer.add(flerpFlowPanel);
-        tabContentDeckPanel.add(content);
-        tabContentDeckPanel.showWidget(tabContentDeckPanel.getWidgetCount() - 1);
-        selectFlerp(flerpFlowPanel);
+        return flerpFlowPanel;
     }
 
-    private FlowPanel getFlerp(String flerpName) {
+    private FlowPanel getFlerp(String flerpKey) {
         for (int i = 0; i < flerpContainer.getWidgetCount(); i++) {
-            String flerpText = flerpContainer.getWidget(i).getElement().getInnerText().substring(1);
-            if (flerpText.contains(flerpName)) {
+            //String flerpText = flerpContainer.getWidget(i).getElement().getInnerText().substring(1);
+            String widgetFlerpKey = flerpContainer.getWidget(i).getElement().getId();
+
+            if (widgetFlerpKey.equals(flerpKey)) {
                 return (FlowPanel) flerpContainer.getWidget(i);
             }
         }
@@ -156,7 +171,9 @@ public class DynamicTabPanel extends Composite {
 
         source.addStyleName(style.flerpSelected());
         source.removeStyleName(style.flerpUnSelected());
-        tabContentDeckPanel.showWidget(((FlowPanel) source.getParent()).getWidgetIndex(source));
+
+        tabContentDeckPanel.showWidget(index);
+
         /*
         flerpContainer.remove(source);
         flerpContainer.add(source);

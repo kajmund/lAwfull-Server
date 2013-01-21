@@ -10,7 +10,7 @@ import lawscraper.client.ui.panels.userspanel.UsersPanel;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 2/26/12
  * Time: 9:56 PM
  */

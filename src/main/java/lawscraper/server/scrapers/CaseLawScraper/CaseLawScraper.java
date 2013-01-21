@@ -1,8 +1,12 @@
 package lawscraper.server.scrapers.caselawscraper;
 
+import com.google.gwt.regexp.shared.MatchResult;
+import com.google.gwt.regexp.shared.RegExp;
 import lawscraper.server.entities.caselaw.CaseLaw;
 import lawscraper.server.entities.caselaw.CaseLawDocumentPart;
+import lawscraper.server.entities.superclasses.Document.DocumentPart;
 import lawscraper.server.entities.superclasses.Document.TextElement;
+import lawscraper.server.repositories.RepositoryBase;
 import lawscraper.server.scrapers.Utilities;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -14,17 +18,20 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+ * <p/>
  * Date: 6/10/12
  * Time: 6:26 PM
  */
 public class CaseLawScraper {
     private ArrayList<String> currentDataType = new ArrayList<String>();
     private Stack<CaseLawDocumentPart> caseLawDocumentPartStack = new Stack<CaseLawDocumentPart>();
+    private Set<String> docKeys = new HashSet<String>();
     private CaseLaw caseLaw = new CaseLaw();
 
     static final String ARSUTGAVA = "rinfo:arsutgava";
@@ -39,8 +46,13 @@ public class CaseLawScraper {
     static final String DESCRIPTION = "dct:description";
     static final String IDENTIFIER = "dct:identifier";
     static final String LAGRUM = "rinfo:lagrum";
+    static final String RATTSFALLSHANVISNING = "rinfo:rattsfallshanvisning";
     static final String SIDNUMMER = "rinfo:sidnummer";
+    private RepositoryBase<DocumentPart> documentPartRepository;
 
+    public CaseLawScraper(RepositoryBase<DocumentPart> documentPartRepository) {
+        this.documentPartRepository = documentPartRepository;
+    }
 
     public void parse(InputStream in) throws ParserConfigurationException, SAXException, IOException {
         DefaultHandler handler = new
@@ -110,7 +122,10 @@ public class CaseLawScraper {
         } else if (cdt.equals(DOMSNUMMER)) {
             caseLaw.setCaseIdentifier(data);
         } else if (cdt.equals(SUBJECT)) {
-            caseLaw.addSubject(data);
+            DocumentPart subject = createSubject(data);
+            if (subject != null) {
+                caseLaw.addSubject(subject);
+            }
         } else if (cdt.equals(RATTSFALLSPUBLIKATION)) {
             caseLaw.setCasePublication(data);
         } else if (cdt.equals(MALNUMMER)) {
@@ -120,15 +135,30 @@ public class CaseLawScraper {
         } else if (cdt.equals(DESCRIPTION)) {
             caseLaw.setDescription(data);
         } else if (cdt.equals(IDENTIFIER)) {
-            caseLaw.setDocumentKey(data.replace(" ", "_"));
-        } else if (cdt.equals(LAGRUM)) {
-            caseLaw.addLawReference(data);
+            caseLaw.setKey(data.replace(" ", "_"));
+            caseLaw.setTitle(data);
         } else if (cdt.equals(SIDNUMMER)) {
             caseLaw.setPageNumber(data);
         } else if (cdt.equals("p")) {
             CaseLawDocumentPart caseLawDocumentPart = caseLawDocumentPartStack.peek();
             caseLawDocumentPart.setTextElement(new TextElement(caseLawDocumentPart.getTextElement().getText() + data));
         }
+    }
+
+    private DocumentPart createSubject(String data) {
+        String docKey = data.replace(" ", "_");
+        DocumentPart subject = getOrCreateDocumentPart(docKey);
+
+
+        if (subject == null) {
+            return null;
+        }
+
+        if (subject.getKey().equals(null)) {
+            subject.setTitle(data);
+            subject.setKey(docKey);
+        }
+        return subject;
     }
 
     private void setCurrentDataType(String currentDataType) {
@@ -139,6 +169,8 @@ public class CaseLawScraper {
     private void parseElement(String qname, Attributes attributes) {
         if (qname.equals("dd")) {
             parseDDElement(attributes);
+        } else if (qname.equals("a")) {
+            parseAElement(attributes);
         } else if (qname.equals("p")) {
             parsePElement(attributes);
         } else {
@@ -146,11 +178,83 @@ public class CaseLawScraper {
         }
     }
 
+    private void parseAElement(Attributes attributes) {
+        String urlString;
+        setCurrentDataType("a");
+        if (attributes.getValue(0).equals(LAGRUM)) {
+            urlString = attributes.getValue(1);
+            if (urlString != null) {
+                String documentId = urlString.substring(urlString.lastIndexOf("/") + 1);
+                caseLaw.addDocumentReference(getOrCreateDocumentPart(documentId));
+            }
+        } else if (attributes.getValue(0).equals(RATTSFALLSHANVISNING)) {
+            urlString = attributes.getValue(1);
+            if (urlString != null) {
+                String documentId = getCaseLawIdFromUrlString(urlString);
+                caseLaw.addDocumentReference(getOrCreateDocumentPart(documentId));
+            }
+        }
+    }
+
+    private String getCaseLawIdFromUrlString(String urlString) {
+        String documentId = "";
+        RegExp regExp = RegExp.compile("http://rinfo.lagrummet.se/publ/rattsfall/(.*)/(\\d\\d\\d\\d)(:(.*)|s(.*))");
+        MatchResult matcher = regExp.exec(urlString);
+        boolean matchFound = (matcher != null); // equivalent to regExp.test(inputStr);
+
+        if (matchFound) {
+            // Get all groups for this match
+            String cInstance = matcher.getGroup(1).toUpperCase();
+            String year = matcher.getGroup(2);
+            String page = matcher.getGroup(3).substring(1);
+
+            if (cInstance.equals("AD")) {
+                documentId = cInstance + " " + year + " nr " + page;
+            } else if (cInstance.equals("NJA")) {
+                documentId = cInstance + " " + year + " s. " + page;
+            } else if (cInstance.equals("MÖD")) {
+                documentId = cInstance + " " + year + ":" + page;
+            } else if (cInstance.equals("MIG")) {
+                documentId = cInstance + " " + year + ":" + page;
+            } else if (cInstance.equals("RK")) {
+                documentId = cInstance + " " + year + ":" + page;
+            } else if (cInstance.equals("MD")) {
+                documentId = cInstance + " " + year + ":" + page;
+            } else if (cInstance.equals("RÅ")) {
+                documentId = cInstance + " " + year + " ref. " + page;
+            } else if (cInstance.equals("HFD")) {
+                documentId = cInstance + " " + year + " ref. " + page;
+            } else if (cInstance.equals("RH")) {
+                documentId = cInstance + " " + year + ":" + page;
+            }
+        }
+
+        return documentId;
+    }
+
+    private DocumentPart getOrCreateDocumentPart(String documentId) {
+        if (docKeys.contains(documentId)) {
+            return null;
+        } else {
+            docKeys.add(documentId);
+        }
+
+        DocumentPart documentPart = documentPartRepository.findOne(documentId);
+        if (documentPart == null) {
+            documentPart = new DocumentPart();
+            documentPart.setKey(documentId);
+        } else {
+            System.out.println("Reference already persisted");
+        }
+
+        return documentPart;
+    }
+
     private void parsePElement(Attributes attributes) {
         CaseLawDocumentPart caseLawDocumentPart = createCaseLawDocumentPart();
         caseLawDocumentPartStack.add(caseLawDocumentPart);
         caseLaw.addCaseLawDocumentPart(caseLawDocumentPart);
-        caseLawDocumentPart.setDocumentKey(caseLaw.getDocumentKey() + "_" + caseLawDocumentPartStack.size());
+        caseLawDocumentPart.setKey(caseLaw.getKey() + "_" + caseLawDocumentPartStack.size());
         setCurrentDataType("p");
     }
 

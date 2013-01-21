@@ -6,7 +6,7 @@ import lawscraper.server.entities.caselaw.CaseLaw;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+ * <p/>
  * Date: 12/26/11
  * Time: 10:22 AM
  */
@@ -14,5 +14,8 @@ import lawscraper.server.entities.caselaw.CaseLaw;
 @ProxyFor(value = CaseLaw.class)
 public interface CaseLawProxy extends ValueProxy {
     Long getId();
+
     String getDescription();
+
+    String getKey();
 }

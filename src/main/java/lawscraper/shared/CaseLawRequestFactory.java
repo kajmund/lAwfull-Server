@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 12/27/11
  * Time: 7:52 AM
  */
@@ -26,6 +26,8 @@ public interface CaseLawRequestFactory extends RequestFactory {
         Request<HTMLProxy> findCaseLawHTMLWrapped(Long id);
 
         Request<List<CaseLawProxy>> findCaseLawByQuery(String query);
+
+        Request<List<CaseLawProxy>> getCaseLawsByYearAndCourt(String year, String court);
     }
 
     CaseLawRequest caseLawRequest();

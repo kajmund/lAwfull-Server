@@ -1,0 +1,88 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:verticaltabpanel="urn:import:lawscraper.client.ui.panels.verticaltabpanel">
+    <ui:style>
+
+        .topControlBar {
+            background-image: url("http://gwt-cx.com/serendipity/serendipity/gwtcx/skins/aqua/images/navigation_pane_header.png");
+            background-repeat: repeat-x;
+            height: 26px;
+            border-bottom: 1px #add8e6 solid;
+            border-top: 1px #add8e6 solid;
+            background-image: url("http://gwt-cx.com/serendipity/serendipity/gwtcx/skins/aqua/images/navigation_pane_header.png");
+            background-size: 34px auto;
+
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .container {
+            position: relative;
+            border-left: 1px #add8e6 solid;;
+            border-right: 1px #add8e6 solid;;
+            border-bottom: 1px #add8e6 solid;;
+        }
+
+        .bottomControlPanel {
+            float: right;
+        }
+
+        .headerFont {
+            color: #15428B;
+            cursor: default;
+            font-family: Tahoma, Verdana, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            position: absolute;
+            left: 4px;
+        }
+
+        .searchBoxContainer {
+            margin-top: 4px;
+            margin-bottom: 4px;
+            margin-left: 3%;
+            width: 100%;
+        }
+
+        .searchBox {
+            width: 90%;
+        }
+
+        .bodyContainer {
+
+        }
+
+        .flerpContainer {
+            float: left;
+            margin-left: 3%;
+            margin-top: 3%;
+            min-width: 380px;
+        }
+    </ui:style>
+
+
+    <g:FlowPanel addStyleNames="{style.container}">
+        <g:FlowPanel addStyleNames="{style.topControlBar}">
+            <g:FlowPanel addStyleNames="{style.bottomControlPanel}">
+                <g:Label addStyleNames="{style.headerFont}" ui:field="panelTitle">Title</g:Label>
+            </g:FlowPanel>
+        </g:FlowPanel>
+        <g:FlowPanel addStyleNames="{style.bodyContainer}">
+
+            <g:FlowPanel addStyleNames="{style.searchBoxContainer}">
+                <g:TextBox ui:field="searchTextBox" addStyleNames="{style.searchBox}"/>
+            </g:FlowPanel>
+            <g:DeckPanel ui:field="resultDeckPanel">
+                <verticaltabpanel:VerticalTabPanel ui:field="verticalTabPanel" addStyleNames="{style.flerpContainer}"/>
+                <g:FlowPanel ui:field="resultCellTableSearchContainer"/>
+            </g:DeckPanel>
+            <!--
+            <g:ScrollPanel height="700px">
+                <g:FlowPanel ui:field="lawTableContainer" addStyleNames="{style.lawTable}"/>
+            </g:ScrollPanel>
+            -->
+        </g:FlowPanel>
+    </g:FlowPanel>
+</ui:UiBinder>

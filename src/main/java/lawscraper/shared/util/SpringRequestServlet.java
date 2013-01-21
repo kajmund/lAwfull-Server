@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 12/29/11
  * Time: 11:13 AM
  */

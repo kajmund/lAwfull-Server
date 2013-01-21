@@ -13,8 +13,6 @@ public class ClientFactoryImpl implements ClientFactory {
     private static final EventBus eventBus = new SimpleEventBus();
     private static final PlaceController placeController = new PlaceController(eventBus);
 
-    private static final GoodbyeView goodbyeView = new GoodbyeViewImpl();
-    private final LawView lawView = new LawViewImpl(this);
     private final UserView userView = new UserViewImpl(this);
     private final StartView startView = new StartViewImpl(this);
     private final CaseLawView caseLawView = new CaseLawViewImpl(this);
@@ -36,17 +34,6 @@ public class ClientFactoryImpl implements ClientFactory {
     @Override
     public PlaceController getPlaceController() {
         return placeController;
-    }
-
-    @Override
-    public GoodbyeView getGoodbyeView() {
-        return goodbyeView;
-    }
-
-    @Override
-    public LawView getLawView() {
-        return lawView;
-
     }
 
     @Override

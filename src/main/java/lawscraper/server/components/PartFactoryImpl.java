@@ -5,7 +5,6 @@ import lawscraper.server.entities.superclasses.Document.TextElement;
 import lawscraper.server.repositories.RepositoryBase;
 import lawscraper.shared.DocumentPartType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +18,8 @@ public class PartFactoryImpl implements PartFactory {
     private RepositoryBase<TextElement> textRepository;
 
     @Autowired
-    public PartFactoryImpl(@Qualifier("repositoryBaseImpl") RepositoryBase<LawDocumentPart> repository,
-                           @Qualifier("repositoryBaseImpl") RepositoryBase<TextElement> textRepository) {
+    public PartFactoryImpl(RepositoryBase<LawDocumentPart> repository,
+                           RepositoryBase<TextElement> textRepository) {
         this.repository = repository;
         this.textRepository = textRepository;
         repository.setEntityClass(LawDocumentPart.class);

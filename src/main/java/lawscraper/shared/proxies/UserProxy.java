@@ -7,7 +7,7 @@ import lawscraper.shared.UserRole;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+ * <p/>
  * Date: 4/30/12
  * Time: 10:49 AM
  */

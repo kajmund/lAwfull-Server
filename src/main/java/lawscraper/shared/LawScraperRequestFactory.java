@@ -11,7 +11,7 @@ import lawscraper.shared.scraper.LawScraperSource;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 12/27/11
  * Time: 7:52 AM
  */

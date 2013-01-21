@@ -4,7 +4,7 @@ import javax.persistence.MappedSuperclass;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 10/2/12
  * Time: 8:02 PM
  */

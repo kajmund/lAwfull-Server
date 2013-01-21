@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.Label;
 
 /**
  * Created by erik, IT Bolaget Per & Per AB
- * Copyright Inspectera AB
+
  * Date: 3/11/12
  * Time: 7:16 PM
  */

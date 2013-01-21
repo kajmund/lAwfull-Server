@@ -50,6 +50,14 @@
 
 
     <dependencies>
+        <dependency>
+            <groupId>com.dropbox</groupId>
+            <artifactId>dropbox-java-sdk</artifactId>
+            <version>1.5.3</version>
+            <type>jar</type>
+        </dependency>
+
+
         <!-- MySQL database driver -->
         <dependency>
             <groupId>mysql</groupId>
@@ -111,6 +119,35 @@
         </dependency>
 
         <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.1.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+        <!-- GWT stuff -->
+
+        <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
             <version>${gwtVersion}</version>
@@ -129,11 +166,14 @@
             <artifactId>gwt-dev</artifactId>
             <version>${gwtVersion}</version>
         </dependency>
+
+
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20090211</version>
         </dependency>
+
 
         <dependency>
             <groupId>junit</groupId>

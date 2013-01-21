@@ -32,9 +32,11 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd http://www.spri
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
 
+
     <jdbc:initialize-database data-source="dataSource">
         <jdbc:script location="classpath:db-drop.sql"/>
         <jdbc:script location="classpath:db-schema.sql"/>
+        <jdbc:script location="classpath:db-data.sql"/>
     </jdbc:initialize-database>
 
 </beans>
