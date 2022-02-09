@@ -19,7 +19,7 @@
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>3.2.0.M1</spring.version>
-        <hibernate.version>3.6.10.Final</hibernate.version>
+        <hibernate.version>5.4.24.Final</hibernate.version>
 
     </properties>
 
@@ -69,7 +69,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>3.6.10.Final</version>
+            <version>5.4.24.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
